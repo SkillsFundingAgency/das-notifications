@@ -31,6 +31,7 @@ namespace SFA.DAS.Notifications.Api.Orchestrators
                 {
                     UserId = notification.UserId,
                     MessageType = notification.MessageType,
+                    TemplateId = notification.TemplateId,
                     ForceFormat = notification.ForceFormat,
                     RecipientsAddress = notification.RecipientsAddress,
                     ReplyToAddress = notification.ReplyToAddress,
