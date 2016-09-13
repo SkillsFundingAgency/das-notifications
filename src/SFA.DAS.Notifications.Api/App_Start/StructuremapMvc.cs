@@ -15,19 +15,23 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System;
-using System.Web.Mvc;
-using Microsoft.Web.Infrastructure.DynamicModuleHelper;
-using SFA.DAS.Notifications.Api;
-using SFA.DAS.Notifications.Api.DependencyResolution;
-using StructureMap;
+using SFA.DAS.Notifications.Api.App_Start;
+
 using WebActivatorEx;
 
 [assembly: PreApplicationStartMethod(typeof(StructuremapMvc), "Start")]
 [assembly: ApplicationShutdownMethod(typeof(StructuremapMvc), "End")]
 
-namespace SFA.DAS.Notifications.Api {
-    public static class StructuremapMvc {
+namespace SFA.DAS.Notifications.Api.App_Start {
+	using System.Web.Mvc;
+
+    using Microsoft.Web.Infrastructure.DynamicModuleHelper;
+
+	using SFA.DAS.Notifications.Api.DependencyResolution;
+
+    using StructureMap;
+    
+	public static class StructuremapMvc {
         #region Public Properties
 
         public static StructureMapDependencyScope StructureMapDependencyScope { get; set; }

@@ -15,14 +15,16 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using Microsoft.Practices.ServiceLocation;
-using StructureMap;
-
 namespace SFA.DAS.Notifications.Api.DependencyResolution {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web;
+
+    using Microsoft.Practices.ServiceLocation;
+
+    using StructureMap;
+	
     /// <summary>
     /// The structure map dependency scope.
     /// </summary>
@@ -80,14 +82,16 @@ namespace SFA.DAS.Notifications.Api.DependencyResolution {
         }
 
         public void Dispose() {
-            DisposeNestedContainer();
+            if (CurrentNestedContainer != null) {
+                CurrentNestedContainer.Dispose();
+            }
+
             Container.Dispose();
         }
 
         public void DisposeNestedContainer() {
             if (CurrentNestedContainer != null) {
                 CurrentNestedContainer.Dispose();
-				CurrentNestedContainer = null;
             }
         }
 

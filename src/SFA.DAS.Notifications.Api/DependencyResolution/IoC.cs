@@ -15,13 +15,18 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System;
-using StructureMap;
+using SFA.DAS.Notifications.Infrastructure.DependencyResolution;
 
 namespace SFA.DAS.Notifications.Api.DependencyResolution {
+    using StructureMap;
+	
     public static class IoC {
         public static IContainer Initialize() {
-            return new Container(c => c.AddRegistry<DefaultRegistry>());
+            return new Container(c =>
+            {
+                c.Policies.Add(new MessagePolicy("SFA.DAS.Notifications"));
+                c.AddRegistry<DefaultRegistry>();
+            });
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Microsoft.WindowsAzure;
+using Microsoft.Azure;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
 using Newtonsoft.Json;
@@ -27,6 +27,7 @@ namespace SFA.DAS.Notifications.Infrastructure
         {
             if (configurationService == null)
                 throw new ArgumentNullException(nameof(configurationService));
+
             _configurationService = configurationService;
             _storageAccount = CloudStorageAccount.Parse(storageConnectionString);
         }
@@ -41,6 +42,7 @@ namespace SFA.DAS.Notifications.Infrastructure
             {
                 Data = JsonConvert.SerializeObject(message.Content)
             };
+
             var insertOperation = TableOperation.Insert(entity);
 
             table.Execute(insertOperation);

@@ -10,25 +10,29 @@ using SFA.DAS.Notifications.Application.Exceptions;
 using SFA.DAS.Notifications.Application.Interfaces;
 using SFA.DAS.Notifications.Application.Messages;
 using SFA.DAS.Notifications.Application.Services;
+using SFA.DAS.Notifications.Domain;
 using SFA.DAS.TimeProvider;
 
 namespace SFA.DAS.Notifications.Application.Commands.SendEmail
 {
     public class SendEmailCommandHandler : AsyncRequestHandler<SendEmailCommand>
     {
+        [QueueName]
+        public string send_notifications { get; set; }
+
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
 
         private readonly IMessageNotificationRepository _emailNotificationRepository;
-        private readonly MessagingService _messagingService;
+        private readonly IMessagePublisher _messagePublisher;
 
-        public SendEmailCommandHandler(IMessageNotificationRepository emailNotificationRepository, MessagingService messagingService)
+        public SendEmailCommandHandler(IMessageNotificationRepository emailNotificationRepository, IMessagePublisher messagePublisher)
         {
             if (emailNotificationRepository == null)
                 throw new ArgumentNullException(nameof(emailNotificationRepository));
-            if (messagingService == null)
-                throw new ArgumentNullException(nameof(messagingService));
+            if (messagePublisher == null)
+                throw new ArgumentNullException(nameof(messagePublisher));
             _emailNotificationRepository = emailNotificationRepository;
-            _messagingService = messagingService;
+            _messagePublisher = messagePublisher;
         }
 
         protected override async Task HandleCore(SendEmailCommand message)
@@ -42,12 +46,11 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
             if (!validationResult.IsValid)
                 throw new CustomValidationException(validationResult);
 
-
             await _emailNotificationRepository.Create(CreateMessageData(message, messageId));
 
             Logger.Debug($"Stored message '{messageId}' in data store");
 
-            await _messagingService.PublishAsync(new QueueMessage
+            await _messagePublisher.PublishAsync(new QueueMessage
             {
                 MessageType = message.MessageType,
                 MessageId = messageId

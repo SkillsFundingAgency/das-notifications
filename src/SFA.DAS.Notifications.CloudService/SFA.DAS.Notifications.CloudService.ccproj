@@ -39,7 +39,7 @@
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.Notifications.Api\SFA.DAS.Notifications.Api.csproj">
       <Name>SFA.DAS.Notifications.Api</Name>
-      <Project>{e371279a-8bc6-4b5c-80e7-c3331a3cad48}</Project>
+      <Project>{962b4e7c-d851-4ba2-94ee-be6dc0e99656}</Project>
       <Private>True</Private>
       <RoleType>Web</RoleType>
       <RoleName>SFA.DAS.Notifications.Api</RoleName>

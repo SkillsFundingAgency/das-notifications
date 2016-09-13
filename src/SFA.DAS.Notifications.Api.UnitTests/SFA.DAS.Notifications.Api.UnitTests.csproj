@@ -140,10 +140,6 @@
       <Project>{AC81FD52-7485-4BBF-9C0C-D6EED90F84A1}</Project>
       <Name>SFA.DAS.Notifications.Domain</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SFA.DAS.Notifications.Api\SFA.DAS.Notifications.Api.csproj">
-      <Project>{E371279A-8BC6-4B5C-80E7-C3331A3CAD48}</Project>
-      <Name>SFA.DAS.Notifications.Api</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />

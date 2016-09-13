@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.WindowsAzure.ServiceRuntime;
 using NLog;
+using SFA.DAS.Notifications.Infrastructure.DependencyResolution;
 using StructureMap;
 
 namespace SFA.DAS.Notifications.Worker
@@ -13,18 +14,24 @@ namespace SFA.DAS.Notifications.Worker
     {
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
 
-        private readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-        private readonly ManualResetEvent runCompleteEvent = new ManualResetEvent(false);
+        private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
+        private readonly ManualResetEvent _runCompleteEvent = new ManualResetEvent(false);
         private Container _container;
 
         public override void Run()
         {
             Logger.Info("Running");
-            Trace.TraceInformation("SFA.DAS.NotificationService.Worker is running");
+            Trace.TraceInformation("SFA.DAS.Notifications.Worker is running");
+
+            _container = new Container(c =>
+            {
+                c.Policies.Add(new MessagePolicy("SFA.DAS.Notifications"));
+                c.AddRegistry<DefaultRegistry>();
+            });
 
             try
             {
-                this.RunAsync(this.cancellationTokenSource.Token).Wait();
+                RunAsync(_cancellationTokenSource.Token).Wait();
             }
             catch (Exception ex)
             {
@@ -33,17 +40,13 @@ namespace SFA.DAS.Notifications.Worker
             }
             finally
             {
-                this.runCompleteEvent.Set();
+                _runCompleteEvent.Set();
             }
         }
 
         public override bool OnStart()
         {
             Logger.Info("Starting");
-
-            var registry = new DefaultRegistry();
-
-            _container = new Container(registry);
 
             // Set the maximum number of concurrent connections
             ServicePointManager.DefaultConnectionLimit = 12;
@@ -64,8 +67,8 @@ namespace SFA.DAS.Notifications.Worker
 
             Trace.TraceInformation("SFA.DAS.NotificationService.Worker is stopping");
 
-            this.cancellationTokenSource.Cancel();
-            this.runCompleteEvent.WaitOne();
+            _cancellationTokenSource.Cancel();
+            _runCompleteEvent.WaitOne();
 
             base.OnStop();
 

@@ -16,89 +16,66 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
-using System.Configuration;
-using System.Web.WebPages;
 using FluentValidation;
 using MediatR;
-using Microsoft.WindowsAzure;
+using Microsoft.Azure;
 using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
-using SFA.DAS.Configuration.FileStorage;
-using SFA.DAS.Messaging;
-using SFA.DAS.Messaging.AzureServiceBus;
-using SFA.DAS.Messaging.FileSystem;
-using SFA.DAS.Notifications.Api.Orchestrators;
 using SFA.DAS.Notifications.Application;
 using SFA.DAS.Notifications.Application.Interfaces;
-using SFA.DAS.Notifications.Domain.Repositories;
 using SFA.DAS.Notifications.Infrastructure;
-using SFA.DAS.Notifications.Infrastructure.Repositories;
-using StructureMap.Configuration.DSL;
+using StructureMap;
 
-namespace SFA.DAS.Notifications.Api.DependencyResolution {
-	
-    public class DefaultRegistry : Registry {
-        private const string ServiceName = "SFA.DAS.NotificationService";
-        private const string DevEnv = "LOCAL";
+namespace SFA.DAS.Notifications.Api.DependencyResolution
+{
+    public class DefaultRegistry : Registry
+    {
+        private const string ServiceName = "SFA.DAS.Notifications";
+        private const string Version = "1.0";
 
-        public DefaultRegistry() {
-
+        public DefaultRegistry()
+        {
             var environment = Environment.GetEnvironmentVariable("DASENV");
             if (string.IsNullOrEmpty(environment))
             {
                 environment = CloudConfigurationManager.GetSetting("EnvironmentName");
             }
-            
+
             Scan(
-                scan => {
-                    scan.WithDefaultConventions();
-                    scan.With(new ControllerConvention());
-                    scan.AssemblyContainingType<IMessageNotificationRepository>();
-                    scan.ConnectImplementationsToTypesClosing(typeof(IRequestHandler<,>));
-                    scan.ConnectImplementationsToTypesClosing(typeof(IAsyncRequestHandler<,>));
-                    scan.ConnectImplementationsToTypesClosing(typeof(INotificationHandler<>));
-                    scan.ConnectImplementationsToTypesClosing(typeof(IAsyncNotificationHandler<>));
-                    scan.ConnectImplementationsToTypesClosing(typeof(AbstractValidator<>));
+                scan =>
+                {
+                    scan.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith(ServiceName));
+                    scan.RegisterConcreteTypesAgainstTheFirstInterface();
+                    scan.ConnectImplementationsToTypesClosing(typeof (AbstractValidator<>));
                 });
+
             For<SingleInstanceFactory>().Use<SingleInstanceFactory>(ctx => t => ctx.GetInstance(t));
             For<MultiInstanceFactory>().Use<MultiInstanceFactory>(ctx => t => ctx.GetAllInstances(t));
-
-            IConfigurationRepository configurationRepository;
-
-            if (ConfigurationManager.AppSettings["LocalConfig"].AsBool())
-            {
-                configurationRepository = new FileStorageConfigurationRepository();
-            }
-            else
-            {
-                configurationRepository = new AzureTableStorageConfigurationRepository(CloudConfigurationManager.GetSetting("ConfigurationStorageConnectionString"));
-            }
-
-
-            var configurationService = new ConfigurationService(
-                configurationRepository,
-                new ConfigurationOptions(ServiceName, environment, "1.0"));
-            For<IConfigurationService>().Use(configurationService);
-            if (environment == DevEnv)
-            {
-                For<IMessageSubSystem>().Use(() => new FileSystemMessageSubSystem());
-            }
-            else
-            {
-                var config = configurationService.Get<NotificationServiceConfiguration>();
-                var queueConfig = config.ServiceBusConfiguration;
-                For<IMessageSubSystem>().Use(() => new AzureServiceBusMessageSubSystem(queueConfig.ConnectionString, queueConfig.QueueName));
-            }
-
-            For<MessagingService>().Use<MessagingService>();
-
-            var storageConnectionString = CloudConfigurationManager.GetSetting("StorageConnectionString") ??
-                              "UseDevelopmentStorage=true";
-
-            For<IMessageNotificationRepository>().Use<AzureEmailNotificationRepository>().Ctor<string>().Is(storageConnectionString);
-            For<INotificationOrchestrator>().Use<NotificationOrchestrator>();
-            For<IAccountRepository>().Use<AccountRepository>();
             For<IMediator>().Use<Mediator>();
+
+            var config = GetConfiguration(environment);
+
+            For<IMessageNotificationRepository>().Use<AzureEmailNotificationRepository>().Ctor<NotificationServiceConfiguration>().Is(config);
+
+            For<IConfigurationService>().Use(GetConfigurationService(environment));
+        }
+
+        private NotificationServiceConfiguration GetConfiguration(string environment)
+        {
+            var configurationService = GetConfigurationService(environment);
+
+            return configurationService.Get<NotificationServiceConfiguration>();
+        }
+
+        private static IConfigurationRepository GetConfigurationRepository()
+        {
+            return new AzureTableStorageConfigurationRepository(CloudConfigurationManager.GetSetting("ConfigurationStorageConnectionString"));
+        }
+
+        private static IConfigurationService GetConfigurationService(string environment)
+        {
+            var configurationRepository = GetConfigurationRepository();
+            return new ConfigurationService(configurationRepository, new ConfigurationOptions(ServiceName, environment, Version));
         }
     }
 }

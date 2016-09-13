@@ -8,7 +8,6 @@ using SFA.DAS.Notifications.Api.Orchestrators;
 
 namespace SFA.DAS.Notifications.Api.Controllers
 {
-    [Authorize]
     [RoutePrefix("api/email")]
     public class EmailController : ApiController
     {
@@ -25,15 +24,12 @@ namespace SFA.DAS.Notifications.Api.Controllers
         [HttpPost]
         public async Task<HttpResponseMessage> Post(EmailViewModel notification)
         {
-
             var response = await _orchestrator.SendEmail(notification);
 
             if (response.Code == NotificationOrchestratorCodes.Post.ValidationFailure)
                 return new HttpResponseMessage(HttpStatusCode.BadRequest);
 
-
             return new HttpResponseMessage(HttpStatusCode.OK);
-
         }
     }
 }
