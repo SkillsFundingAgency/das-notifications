@@ -15,16 +15,21 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System;
 using SFA.DAS.Notifications.Infrastructure.DependencyResolution;
+using StructureMap;
 
-namespace SFA.DAS.Notifications.Api.DependencyResolution {
-    using StructureMap;
-	
-    public static class IoC {
-        public static IContainer Initialize() {
+namespace SFA.DAS.Notifications.Api.DependencyResolution
+{
+    public static class IoC
+    {
+        private const string ServiceName = "SFA.DAS.Notifications";
+
+        public static IContainer Initialize()
+        {
             return new Container(c =>
             {
-                c.Policies.Add(new MessagePolicy("SFA.DAS.Notifications"));
+                c.Policies.Add(new MessagePolicy(ServiceName));
                 c.AddRegistry<DefaultRegistry>();
             });
         }

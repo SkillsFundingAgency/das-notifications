@@ -113,6 +113,7 @@
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="AzureEmailNotificationRepository.cs" />
+    <Compile Include="Configuration\NotificationServiceConfiguration.cs" />
     <Compile Include="DependencyResolution\MessagePolicy.cs" />
     <Compile Include="EmailMessageEntity.cs" />
     <Compile Include="LocalEmailService.cs" />
@@ -121,7 +122,6 @@
     <Compile Include="Notify\NotifyMessage.cs" />
     <Compile Include="Notify\NotifySmsService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repositories\AccountRepository.cs" />
     <Compile Include="SendGridSmtpEmailService.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -140,9 +140,7 @@
     </None>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Services\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

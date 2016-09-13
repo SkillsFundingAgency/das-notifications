@@ -11,6 +11,7 @@ using SFA.DAS.Messaging.AzureServiceBus;
 using SFA.DAS.Messaging.FileSystem;
 using SFA.DAS.Notifications.Application;
 using SFA.DAS.Notifications.Domain;
+using SFA.DAS.Notifications.Infrastructure.Configuration;
 using StructureMap;
 using StructureMap.Pipeline;
 

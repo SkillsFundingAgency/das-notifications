@@ -8,7 +8,6 @@ using SFA.DAS.Notifications.Application.Interfaces;
 using SFA.DAS.Notifications.Application.Messages;
 using SFA.DAS.Notifications.Application.Queries.GetMessage;
 using SFA.DAS.Notifications.Domain;
-using SFA.DAS.Notifications.Infrastructure.DependencyResolution;
 
 namespace SFA.DAS.Notifications.Worker
 {

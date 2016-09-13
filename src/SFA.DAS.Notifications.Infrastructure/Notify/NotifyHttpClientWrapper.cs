@@ -5,8 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using SFA.DAS.Configuration;
-using SFA.DAS.Notifications.Application;
 using SFA.DAS.Notifications.Application.Services;
+using SFA.DAS.Notifications.Infrastructure.Configuration;
 
 namespace SFA.DAS.Notifications.Infrastructure.Notify
 {
@@ -30,11 +30,11 @@ namespace SFA.DAS.Notifications.Infrastructure.Notify
         {
             var configuration = await _configurationService.GetAsync<NotificationServiceConfiguration>();
 
-            content.Template = configuration.NotifyEmail.EmailTemplateId;
+            content.Template = content.Template;
 
-            using (var httpClient = CreateHttpClient(configuration.NotifyEmail.ApiBaseUrl))
+            using (var httpClient = CreateHttpClient(configuration.NotifyEmailServiceConfiguration.ApiBaseUrl))
             {
-                var token = JwtTokenCreation.CreateToken(configuration.NotifyEmail.ServiceId, configuration.NotifyEmail.ApiKey);
+                var token = JwtTokenCreation.CreateToken(configuration.NotifyEmailServiceConfiguration.ServiceId, configuration.NotifyEmailServiceConfiguration.ApiKey);
                 httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
                 var serializeObject = JsonConvert.SerializeObject(content);
@@ -44,7 +44,7 @@ namespace SFA.DAS.Notifications.Infrastructure.Notify
                 {
                     Content = stringContent
                 });
-                
+
                 response.EnsureSuccessStatusCode();
             }
         }

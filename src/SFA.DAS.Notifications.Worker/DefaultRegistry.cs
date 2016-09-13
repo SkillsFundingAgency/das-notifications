@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Configuration;
 using FluentValidation;
 using MediatR;
 using Microsoft.Azure;
 using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
-using SFA.DAS.Notifications.Application;
 using SFA.DAS.Notifications.Application.Interfaces;
-using SFA.DAS.Notifications.Domain.Repositories;
 using SFA.DAS.Notifications.Infrastructure;
-using SFA.DAS.Notifications.Infrastructure.Repositories;
+using SFA.DAS.Notifications.Infrastructure.Configuration;
 using StructureMap;
 
 namespace SFA.DAS.Notifications.Worker
@@ -55,7 +52,6 @@ namespace SFA.DAS.Notifications.Worker
             }
 
             For<QueuedMessageHandler>().Use<QueuedMessageHandler>();
-            For<IAccountRepository>().Use<AccountRepository>();
             For<IMediator>().Use<Mediator>();
         }
 

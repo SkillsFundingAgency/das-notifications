@@ -8,6 +8,7 @@ using SFA.DAS.Configuration;
 using SFA.DAS.Notifications.Application;
 using SFA.DAS.Notifications.Application.Interfaces;
 using SFA.DAS.Notifications.Application.Messages;
+using SFA.DAS.Notifications.Infrastructure.Configuration;
 
 namespace SFA.DAS.Notifications.Infrastructure
 {

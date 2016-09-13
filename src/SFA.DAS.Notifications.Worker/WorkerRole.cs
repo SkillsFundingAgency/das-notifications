@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.Net;
+using System.Security.Authentication.ExtendedProtection;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.WindowsAzure.ServiceRuntime;
@@ -12,6 +13,8 @@ namespace SFA.DAS.Notifications.Worker
 {
     public class WorkerRole : RoleEntryPoint
     {
+        private const string ServiceName = "SFA.DAS.Notifications";
+
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
 
         private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
@@ -21,11 +24,11 @@ namespace SFA.DAS.Notifications.Worker
         public override void Run()
         {
             Logger.Info("Running");
-            Trace.TraceInformation("SFA.DAS.Notifications.Worker is running");
+            Trace.TraceInformation(ServiceName + " is running");
 
             _container = new Container(c =>
             {
-                c.Policies.Add(new MessagePolicy("SFA.DAS.Notifications"));
+                c.Policies.Add(new MessagePolicy(ServiceName));
                 c.AddRegistry<DefaultRegistry>();
             });
 
@@ -72,7 +75,7 @@ namespace SFA.DAS.Notifications.Worker
 
             base.OnStop();
 
-            Trace.TraceInformation("SFA.DAS.NotificationService.Worker has stopped");
+            Trace.TraceInformation(ServiceName + " has stopped");
         }
 
         private async Task RunAsync(CancellationToken cancellationToken)

@@ -10,6 +10,6 @@ namespace SFA.DAS.Notifications.Application.DataEntities
         public MessageFormat MessageFormat { get; set; }
         public bool ForceFormat { get; set; }
         public string TemplateId { get; set; }
-        public string Data { get; set; }    
+        public string Data { get; set; }
     }
 }

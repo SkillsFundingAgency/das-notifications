@@ -187,13 +187,9 @@
     <Compile Include="App_Start\StructuremapMvc.cs" />
     <Compile Include="App_Start\StructuremapWebApi.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\EmailController.cs" />
-    <Compile Include="Core\InvalidOrchestratorCodeException.cs" />
     <Compile Include="Core\OrchestratorBase.cs" />
     <Compile Include="Core\OrchestratorResponse.cs" />
-    <Compile Include="Core\OrchestratorResponseMessage.cs" />
-    <Compile Include="Core\UserMessageLevel.cs" />
     <Compile Include="DependencyResolution\DefaultRegistry.cs" />
     <Compile Include="DependencyResolution\IoC.cs" />
     <Compile Include="DependencyResolution\StructureMapDependencyScope.cs" />
@@ -203,8 +199,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\AccountRequest.cs" />
-    <Compile Include="Models\EmailViewModel.cs" />
+    <Compile Include="Models\SendEmailRequest.cs" />
     <Compile Include="Orchestrators\INotificationOrchestrator.cs" />
     <Compile Include="Orchestrators\NotificationOrchestrator.cs" />
     <Compile Include="Orchestrators\NotificationOrchestratorCodes.cs" />

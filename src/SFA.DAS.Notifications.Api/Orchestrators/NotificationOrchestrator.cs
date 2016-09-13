@@ -23,7 +23,7 @@ namespace SFA.DAS.Notifications.Api.Orchestrators
             _mediator = mediator;
         }
 
-        public async Task<OrchestratorResponse> SendEmail(EmailViewModel notification)
+        public async Task<OrchestratorResponse> SendEmail(SendEmailRequest notification)
         {
             try
             {

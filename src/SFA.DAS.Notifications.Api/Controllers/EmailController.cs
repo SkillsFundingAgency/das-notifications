@@ -22,7 +22,7 @@ namespace SFA.DAS.Notifications.Api.Controllers
 
         [Route("")]
         [HttpPost]
-        public async Task<HttpResponseMessage> Post(EmailViewModel notification)
+        public async Task<HttpResponseMessage> Post(SendEmailRequest notification)
         {
             var response = await _orchestrator.SendEmail(notification);
 

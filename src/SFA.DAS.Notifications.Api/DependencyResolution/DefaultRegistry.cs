@@ -21,9 +21,9 @@ using MediatR;
 using Microsoft.Azure;
 using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
-using SFA.DAS.Notifications.Application;
 using SFA.DAS.Notifications.Application.Interfaces;
 using SFA.DAS.Notifications.Infrastructure;
+using SFA.DAS.Notifications.Infrastructure.Configuration;
 using StructureMap;
 
 namespace SFA.DAS.Notifications.Api.DependencyResolution

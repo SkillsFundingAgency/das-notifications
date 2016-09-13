@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace SFA.DAS.Notifications.Api.Models
 {
-    public class EmailViewModel
+    public class SendEmailRequest
     {
         public string UserId { get; set; }
         public string MessageType { get; set; }
