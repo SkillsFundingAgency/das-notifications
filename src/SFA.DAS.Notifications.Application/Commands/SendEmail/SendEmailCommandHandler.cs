@@ -70,7 +70,7 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
                     Timestamp = DateTimeProvider.Current.UtcNow,
                     Format = NotificationFormat.Email,
                     TemplateId = message.TemplateId,
-                    Data = JsonConvert.SerializeObject(new EmailMessageContent
+                    Data = JsonConvert.SerializeObject(new EmailNotificationContent
                     {
                         RecipientsAddress = message.RecipientsAddress,
                         ReplyToAddress = message.ReplyToAddress,

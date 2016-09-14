@@ -58,7 +58,7 @@ namespace SFA.DAS.Notifications.Worker.MessageHandlers
                     switch (notificationFormat)
                     {
                         case NotificationFormat.Email:
-                            var emailContent = JsonConvert.DeserializeObject<EmailMessageContent>(savedMessage.Content.Data);
+                            var emailContent = JsonConvert.DeserializeObject<EmailNotificationContent>(savedMessage.Content.Data);
 
                             await _emailService.SendAsync(new EmailMessage
                             {

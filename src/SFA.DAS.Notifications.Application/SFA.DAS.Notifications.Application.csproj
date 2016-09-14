@@ -96,7 +96,7 @@
     <Compile Include="Exceptions\CustomValidationException.cs" />
     <Compile Include="Interfaces\IEmailService.cs" />
     <Compile Include="Interfaces\ISmsService.cs" />
-    <Compile Include="Messages\EmailMessageContent.cs" />
+    <Compile Include="Messages\EmailNotificationContent.cs" />
     <Compile Include="Messages\EmailMessage.cs" />
     <Compile Include="Messages\QueuedNotificationMessage.cs" />
     <Compile Include="Commands\QueueNameAttribute.cs" />

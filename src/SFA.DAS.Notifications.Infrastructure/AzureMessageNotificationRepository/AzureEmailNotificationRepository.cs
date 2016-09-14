@@ -5,7 +5,6 @@ using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
 using Newtonsoft.Json;
 using SFA.DAS.Configuration;
-using SFA.DAS.Notifications.Application.Interfaces;
 using SFA.DAS.Notifications.Domain.Entities;
 using SFA.DAS.Notifications.Domain.Repositories;
 using SFA.DAS.Notifications.Infrastructure.Configuration;
@@ -15,7 +14,7 @@ namespace SFA.DAS.Notifications.Infrastructure.AzureMessageNotificationRepositor
     public class AzureEmailNotificationRepository : INotificationsRepository
     {
         private readonly CloudStorageAccount _storageAccount;
-        private string _tableName;
+        private readonly string _tableName;
 
         public AzureEmailNotificationRepository(IConfigurationService configurationService)
             : this(configurationService, CloudConfigurationManager.GetSetting("StorageConnectionString")) {}
@@ -47,7 +46,7 @@ namespace SFA.DAS.Notifications.Infrastructure.AzureMessageNotificationRepositor
 
         public async Task<Notification> Get(string messageType, string messageId)
         {
-            var messageData = new Notification
+            var notification = new Notification
             {
                 MessageType = messageType,
                 MessageId = messageId,
@@ -60,12 +59,12 @@ namespace SFA.DAS.Notifications.Infrastructure.AzureMessageNotificationRepositor
             var tableOperation = TableOperation.Retrieve<EmailMessageTableEntity>(messageType, messageId);
             var result = await table.ExecuteAsync(tableOperation);
 
-            var messageEntity = (EmailMessageTableEntity) result.Result;
+            var tableEntity = (EmailMessageTableEntity) result.Result;
 
-            if (messageEntity != null)
-                messageData.Content = JsonConvert.DeserializeObject<NotificationContent>(messageEntity.Data);
+            if (tableEntity != null)
+                notification.Content = JsonConvert.DeserializeObject<NotificationContent>(tableEntity.Data);
 
-            return messageData;
+            return notification;
         }
     }
 }
