@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SFA.DAS.Notifications.Application.Messages
+namespace SFA.DAS.Notifications.Domain.Entities
 {
-    //todo: is this a message?
     public class EmailMessage
     {
         public string UserId { get; set; }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using SFA.DAS.Configuration;
 using SFA.DAS.Notifications.Application.Interfaces;
-using SFA.DAS.Notifications.Application.Messages;
+using SFA.DAS.Notifications.Domain.Entities;
 using SFA.DAS.Notifications.Infrastructure.Configuration;
 
 namespace SFA.DAS.Notifications.Infrastructure.LocalEmailService

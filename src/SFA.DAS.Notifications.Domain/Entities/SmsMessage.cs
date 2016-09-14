@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SFA.DAS.Notifications.Application.Messages
+namespace SFA.DAS.Notifications.Domain.Entities
 {
     public class SmsMessage
     {
