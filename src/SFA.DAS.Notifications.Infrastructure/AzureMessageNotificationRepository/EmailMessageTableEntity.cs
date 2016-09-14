@@ -5,8 +5,8 @@ namespace SFA.DAS.Notifications.Infrastructure.AzureMessageNotificationRepositor
 {
     public class EmailMessageTableEntity : TableEntity
     {
-        public EmailMessageTableEntity(string userId, string messageId)
-            : base(userId, messageId) {}
+        public EmailMessageTableEntity(string messageType, string messageId)
+            : base(messageType, messageId) {}
 
         // ReSharper disable once UnusedMember.Global
         public EmailMessageTableEntity() {}
