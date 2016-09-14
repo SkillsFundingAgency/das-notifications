@@ -47,24 +47,24 @@ namespace SFA.DAS.Notifications.Worker.MessageHandlers
                 {
                     Logger.Info($"Received message {message.Content.MessageId}");
 
-                    var savedMessage = await _mediator.SendAsync(new GetMessageQueryRequest
+                    var response = await _mediator.SendAsync(new GetMessageQueryRequest
                     {
                         MessageType = message.Content.MessageType,
                         MessageId = message.Content.MessageId
                     });
 
-                    var notificationFormat = savedMessage.Content?.Format;
+                    var notificationFormat = response.Notification.Content?.Format;
 
                     switch (notificationFormat)
                     {
                         case NotificationFormat.Email:
-                            var emailContent = JsonConvert.DeserializeObject<EmailNotificationContent>(savedMessage.Content.Data);
+                            var emailContent = JsonConvert.DeserializeObject<EmailNotificationContent>(response.Notification.Content.Data);
 
                             await _emailService.SendAsync(new EmailMessage
                             {
-                                MessageType = savedMessage.MessageType,
-                                TemplateId = savedMessage.Content.TemplateId,
-                                UserId = savedMessage.Content.UserId,
+                                MessageType = response.Notification.MessageType,
+                                TemplateId = response.Notification.Content.TemplateId,
+                                UserId = response.Notification.Content.UserId,
                                 RecipientsAddress = emailContent.RecipientsAddress,
                                 ReplyToAddress = emailContent.ReplyToAddress,
                                 Tokens = emailContent.Tokens
@@ -72,7 +72,7 @@ namespace SFA.DAS.Notifications.Worker.MessageHandlers
                             break;
 
                         case NotificationFormat.Sms:
-                            var smsContent = JsonConvert.DeserializeObject<SmsMessage>(savedMessage.Content.Data);
+                            var smsContent = JsonConvert.DeserializeObject<SmsMessage>(response.Notification.Content.Data);
                             throw new NotImplementedException();
 
                         default:

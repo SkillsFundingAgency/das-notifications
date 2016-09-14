@@ -5,8 +5,6 @@ namespace SFA.DAS.Notifications.Application.Queries.GetMessage
 {
     public class GetMessageQueryResponse
     {
-        public string MessageType { get; set; }
-        public string MessageId { get; set; }
-        public NotificationContent Content { get; set; }
+        public Notification Notification { get; set; }
     }
 }
