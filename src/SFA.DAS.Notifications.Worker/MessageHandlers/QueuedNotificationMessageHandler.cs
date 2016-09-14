@@ -67,7 +67,7 @@ namespace SFA.DAS.Notifications.Worker.MessageHandlers
                                 UserId = savedMessage.Content.UserId,
                                 RecipientsAddress = emailContent.RecipientsAddress,
                                 ReplyToAddress = emailContent.ReplyToAddress,
-                                Data = emailContent.Data
+                                Tokens = emailContent.Tokens
                             });
                             break;
 

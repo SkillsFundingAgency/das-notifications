@@ -10,7 +10,6 @@ namespace SFA.DAS.Notifications.Api.Models
         public string TemplateId { get; set; }
         public string RecipientsAddress { get; set; }
         public string ReplyToAddress { get; set; }
-        public bool ForceFormat { get; set; }
-        public Dictionary<string, string> Data { get; set; }
+        public Dictionary<string, string> Tokens { get; set; }
     }
 }

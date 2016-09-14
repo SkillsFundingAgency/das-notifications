@@ -24,7 +24,7 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
             {
                 To = message.SendTo,
                 Template = message.TemplateId,
-                Personalisation = message.Data.ToDictionary(item => item.Key.ToLower(), item => item.Value)
+                Personalisation = message.Tokens.ToDictionary(item => item.Key.ToLower(), item => item.Value)
             };
 
             await _httpClientWrapper.SendMessage(notifyMessage);

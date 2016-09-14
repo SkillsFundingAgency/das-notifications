@@ -69,13 +69,12 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
                     UserId = message.UserId,
                     Timestamp = DateTimeProvider.Current.UtcNow,
                     Format = NotificationFormat.Email,
-                    ForceFormat = message.ForceFormat,
                     TemplateId = message.TemplateId,
                     Data = JsonConvert.SerializeObject(new EmailMessageContent
                     {
                         RecipientsAddress = message.RecipientsAddress,
                         ReplyToAddress = message.ReplyToAddress,
-                        Data = message.Data
+                        Tokens = message.Tokens
                     })
                 }
             };
