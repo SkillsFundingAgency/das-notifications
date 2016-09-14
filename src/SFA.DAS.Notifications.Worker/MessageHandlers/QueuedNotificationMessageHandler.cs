@@ -70,10 +70,11 @@ namespace SFA.DAS.Notifications.Worker.MessageHandlers
                                 Data = emailContent.Data
                             });
                             break;
+
                         case NotificationFormat.Sms:
                             var smsContent = JsonConvert.DeserializeObject<SmsMessage>(savedMessage.Content.Data);
-
                             throw new NotImplementedException();
+
                         default:
                             throw new ArgumentOutOfRangeException(nameof(notificationFormat), "Unsupported notification format");
                     }

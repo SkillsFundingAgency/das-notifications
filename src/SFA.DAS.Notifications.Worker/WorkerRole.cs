@@ -83,9 +83,10 @@ namespace SFA.DAS.Notifications.Worker
         {
             var handler = _container.GetInstance<QueuedNotificationMessageHandler>();
 
+            Logger.Debug("Started polling");
+
             while (!cancellationToken.IsCancellationRequested)
             {
-                Logger.Debug("Polling");
                 try
                 {
                     await handler.Handle();
