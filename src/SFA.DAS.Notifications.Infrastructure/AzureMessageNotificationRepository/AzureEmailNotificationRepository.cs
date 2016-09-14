@@ -26,7 +26,7 @@ namespace SFA.DAS.Notifications.Infrastructure.AzureMessageNotificationRepositor
                 throw new ArgumentNullException(nameof(configurationService));
 
             _storageAccount = CloudStorageAccount.Parse(storageConnectionString);
-            _tableName = configurationService.Get<NotificationServiceConfiguration>().MessageStorageConfiguration.TableName;
+            _tableName = configurationService.Get<NotificationServiceConfiguration>().NotificationsStorageConfiguration.TableName;
         }
 
         public async Task Create(Notification message)

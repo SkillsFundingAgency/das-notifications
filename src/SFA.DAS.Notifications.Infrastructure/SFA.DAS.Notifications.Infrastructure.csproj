@@ -118,7 +118,7 @@
     </Compile>
     <Compile Include="AzureMessageNotificationRepository\AzureEmailNotificationRepository.cs" />
     <Compile Include="Configuration\AzureServiceBusMessageSubSystemConfiguration.cs" />
-    <Compile Include="Configuration\MessageStorageConfiguration.cs" />
+    <Compile Include="Configuration\NotificationsStorageConfiguration.cs" />
     <Compile Include="Configuration\NotificationServiceConfiguration.cs" />
     <Compile Include="Configuration\NotifyEmailServiceConfiguration.cs" />
     <Compile Include="Configuration\SmtpConfiguration.cs" />

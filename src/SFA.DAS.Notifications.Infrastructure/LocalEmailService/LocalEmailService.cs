@@ -28,14 +28,14 @@ namespace SFA.DAS.Notifications.Infrastructure.LocalEmailService
 
             using (var client = new SmtpClient())
             {
-                client.Port = GetPortNumber(config.SmtpServer.Port);
+                client.Port = GetPortNumber(config.SmtpConfiguration.Port);
                 client.DeliveryMethod = SmtpDeliveryMethod.Network;
                 client.UseDefaultCredentials = false;
-                client.Host = config.SmtpServer.ServerName;
+                client.Host = config.SmtpConfiguration.ServerName;
 
-                if (!string.IsNullOrEmpty(config.SmtpServer.UserName) && !string.IsNullOrEmpty(config.SmtpServer.Password))
+                if (!string.IsNullOrEmpty(config.SmtpConfiguration.UserName) && !string.IsNullOrEmpty(config.SmtpConfiguration.Password))
                 {
-                    client.Credentials = new System.Net.NetworkCredential(config.SmtpServer.UserName, config.SmtpServer.Password);
+                    client.Credentials = new System.Net.NetworkCredential(config.SmtpConfiguration.UserName, config.SmtpConfiguration.Password);
                 }
 
                 var mail = new MailMessage(message.ReplyToAddress, message.RecipientsAddress)

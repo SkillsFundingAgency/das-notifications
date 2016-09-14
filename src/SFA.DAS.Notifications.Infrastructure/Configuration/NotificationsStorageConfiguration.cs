@@ -2,7 +2,7 @@ using System;
 
 namespace SFA.DAS.Notifications.Infrastructure.Configuration
 {
-    public class MessageStorageConfiguration
+    public class NotificationsStorageConfiguration
     {
         public string TableName { get; set; }
     }
