@@ -22,7 +22,9 @@ using Microsoft.Azure;
 using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.Notifications.Application.Interfaces;
+using SFA.DAS.Notifications.Domain.Repositories;
 using SFA.DAS.Notifications.Infrastructure;
+using SFA.DAS.Notifications.Infrastructure.AzureMessageNotificationRepository;
 using SFA.DAS.Notifications.Infrastructure.Configuration;
 using StructureMap;
 
@@ -55,7 +57,7 @@ namespace SFA.DAS.Notifications.Api.DependencyResolution
 
             var config = GetConfiguration(environment);
 
-            For<IMessageNotificationRepository>().Use<AzureEmailNotificationRepository>().Ctor<NotificationServiceConfiguration>().Is(config);
+            For<INotificationsRepository>().Use<AzureEmailNotificationRepository>().Ctor<NotificationServiceConfiguration>().Is(config);
 
             For<IConfigurationService>().Use(GetConfigurationService(environment));
         }

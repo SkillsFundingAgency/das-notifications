@@ -2,14 +2,15 @@
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.Notifications.Application.Interfaces;
+using SFA.DAS.Notifications.Domain.Repositories;
 
 namespace SFA.DAS.Notifications.Application.Queries.GetMessage
 {
     public class GetMessageQueryHandler : IAsyncRequestHandler<GetMessageQueryRequest, GetMessageQueryResponse>
     {
-        private readonly IMessageNotificationRepository _messageRepository;
+        private readonly INotificationsRepository _messageRepository;
 
-        public GetMessageQueryHandler(IMessageNotificationRepository messageRepository)
+        public GetMessageQueryHandler(INotificationsRepository messageRepository)
         {
             if (messageRepository == null)
                 throw new ArgumentNullException(nameof(messageRepository));

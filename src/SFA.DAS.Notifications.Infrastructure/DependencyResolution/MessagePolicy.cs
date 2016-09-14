@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Configuration;
 using System.IO;
 using System.Linq;
-using System.Configuration;
 using Microsoft.Azure;
 using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
@@ -9,8 +9,7 @@ using SFA.DAS.Configuration.FileStorage;
 using SFA.DAS.Messaging;
 using SFA.DAS.Messaging.AzureServiceBus;
 using SFA.DAS.Messaging.FileSystem;
-using SFA.DAS.Notifications.Application;
-using SFA.DAS.Notifications.Domain;
+using SFA.DAS.Notifications.Application.Commands;
 using SFA.DAS.Notifications.Infrastructure.Configuration;
 using StructureMap;
 using StructureMap.Pipeline;

@@ -1,12 +1,13 @@
 using System;
 using System.Diagnostics;
 using System.Net;
-using System.Security.Authentication.ExtendedProtection;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.WindowsAzure.ServiceRuntime;
 using NLog;
 using SFA.DAS.Notifications.Infrastructure.DependencyResolution;
+using SFA.DAS.Notifications.Worker.DependencyResolution;
+using SFA.DAS.Notifications.Worker.MessageHandlers;
 using StructureMap;
 
 namespace SFA.DAS.Notifications.Worker
@@ -57,9 +58,9 @@ namespace SFA.DAS.Notifications.Worker
             // For information on handling configuration changes
             // see the MSDN topic at http://go.microsoft.com/fwlink/?LinkId=166357.
 
-            bool result = base.OnStart();
+            var result = base.OnStart();
 
-            Trace.TraceInformation("SFA.DAS.NotificationService.Worker has been started");
+            Trace.TraceInformation("SFA.DAS.Notifications.Worker has been started");
 
             return result;
         }
@@ -68,7 +69,7 @@ namespace SFA.DAS.Notifications.Worker
         {
             Logger.Info("Stopping");
 
-            Trace.TraceInformation("SFA.DAS.NotificationService.Worker is stopping");
+            Trace.TraceInformation("SFA.DAS.Notifications.Worker is stopping");
 
             _cancellationTokenSource.Cancel();
             _runCompleteEvent.WaitOne();
@@ -80,7 +81,7 @@ namespace SFA.DAS.Notifications.Worker
 
         private async Task RunAsync(CancellationToken cancellationToken)
         {
-            var handler = _container.GetInstance<QueuedMessageHandler>();
+            var handler = _container.GetInstance<QueuedNotificationMessageHandler>();
 
             while (!cancellationToken.IsCancellationRequested)
             {
@@ -89,7 +90,7 @@ namespace SFA.DAS.Notifications.Worker
                 {
                     await handler.Handle();
 
-                    await Task.Delay(1000);
+                    await Task.Delay(1000, cancellationToken);
                 }
                 catch (Exception ex)
                 {

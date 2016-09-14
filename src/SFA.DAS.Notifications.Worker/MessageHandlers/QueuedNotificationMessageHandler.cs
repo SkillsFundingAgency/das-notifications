@@ -39,8 +39,6 @@ namespace SFA.DAS.Notifications.Worker.MessageHandlers
 
         public async Task Handle()
         {
-            Logger.Info($"Received message?");
-
             var message = await _pollingMessageReceiver.ReceiveAsAsync<QueuedNotificationMessage>();
 
             if (message?.Content != null)
@@ -87,6 +85,7 @@ namespace SFA.DAS.Notifications.Worker.MessageHandlers
                 catch (Exception ex)
                 {
                     Logger.Error(ex, $"Error processing message {message.Content.MessageId} - {ex.Message}");
+                    //todo: abort message?
                 }
             }
         }

@@ -5,12 +5,10 @@ using MediatR;
 using Newtonsoft.Json;
 using NLog;
 using SFA.DAS.Messaging;
-using SFA.DAS.Notifications.Application.DataEntities;
 using SFA.DAS.Notifications.Application.Exceptions;
-using SFA.DAS.Notifications.Application.Interfaces;
 using SFA.DAS.Notifications.Application.Messages;
-using SFA.DAS.Notifications.Application.Services;
-using SFA.DAS.Notifications.Domain;
+using SFA.DAS.Notifications.Domain.Entities;
+using SFA.DAS.Notifications.Domain.Repositories;
 using SFA.DAS.TimeProvider;
 
 namespace SFA.DAS.Notifications.Application.Commands.SendEmail
@@ -22,56 +20,58 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
 
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
 
-        private readonly IMessageNotificationRepository _emailNotificationRepository;
+        private readonly INotificationsRepository _notificationsRepository;
         private readonly IMessagePublisher _messagePublisher;
 
-        public SendEmailCommandHandler(IMessageNotificationRepository emailNotificationRepository, IMessagePublisher messagePublisher)
+        public SendEmailCommandHandler(INotificationsRepository notificationsRepository, IMessagePublisher messagePublisher)
         {
-            if (emailNotificationRepository == null)
-                throw new ArgumentNullException(nameof(emailNotificationRepository));
+            if (notificationsRepository == null)
+                throw new ArgumentNullException(nameof(notificationsRepository));
             if (messagePublisher == null)
                 throw new ArgumentNullException(nameof(messagePublisher));
-            _emailNotificationRepository = emailNotificationRepository;
+
+            _notificationsRepository = notificationsRepository;
             _messagePublisher = messagePublisher;
         }
 
         protected override async Task HandleCore(SendEmailCommand message)
         {
-            var messageId = GuidProvider.Current.NewGuid().ToString();
+            var messageId = Guid.NewGuid().ToString();
 
-            Logger.Debug($"Received SendEmailCommand for message type {message.MessageType} to send to {message.RecipientsAddress} (message id: {messageId})");
+            Logger.Debug($"Received message type {message.MessageType} to send to {message.RecipientsAddress} (message id: {messageId})");
 
             var validationResult = Validate(message);
 
             if (!validationResult.IsValid)
                 throw new CustomValidationException(validationResult);
 
-            await _emailNotificationRepository.Create(CreateMessageData(message, messageId));
+            await _notificationsRepository.Create(CreateMessageData(message, messageId));
 
             Logger.Debug($"Stored message '{messageId}' in data store");
 
-            await _messagePublisher.PublishAsync(new QueueMessage
+            await _messagePublisher.PublishAsync(new QueuedNotificationMessage
             {
                 MessageType = message.MessageType,
                 MessageId = messageId
             });
+
             Logger.Debug($"Published message '{messageId}' to queue");
         }
 
-        private static MessageData CreateMessageData(SendEmailCommand message, string messageId)
+        private static Notification CreateMessageData(SendEmailCommand message, string messageId)
         {
-            return new MessageData
+            return new Notification
             {
                 MessageId = messageId,
                 MessageType = message.MessageType,
-                Content = new MessageContent
+                Content = new NotificationContent
                 {
                     UserId = message.UserId,
                     Timestamp = DateTimeProvider.Current.UtcNow,
-                    MessageFormat = MessageFormat.Email,
+                    Format = NotificationFormat.Email,
                     ForceFormat = message.ForceFormat,
                     TemplateId = message.TemplateId,
-                    Data = JsonConvert.SerializeObject(new EmailContent
+                    Data = JsonConvert.SerializeObject(new EmailMessageContent
                     {
                         RecipientsAddress = message.RecipientsAddress,
                         ReplyToAddress = message.ReplyToAddress,
@@ -87,6 +87,5 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
 
             return validator.Validate(cmd);
         }
-
     }
 }

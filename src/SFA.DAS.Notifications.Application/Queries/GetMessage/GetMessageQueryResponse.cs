@@ -1,5 +1,5 @@
 ﻿using System;
-using SFA.DAS.Notifications.Application.DataEntities;
+using SFA.DAS.Notifications.Domain.Entities;
 
 namespace SFA.DAS.Notifications.Application.Queries.GetMessage
 {
@@ -7,6 +7,6 @@ namespace SFA.DAS.Notifications.Application.Queries.GetMessage
     {
         public string MessageType { get; set; }
         public string MessageId { get; set; }
-        public MessageContent Content { get; set; }
+        public NotificationContent Content { get; set; }
     }
 }

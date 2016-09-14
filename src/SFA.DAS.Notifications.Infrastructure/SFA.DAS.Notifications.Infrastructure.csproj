@@ -35,6 +35,10 @@
       <HintPath>..\packages\Dapper.1.50.2\lib\net45\Dapper.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="JWT, Version=1.3.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\JWT.1.3.4\lib\3.5\JWT.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.Azure.KeyVault.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Azure.KeyVault.Core.1.0.0\lib\net40\Microsoft.Azure.KeyVault.Core.dll</HintPath>
       <Private>True</Private>
@@ -112,17 +116,24 @@
     <Compile Include="..\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="AzureEmailNotificationRepository.cs" />
+    <Compile Include="AzureMessageNotificationRepository\AzureEmailNotificationRepository.cs" />
+    <Compile Include="Configuration\AzureServiceBusMessageSubSystemConfiguration.cs" />
+    <Compile Include="Configuration\MessageStorageConfiguration.cs" />
     <Compile Include="Configuration\NotificationServiceConfiguration.cs" />
+    <Compile Include="Configuration\NotifyEmailServiceConfiguration.cs" />
+    <Compile Include="Configuration\SmtpConfiguration.cs" />
     <Compile Include="DependencyResolution\MessagePolicy.cs" />
-    <Compile Include="EmailMessageEntity.cs" />
-    <Compile Include="LocalEmailService.cs" />
-    <Compile Include="Notify\NotifyHttpClientWrapper.cs" />
-    <Compile Include="Notify\NotifyEmailService.cs" />
-    <Compile Include="Notify\NotifyMessage.cs" />
-    <Compile Include="Notify\NotifySmsService.cs" />
+    <Compile Include="AzureMessageNotificationRepository\EmailMessageTableEntity.cs" />
+    <Compile Include="LocalEmailService\LocalEmailService.cs" />
+    <Compile Include="NotifyEmailService\GovNotifyPayload.cs" />
+    <Compile Include="NotifyEmailService\JwtTokenUtility.cs" />
+    <Compile Include="NotifyEmailService\NotifyHttpClientWrapper.cs" />
+    <Compile Include="NotifyEmailService\NotifyEmailService.cs" />
+    <Compile Include="NotifyEmailService\NotifyMessage.cs" />
+    <Compile Include="NotifyEmailService\NotifySmsService.cs" />
+    <Compile Include="NotifyEmailService\UnixDate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SendGridSmtpEmailService.cs" />
+    <Compile Include="SendGridSmtpEmailService\SendGridSmtpEmailService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.Notifications.Application\SFA.DAS.Notifications.Application.csproj">

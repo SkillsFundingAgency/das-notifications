@@ -6,6 +6,6 @@ namespace SFA.DAS.Notifications.Application.Interfaces
 {
     public interface ISmsService
     {
-        Task SendAsync(SmsMessage message);
+        Task SendAsync(SmsMessage message); //todo: should use domain entities
     }
 }
