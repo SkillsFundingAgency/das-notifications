@@ -27,6 +27,7 @@ namespace SFA.DAS.Notifications.Api.Orchestrators
         {
             try
             {
+                //todo: change to QueueEmailCommand OR add a new DispatchNotificationCommand
                 var cmd = new SendEmailCommand
                 {
                     UserId = notification.UserId,

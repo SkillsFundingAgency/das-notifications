@@ -37,6 +37,7 @@ namespace SFA.DAS.Notifications.Worker.MessageHandlers
             _emailService = emailService;
         }
 
+        //todo: too much in here for a message handler. should delegate to an application handler to DispatchNotification
         public async Task Handle()
         {
             var message = await _pollingMessageReceiver.ReceiveAsAsync<QueuedNotificationMessage>();
