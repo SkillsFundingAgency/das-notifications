@@ -36,7 +36,7 @@ namespace SFA.DAS.Notifications.Infrastructure.AzureMessageNotificationRepositor
 
             var entity = new EmailMessageTableEntity(message.MessageId)
             {
-                Data = JsonConvert.SerializeObject(message.Content)
+                Data = JsonConvert.SerializeObject(message)
             };
 
             var insertOperation = TableOperation.Insert(entity);
@@ -46,12 +46,6 @@ namespace SFA.DAS.Notifications.Infrastructure.AzureMessageNotificationRepositor
 
         public async Task<Notification> Get(NotificationFormat format, string messageId)
         {
-            var notification = new Notification
-            {
-                MessageId = messageId,
-                Content = null
-            };
-
             var tableClient = _storageAccount.CreateCloudTableClient();
             var table = tableClient.GetTableReference(_tableName);
 
@@ -61,8 +55,7 @@ namespace SFA.DAS.Notifications.Infrastructure.AzureMessageNotificationRepositor
 
             var tableEntity = (EmailMessageTableEntity) result.Result;
 
-            if (tableEntity != null)
-                notification.Content = JsonConvert.DeserializeObject<NotificationContent>(tableEntity.Data);
+            var notification = JsonConvert.DeserializeObject<Notification>(tableEntity.Data);
 
             return notification;
         }

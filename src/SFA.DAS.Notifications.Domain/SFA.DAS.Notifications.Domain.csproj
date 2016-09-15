@@ -39,10 +39,9 @@
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Entities\EmailMessage.cs" />
-    <Compile Include="Entities\SmsNotificationContent.cs" />
-    <Compile Include="Entities\EmailNotificationContent.cs" />
+    <Compile Include="Entities\NotificationSmsContent.cs" />
+    <Compile Include="Entities\NotificationEmailContent.cs" />
     <Compile Include="Entities\Notification.cs" />
-    <Compile Include="Entities\NotificationContent.cs" />
     <Compile Include="Entities\NotificationFormat.cs" />
     <Compile Include="Entities\SmsMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

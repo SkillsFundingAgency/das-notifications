@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace SFA.DAS.Notifications.Domain.Entities
 {
-    public class EmailNotificationContent
+    public class NotificationEmailContent
     {
         public string Subject { get; set; }
         public string RecipientsAddress { get; set; }

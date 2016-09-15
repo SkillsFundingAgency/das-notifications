@@ -30,17 +30,18 @@ namespace SFA.DAS.Notifications.Application.Commands.DispatchNotification
                 MessageId = command.MessageId
             });
 
-            var notificationFormat = response.Notification.Content?.Format;
+            var notificationFormat = response.Notification.Format;
 
             switch (notificationFormat)
             {
                 case NotificationFormat.Email:
-                    var emailContent = JsonConvert.DeserializeObject<EmailNotificationContent>(response.Notification.Content.Data);
+                    //todo: log here
+                    var emailContent = JsonConvert.DeserializeObject<NotificationEmailContent>(response.Notification.Data);
 
                     await _emailService.SendAsync(new EmailMessage
                     {
-                        TemplateId = response.Notification.Content.TemplateId,
-                        SystemId = response.Notification.Content.SystemId,
+                        TemplateId = response.Notification.TemplateId,
+                        SystemId = response.Notification.SystemId,
                         Subject = emailContent.Subject,
                         RecipientsAddress = emailContent.RecipientsAddress,
                         ReplyToAddress = emailContent.ReplyToAddress,
@@ -49,7 +50,7 @@ namespace SFA.DAS.Notifications.Application.Commands.DispatchNotification
                     break;
 
                 case NotificationFormat.Sms:
-                    var smsContent = JsonConvert.DeserializeObject<SmsNotificationContent>(response.Notification.Content.Data);
+                    var smsContent = JsonConvert.DeserializeObject<NotificationSmsContent>(response.Notification.Data);
                     throw new NotImplementedException();
 
                 default:

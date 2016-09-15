@@ -62,20 +62,17 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
             return new Notification
             {
                 MessageId = messageId,
-                Content = new NotificationContent
+                SystemId = message.SystemId,
+                Timestamp = DateTimeProvider.Current.UtcNow,
+                Format = NotificationFormat.Email,
+                TemplateId = message.TemplateId,
+                Data = JsonConvert.SerializeObject(new NotificationEmailContent
                 {
-                    SystemId = message.SystemId,
-                    Timestamp = DateTimeProvider.Current.UtcNow,
-                    Format = NotificationFormat.Email,
-                    TemplateId = message.TemplateId,
-                    Data = JsonConvert.SerializeObject(new EmailNotificationContent
-                    {
-                        Subject = message.Subject,
-                        RecipientsAddress = message.RecipientsAddress,
-                        ReplyToAddress = message.ReplyToAddress,
-                        Tokens = message.Tokens
-                    })
-                }
+                    Subject = message.Subject,
+                    RecipientsAddress = message.RecipientsAddress,
+                    ReplyToAddress = message.ReplyToAddress,
+                    Tokens = message.Tokens
+                })
             };
         }
 
