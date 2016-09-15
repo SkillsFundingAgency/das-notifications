@@ -50,8 +50,17 @@ namespace SFA.DAS.Notifications.Application.Commands.DispatchNotification
                     break;
 
                 case NotificationFormat.Sms:
+                    //todo: log here
                     var smsContent = JsonConvert.DeserializeObject<NotificationSmsContent>(response.Notification.Data);
-                    throw new NotImplementedException();
+
+                    await _smsService.SendAsync(new SmsMessage
+                    {
+                        TemplateId = response.Notification.TemplateId,
+                        SystemId = response.Notification.SystemId,
+                        SendTo = smsContent.RecipientsNumber,
+                        Tokens = smsContent.Tokens
+                    });
+                    break;
 
                 default:
                     throw new ArgumentOutOfRangeException(nameof(notificationFormat), "Unsupported notification format");
