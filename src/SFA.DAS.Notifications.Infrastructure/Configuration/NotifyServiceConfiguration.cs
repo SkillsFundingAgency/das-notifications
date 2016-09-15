@@ -2,7 +2,7 @@ using System;
 
 namespace SFA.DAS.Notifications.Infrastructure.Configuration
 {
-    public class NotifyEmailServiceConfiguration
+    public class NotifyServiceConfiguration
     {
         public string ApiBaseUrl { get; set; }
         public string ServiceId { get; set; }

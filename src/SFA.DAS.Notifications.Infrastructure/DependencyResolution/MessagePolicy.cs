@@ -48,7 +48,7 @@ namespace SFA.DAS.Notifications.Infrastructure.DependencyResolution
                 {
                     var configurationService = new ConfigurationService(GetConfigurationRepository(), new ConfigurationOptions(_serviceName, environment, "1.0"));
 
-                    var config = configurationService.Get<NotificationServiceConfiguration>().ServiceBusConfiguration;
+                    var config = configurationService.Get<NotificationServiceConfiguration>().AzureServiceBusMessageServiceConfiguration;
                     if (string.IsNullOrEmpty(config.ConnectionString))
                     {
                         var queueFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);

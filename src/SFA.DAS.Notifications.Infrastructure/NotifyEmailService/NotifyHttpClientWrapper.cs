@@ -31,9 +31,9 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
 
             content.Template = content.Template;
 
-            using (var httpClient = CreateHttpClient(configuration.NotifyEmailServiceConfiguration.ApiBaseUrl))
+            using (var httpClient = CreateHttpClient(configuration.NotifyServiceConfiguration.ApiBaseUrl))
             {
-                var token = JwtTokenUtility.CreateToken(configuration.NotifyEmailServiceConfiguration.ServiceId, configuration.NotifyEmailServiceConfiguration.ApiKey);
+                var token = JwtTokenUtility.CreateToken(configuration.NotifyServiceConfiguration.ServiceId, configuration.NotifyServiceConfiguration.ApiKey);
                 httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
                 var serializeObject = JsonConvert.SerializeObject(content);
