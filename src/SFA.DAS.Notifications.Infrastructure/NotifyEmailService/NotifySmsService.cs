@@ -22,7 +22,7 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
         {
             var notifyMessage = new NotifyMessage
             {
-                To = message.SendTo,
+                To = message.RecipientsNumber,
                 Template = message.TemplateId,
                 Personalisation = message.Tokens.ToDictionary(item => item.Key.ToLower(), item => item.Value)
             };

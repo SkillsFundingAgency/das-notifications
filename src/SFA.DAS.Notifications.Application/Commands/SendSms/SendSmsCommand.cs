@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using MediatR;
 
-namespace SFA.DAS.Notifications.Domain.Entities
+namespace SFA.DAS.Notifications.Application.Commands.SendSms
 {
-    public class SmsMessage
+    public class SendSmsCommand : IAsyncRequest
     {
         public string SystemId { get; set; }
         public string TemplateId { get; set; }

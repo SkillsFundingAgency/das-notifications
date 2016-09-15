@@ -92,6 +92,9 @@
     </Compile>
     <Compile Include="Commands\DispatchNotification\DispatchNotificationCommand.cs" />
     <Compile Include="Commands\DispatchNotification\DispatchNotificationCommandHandler.cs" />
+    <Compile Include="Commands\SendSms\SendSmsCommand.cs" />
+    <Compile Include="Commands\SendSms\SendSmsCommandHandler.cs" />
+    <Compile Include="Commands\SendSms\SendsmsCommandValidator.cs" />
     <Compile Include="Commands\SendEmail\SendEmailCommand.cs" />
     <Compile Include="Commands\SendEmail\SendEmailCommandHandler.cs" />
     <Compile Include="Commands\SendEmail\SendEmailCommandValidator.cs" />

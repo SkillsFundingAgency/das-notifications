@@ -57,7 +57,7 @@ namespace SFA.DAS.Notifications.Api.DependencyResolution
 
             var config = GetConfiguration(environment);
 
-            For<INotificationsRepository>().Use<AzureEmailNotificationRepository>().Ctor<NotificationServiceConfiguration>().Is(config);
+            For<INotificationsRepository>().Use<AzureNotificationRepository>().Ctor<NotificationServiceConfiguration>().Is(config);
 
             For<IConfigurationService>().Use(GetConfigurationService(environment));
         }

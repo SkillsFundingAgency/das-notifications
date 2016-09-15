@@ -116,14 +116,14 @@
     <Compile Include="..\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="AzureMessageNotificationRepository\AzureEmailNotificationRepository.cs" />
+    <Compile Include="AzureMessageNotificationRepository\AzureNotificationRepository.cs" />
     <Compile Include="Configuration\AzureServiceBusMessageServiceConfiguration.cs" />
     <Compile Include="Configuration\NotificationsStorageConfiguration.cs" />
     <Compile Include="Configuration\NotificationServiceConfiguration.cs" />
     <Compile Include="Configuration\NotifyServiceConfiguration.cs" />
     <Compile Include="Configuration\SmtpConfiguration.cs" />
     <Compile Include="DependencyResolution\MessagePolicy.cs" />
-    <Compile Include="AzureMessageNotificationRepository\EmailMessageTableEntity.cs" />
+    <Compile Include="AzureMessageNotificationRepository\NotificationTableEntity.cs" />
     <Compile Include="LocalEmailService\LocalEmailService.cs" />
     <Compile Include="NotifyEmailService\GovNotifyPayload.cs" />
     <Compile Include="NotifyEmailService\JwtTokenUtility.cs" />

@@ -27,6 +27,7 @@ namespace SFA.DAS.Notifications.Application.Commands.DispatchNotification
         {
             var response = await _mediator.SendAsync(new GetMessageQueryRequest
             {
+                Format = command.Format,
                 MessageId = command.MessageId
             });
 
@@ -35,7 +36,8 @@ namespace SFA.DAS.Notifications.Application.Commands.DispatchNotification
             switch (notificationFormat)
             {
                 case NotificationFormat.Email:
-                    //todo: log here
+                    Logger.Info($"Handling dispatch email message {command.MessageId}");
+
                     var emailContent = JsonConvert.DeserializeObject<NotificationEmailContent>(response.Notification.Data);
 
                     await _emailService.SendAsync(new EmailMessage
@@ -50,14 +52,15 @@ namespace SFA.DAS.Notifications.Application.Commands.DispatchNotification
                     break;
 
                 case NotificationFormat.Sms:
-                    //todo: log here
+                    Logger.Info($"Handling dispatch SMS message {command.MessageId}");
+
                     var smsContent = JsonConvert.DeserializeObject<NotificationSmsContent>(response.Notification.Data);
 
                     await _smsService.SendAsync(new SmsMessage
                     {
                         TemplateId = response.Notification.TemplateId,
                         SystemId = response.Notification.SystemId,
-                        SendTo = smsContent.RecipientsNumber,
+                        RecipientsNumber = smsContent.RecipientsNumber,
                         Tokens = smsContent.Tokens
                     });
                     break;

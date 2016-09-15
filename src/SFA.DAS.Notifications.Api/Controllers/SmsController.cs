@@ -8,12 +8,12 @@ using SFA.DAS.Notifications.Api.Orchestrators;
 
 namespace SFA.DAS.Notifications.Api.Controllers
 {
-    [RoutePrefix("api/email")]
-    public class EmailController : ApiController
+    [RoutePrefix("api/sms")]
+    public class SmsController : ApiController
     {
         private readonly INotificationOrchestrator _orchestrator;
 
-        public EmailController(INotificationOrchestrator orchestrator)
+        public SmsController(INotificationOrchestrator orchestrator)
         {
             if (orchestrator == null)
                 throw new ArgumentNullException(nameof(orchestrator));
@@ -23,9 +23,9 @@ namespace SFA.DAS.Notifications.Api.Controllers
 
         [Route("")]
         [HttpPost]
-        public async Task<HttpResponseMessage> Post(SendEmailRequest notification)
+        public async Task<HttpResponseMessage> Post(SendSmsRequest notification)
         {
-            var response = await _orchestrator.SendEmail(notification);
+            var response = await _orchestrator.SendSms(notification);
 
             if (response.Code == NotificationOrchestratorCodes.Post.ValidationFailure)
                 return new HttpResponseMessage(HttpStatusCode.BadRequest);

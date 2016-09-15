@@ -191,6 +191,7 @@
     <Compile Include="App_Start\StructuremapMvc.cs" />
     <Compile Include="App_Start\StructuremapWebApi.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\SmsController.cs" />
     <Compile Include="Controllers\EmailController.cs" />
     <Compile Include="Core\OrchestratorBase.cs" />
     <Compile Include="Core\OrchestratorResponse.cs" />
@@ -203,6 +204,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\SendSmsRequest.cs" />
     <Compile Include="Models\SendEmailRequest.cs" />
     <Compile Include="Orchestrators\INotificationOrchestrator.cs" />
     <Compile Include="Orchestrators\NotificationOrchestrator.cs" />

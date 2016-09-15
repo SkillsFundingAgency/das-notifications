@@ -5,15 +5,16 @@ using MediatR;
 using Newtonsoft.Json;
 using NLog;
 using SFA.DAS.Messaging;
+using SFA.DAS.Notifications.Application.Commands.SendEmail;
 using SFA.DAS.Notifications.Application.Exceptions;
 using SFA.DAS.Notifications.Application.Messages;
 using SFA.DAS.Notifications.Domain.Entities;
 using SFA.DAS.Notifications.Domain.Repositories;
 using SFA.DAS.TimeProvider;
 
-namespace SFA.DAS.Notifications.Application.Commands.SendEmail
+namespace SFA.DAS.Notifications.Application.Commands.SendSms
 {
-    public class SendEmailCommandHandler : AsyncRequestHandler<SendEmailCommand>
+    public class SendSmsCommandHandler : AsyncRequestHandler<SendSmsCommand>
     {
         [QueueName]
         public string send_notifications { get; set; }
@@ -23,7 +24,7 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
         private readonly INotificationsRepository _notificationsRepository;
         private readonly IMessagePublisher _messagePublisher;
 
-        public SendEmailCommandHandler(INotificationsRepository notificationsRepository, IMessagePublisher messagePublisher)
+        public SendSmsCommandHandler(INotificationsRepository notificationsRepository, IMessagePublisher messagePublisher)
         {
             if (notificationsRepository == null)
                 throw new ArgumentNullException(nameof(notificationsRepository));
@@ -34,11 +35,11 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
             _messagePublisher = messagePublisher;
         }
 
-        protected override async Task HandleCore(SendEmailCommand command)
+        protected override async Task HandleCore(SendSmsCommand command)
         {
             var messageId = Guid.NewGuid().ToString();
 
-            Logger.Debug($"Received command to send email to {command.RecipientsAddress} (message id: {messageId})");
+            Logger.Debug($"Received command to send SMS to {command.RecipientsNumber} (message id: {messageId})");
 
             var validationResult = Validate(command);
 
@@ -52,34 +53,32 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
             await _messagePublisher.PublishAsync(new DispatchNotificationMessage
             {
                 MessageId = messageId,
-                Format = NotificationFormat.Email
+                Format = NotificationFormat.Sms
             });
 
             Logger.Debug($"Published message '{messageId}' to queue");
         }
 
-        private static Notification CreateMessageData(SendEmailCommand message, string messageId)
+        private static Notification CreateMessageData(SendSmsCommand message, string messageId)
         {
             return new Notification
             {
                 MessageId = messageId,
                 SystemId = message.SystemId,
                 Timestamp = DateTimeProvider.Current.UtcNow,
-                Format = NotificationFormat.Email,
+                Format = NotificationFormat.Sms,
                 TemplateId = message.TemplateId,
-                Data = JsonConvert.SerializeObject(new NotificationEmailContent
+                Data = JsonConvert.SerializeObject(new NotificationSmsContent
                 {
-                    Subject = message.Subject,
-                    RecipientsAddress = message.RecipientsAddress,
-                    ReplyToAddress = message.ReplyToAddress,
+                    RecipientsNumber = message.RecipientsNumber,
                     Tokens = message.Tokens
                 })
             };
         }
 
-        private ValidationResult Validate(SendEmailCommand command)
+        private ValidationResult Validate(SendSmsCommand command)
         {
-            var validator = new SendEmailCommandValidator();
+            var validator = new SendSmsCommandValidator();
 
             return validator.Validate(command);
         }

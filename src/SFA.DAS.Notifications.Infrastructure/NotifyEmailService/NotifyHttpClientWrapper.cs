@@ -39,6 +39,7 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
                 var serializeObject = JsonConvert.SerializeObject(content);
                 var stringContent = new StringContent(serializeObject, Encoding.UTF8, "application/json");
 
+                //todo: add SMS support for Notify
                 var response = await httpClient.SendAsync(new HttpRequestMessage(HttpMethod.Post, "/notifications/email")
                 {
                     Content = stringContent

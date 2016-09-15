@@ -8,5 +8,6 @@ namespace SFA.DAS.Notifications.Api.Orchestrators
     public interface INotificationOrchestrator
     {
         Task<OrchestratorResponse> SendEmail(SendEmailRequest request);
+        Task<OrchestratorResponse> SendSms(SendSmsRequest request);
     }
 }

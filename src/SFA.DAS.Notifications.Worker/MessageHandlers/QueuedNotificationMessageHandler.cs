@@ -37,7 +37,8 @@ namespace SFA.DAS.Notifications.Worker.MessageHandlers
                 {
                     var command = new DispatchNotificationCommand
                     {
-                        MessageId = message.Content.MessageId
+                        MessageId = message.Content.MessageId,
+                        Format = message.Content.Format
                     };
 
                     await _mediator.SendAsync(command);
@@ -50,7 +51,7 @@ namespace SFA.DAS.Notifications.Worker.MessageHandlers
                 {
                     Logger.Error(ex, $"Error processing message {message.Content.MessageId} - {ex.Message}");
 
-                    await message.CompleteAsync(); //todo: abort message?
+                    await message.CompleteAsync(); //todo: abort or dead letter message?
                 }
             }
         }

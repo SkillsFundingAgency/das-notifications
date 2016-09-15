@@ -11,15 +11,15 @@ using SFA.DAS.Notifications.Infrastructure.Configuration;
 
 namespace SFA.DAS.Notifications.Infrastructure.AzureMessageNotificationRepository
 {
-    public class AzureEmailNotificationRepository : INotificationsRepository
+    public class AzureNotificationRepository : INotificationsRepository
     {
         private readonly CloudStorageAccount _storageAccount;
         private readonly string _tableName;
 
-        public AzureEmailNotificationRepository(IConfigurationService configurationService)
+        public AzureNotificationRepository(IConfigurationService configurationService)
             : this(configurationService, CloudConfigurationManager.GetSetting("StorageConnectionString")) {}
 
-        public AzureEmailNotificationRepository(IConfigurationService configurationService, string storageConnectionString)
+        public AzureNotificationRepository(IConfigurationService configurationService, string storageConnectionString)
         {
             if (configurationService == null)
                 throw new ArgumentNullException(nameof(configurationService));
@@ -34,7 +34,7 @@ namespace SFA.DAS.Notifications.Infrastructure.AzureMessageNotificationRepositor
 
             var table = tableClient.GetTableReference(_tableName);
 
-            var entity = new EmailMessageTableEntity(message.MessageId)
+            var entity = new NotificationTableEntity(message.Format, message.MessageId)
             {
                 Data = JsonConvert.SerializeObject(message)
             };
@@ -50,10 +50,10 @@ namespace SFA.DAS.Notifications.Infrastructure.AzureMessageNotificationRepositor
             var table = tableClient.GetTableReference(_tableName);
 
             var messageType = format.ToString();
-            var tableOperation = TableOperation.Retrieve<EmailMessageTableEntity>(messageType, messageId);
+            var tableOperation = TableOperation.Retrieve<NotificationTableEntity>(messageType, messageId);
             var result = await table.ExecuteAsync(tableOperation);
 
-            var tableEntity = (EmailMessageTableEntity) result.Result;
+            var tableEntity = (NotificationTableEntity) result.Result;
 
             var notification = JsonConvert.DeserializeObject<Notification>(tableEntity.Data);
 
