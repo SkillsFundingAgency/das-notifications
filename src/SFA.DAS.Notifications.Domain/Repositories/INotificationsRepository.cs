@@ -8,5 +8,6 @@ namespace SFA.DAS.Notifications.Domain.Repositories
     {
         Task Create(Notification message);
         Task<Notification> Get(NotificationFormat format, string messageId);
+        Task Update(NotificationFormat format, string messageId, NotificationStatus sending);
     }
 }

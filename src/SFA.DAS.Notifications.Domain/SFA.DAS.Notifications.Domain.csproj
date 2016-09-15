@@ -43,6 +43,7 @@
     <Compile Include="Entities\NotificationEmailContent.cs" />
     <Compile Include="Entities\Notification.cs" />
     <Compile Include="Entities\NotificationFormat.cs" />
+    <Compile Include="Entities\NotificationStatus.cs" />
     <Compile Include="Entities\SmsMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\INotificationsRepository.cs" />

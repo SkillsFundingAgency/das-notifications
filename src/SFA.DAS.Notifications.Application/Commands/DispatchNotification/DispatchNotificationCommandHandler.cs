@@ -6,6 +6,7 @@ using NLog;
 using SFA.DAS.Notifications.Application.Interfaces;
 using SFA.DAS.Notifications.Application.Queries.GetMessage;
 using SFA.DAS.Notifications.Domain.Entities;
+using SFA.DAS.Notifications.Domain.Repositories;
 
 namespace SFA.DAS.Notifications.Application.Commands.DispatchNotification
 {
@@ -14,13 +15,15 @@ namespace SFA.DAS.Notifications.Application.Commands.DispatchNotification
         private readonly IMediator _mediator;
         private readonly IEmailService _emailService;
         private readonly ISmsService _smsService;
+        private readonly INotificationsRepository _notificationsRepository;
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
 
-        public DispatchNotificationCommandHandler(IMediator mediator, IEmailService emailService, ISmsService smsService)
+        public DispatchNotificationCommandHandler(IMediator mediator, IEmailService emailService, ISmsService smsService, INotificationsRepository notificationsRepository)
         {
             _mediator = mediator;
             _emailService = emailService;
             _smsService = smsService;
+            _notificationsRepository = notificationsRepository;
         }
 
         protected override async Task HandleCore(DispatchNotificationCommand command)
@@ -40,6 +43,8 @@ namespace SFA.DAS.Notifications.Application.Commands.DispatchNotification
 
                     var emailContent = JsonConvert.DeserializeObject<NotificationEmailContent>(response.Notification.Data);
 
+                    await _notificationsRepository.Update(command.Format, command.MessageId, NotificationStatus.Sending);
+
                     await _emailService.SendAsync(new EmailMessage
                     {
                         TemplateId = response.Notification.TemplateId,
@@ -49,12 +54,17 @@ namespace SFA.DAS.Notifications.Application.Commands.DispatchNotification
                         ReplyToAddress = emailContent.ReplyToAddress,
                         Tokens = emailContent.Tokens
                     });
+
+                    await _notificationsRepository.Update(command.Format, command.MessageId, NotificationStatus.Sent);
+
                     break;
 
                 case NotificationFormat.Sms:
                     Logger.Info($"Handling dispatch SMS message {command.MessageId}");
 
                     var smsContent = JsonConvert.DeserializeObject<NotificationSmsContent>(response.Notification.Data);
+
+                    await _notificationsRepository.Update(command.Format, command.MessageId, NotificationStatus.Sending);
 
                     await _smsService.SendAsync(new SmsMessage
                     {
@@ -63,6 +73,9 @@ namespace SFA.DAS.Notifications.Application.Commands.DispatchNotification
                         RecipientsNumber = smsContent.RecipientsNumber,
                         Tokens = smsContent.Tokens
                     });
+
+                    await _notificationsRepository.Update(command.Format, command.MessageId, NotificationStatus.Sent);
+
                     break;
 
                 default:

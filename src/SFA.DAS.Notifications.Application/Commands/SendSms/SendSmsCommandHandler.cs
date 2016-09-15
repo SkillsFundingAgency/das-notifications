@@ -66,6 +66,7 @@ namespace SFA.DAS.Notifications.Application.Commands.SendSms
                 MessageId = messageId,
                 SystemId = message.SystemId,
                 Timestamp = DateTimeProvider.Current.UtcNow,
+                Status = NotificationStatus.New,
                 Format = NotificationFormat.Sms,
                 TemplateId = message.TemplateId,
                 Data = JsonConvert.SerializeObject(new NotificationSmsContent

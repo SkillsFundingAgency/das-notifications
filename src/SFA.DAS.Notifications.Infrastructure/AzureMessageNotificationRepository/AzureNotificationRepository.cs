@@ -49,8 +49,7 @@ namespace SFA.DAS.Notifications.Infrastructure.AzureMessageNotificationRepositor
             var tableClient = _storageAccount.CreateCloudTableClient();
             var table = tableClient.GetTableReference(_tableName);
 
-            var messageType = format.ToString();
-            var tableOperation = TableOperation.Retrieve<NotificationTableEntity>(messageType, messageId);
+            var tableOperation = TableOperation.Retrieve<NotificationTableEntity>(format.ToString(), messageId);
             var result = await table.ExecuteAsync(tableOperation);
 
             var tableEntity = (NotificationTableEntity) result.Result;
@@ -58,6 +57,26 @@ namespace SFA.DAS.Notifications.Infrastructure.AzureMessageNotificationRepositor
             var notification = JsonConvert.DeserializeObject<Notification>(tableEntity.Data);
 
             return notification;
+        }
+
+        public async Task Update(NotificationFormat format, string messageId, NotificationStatus status)
+        {
+            var tableClient = _storageAccount.CreateCloudTableClient();
+            var table = tableClient.GetTableReference(_tableName);
+
+            var getOperationt= TableOperation.Retrieve<NotificationTableEntity>(format.ToString(), messageId);
+            var result = await table.ExecuteAsync(getOperationt);
+
+            var notificationTableEntity = (NotificationTableEntity)result.Result;
+
+            var notification = JsonConvert.DeserializeObject<Notification>(notificationTableEntity.Data);
+            notification.Status = status;
+
+            notificationTableEntity.Data = JsonConvert.SerializeObject(notification);
+
+            var updateOperation = TableOperation.Replace(notificationTableEntity);
+
+            await table.ExecuteAsync(updateOperation);
         }
     }
 }

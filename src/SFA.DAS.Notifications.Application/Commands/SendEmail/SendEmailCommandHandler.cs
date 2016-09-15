@@ -65,6 +65,7 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
                 MessageId = messageId,
                 SystemId = message.SystemId,
                 Timestamp = DateTimeProvider.Current.UtcNow,
+                Status = NotificationStatus.New,
                 Format = NotificationFormat.Email,
                 TemplateId = message.TemplateId,
                 Data = JsonConvert.SerializeObject(new NotificationEmailContent
