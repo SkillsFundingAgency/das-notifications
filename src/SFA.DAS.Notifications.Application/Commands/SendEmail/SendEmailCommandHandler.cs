@@ -34,24 +34,24 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
             _messagePublisher = messagePublisher;
         }
 
-        protected override async Task HandleCore(SendEmailCommand message)
+        protected override async Task HandleCore(SendEmailCommand command)
         {
             var messageId = Guid.NewGuid().ToString();
 
-            Logger.Debug($"Received message type {message.MessageType} to send to {message.RecipientsAddress} (message id: {messageId})");
+            Logger.Debug($"Received message type {command.MessageType} to send to {command.RecipientsAddress} (message id: {messageId})");
 
-            var validationResult = Validate(message);
+            var validationResult = Validate(command);
 
             if (!validationResult.IsValid)
                 throw new CustomValidationException(validationResult);
 
-            await _notificationsRepository.Create(CreateMessageData(message, messageId));
+            await _notificationsRepository.Create(CreateMessageData(command, messageId));
 
             Logger.Debug($"Stored message '{messageId}' in data store");
 
-            await _messagePublisher.PublishAsync(new QueuedNotificationMessage
+            await _messagePublisher.PublishAsync(new DispatchNotificationMessage
             {
-                MessageType = message.MessageType,
+                MessageType = command.MessageType,
                 MessageId = messageId
             });
 
@@ -80,11 +80,11 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
             };
         }
 
-        private ValidationResult Validate(SendEmailCommand cmd)
+        private ValidationResult Validate(SendEmailCommand command)
         {
             var validator = new SendEmailCommandValidator();
 
-            return validator.Validate(cmd);
+            return validator.Validate(command);
         }
     }
 }

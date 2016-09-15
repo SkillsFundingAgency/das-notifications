@@ -27,8 +27,7 @@ namespace SFA.DAS.Notifications.Api.Orchestrators
         {
             try
             {
-                //todo: change to QueueEmailCommand OR add a new DispatchNotificationCommand
-                var cmd = new SendEmailCommand
+                var command = new SendEmailCommand
                 {
                     UserId = notification.UserId,
                     MessageType = notification.MessageType,
@@ -38,12 +37,12 @@ namespace SFA.DAS.Notifications.Api.Orchestrators
                     Tokens = notification.Tokens
                 };
 
-                var validationResult = ValidateCommand(cmd);
+                var validationResult = ValidateCommand(command);
 
                 if (!validationResult.IsValid)
                     return GetOrchestratorResponse(NotificationOrchestratorCodes.Post.ValidationFailure, validationResult: validationResult);
 
-                await _mediator.SendAsync(cmd);
+                await _mediator.SendAsync(command);
 
                 return GetOrchestratorResponse(NotificationOrchestratorCodes.Post.Success);
             }
@@ -59,11 +58,11 @@ namespace SFA.DAS.Notifications.Api.Orchestrators
             }
         }
 
-        private static ValidationResult ValidateCommand(SendEmailCommand cmd)
+        private static ValidationResult ValidateCommand(SendEmailCommand command)
         {
             var validator = new SendEmailCommandValidator();
 
-            return validator.Validate(cmd);
+            return validator.Validate(command);
         }
     }
 }
