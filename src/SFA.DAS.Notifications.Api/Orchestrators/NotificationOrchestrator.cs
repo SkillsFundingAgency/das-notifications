@@ -29,7 +29,7 @@ namespace SFA.DAS.Notifications.Api.Orchestrators
             {
                 var command = new SendEmailCommand
                 {
-                    UserId = request.UserId,
+                    SystemId = request.SystemId,
                     TemplateId = request.TemplateId,
                     Subject = request.Subject,
                     RecipientsAddress = request.RecipientsAddress,

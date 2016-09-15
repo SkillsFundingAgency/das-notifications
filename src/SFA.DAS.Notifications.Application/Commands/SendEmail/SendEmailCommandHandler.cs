@@ -64,7 +64,7 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
                 MessageId = messageId,
                 Content = new NotificationContent
                 {
-                    UserId = message.UserId,
+                    SystemId = message.SystemId,
                     Timestamp = DateTimeProvider.Current.UtcNow,
                     Format = NotificationFormat.Email,
                     TemplateId = message.TemplateId,

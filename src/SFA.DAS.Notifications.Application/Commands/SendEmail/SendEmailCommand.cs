@@ -6,7 +6,7 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
 {
     public class SendEmailCommand : IAsyncRequest
     {
-        public string UserId { get; set; }
+        public string SystemId { get; set; }
         public string TemplateId { get; set; }
         public string Subject { get; set; }
         public string RecipientsAddress { get; set; }

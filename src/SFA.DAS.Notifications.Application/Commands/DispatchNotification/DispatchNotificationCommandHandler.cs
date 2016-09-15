@@ -40,7 +40,7 @@ namespace SFA.DAS.Notifications.Application.Commands.DispatchNotification
                     await _emailService.SendAsync(new EmailMessage
                     {
                         TemplateId = response.Notification.Content.TemplateId,
-                        UserId = response.Notification.Content.UserId,
+                        SystemId = response.Notification.Content.SystemId,
                         Subject = emailContent.Subject,
                         RecipientsAddress = emailContent.RecipientsAddress,
                         ReplyToAddress = emailContent.ReplyToAddress,
