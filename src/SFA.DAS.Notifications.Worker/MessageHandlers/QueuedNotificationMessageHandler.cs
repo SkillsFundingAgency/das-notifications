@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MediatR;
-using Newtonsoft.Json;
 using NLog;
 using SFA.DAS.Messaging;
 using SFA.DAS.Notifications.Application.Commands;
-using SFA.DAS.Notifications.Application.Interfaces;
+using SFA.DAS.Notifications.Application.Commands.DispatchNotification;
 using SFA.DAS.Notifications.Application.Messages;
-using SFA.DAS.Notifications.Application.Queries.GetMessage;
-using SFA.DAS.Notifications.Domain.Entities;
 
 namespace SFA.DAS.Notifications.Worker.MessageHandlers
 {
@@ -21,64 +18,31 @@ namespace SFA.DAS.Notifications.Worker.MessageHandlers
 
         private readonly IMediator _mediator;
         private readonly IPollingMessageReceiver _pollingMessageReceiver;
-        private readonly IEmailService _emailService;
 
-        public QueuedNotificationMessageHandler(IMediator mediator, IPollingMessageReceiver pollingMessageReceiver, IEmailService emailService)
+        public QueuedNotificationMessageHandler(IMediator mediator, IPollingMessageReceiver pollingMessageReceiver)
         {
-            if (mediator == null)
-                throw new ArgumentNullException(nameof(mediator));
-            if (pollingMessageReceiver == null)
-                throw new ArgumentNullException(nameof(pollingMessageReceiver));
-            if (emailService == null)
-                throw new ArgumentNullException(nameof(emailService));
-
             _mediator = mediator;
             _pollingMessageReceiver = pollingMessageReceiver;
-            _emailService = emailService;
         }
 
-        //todo: too much in here for a message handler. should delegate to an application handler to DispatchNotification
         public async Task Handle()
         {
-            var message = await _pollingMessageReceiver.ReceiveAsAsync<QueuedNotificationMessage>();
+            var message = await _pollingMessageReceiver.ReceiveAsAsync<DispatchNotificationMessage>();
 
             if (message?.Content != null)
             {
+                Logger.Info($"Received message {message.Content.MessageId}");
+
                 try
                 {
-                    Logger.Info($"Received message {message.Content.MessageId}");
-
-                    var response = await _mediator.SendAsync(new GetMessageQueryRequest
+                    var command = new DispatchNotificationCommand
                     {
                         MessageType = message.Content.MessageType,
                         MessageId = message.Content.MessageId
-                    });
+                    };
 
-                    var notificationFormat = response.Notification.Content?.Format;
+                    await _mediator.SendAsync(command);
 
-                    switch (notificationFormat)
-                    {
-                        case NotificationFormat.Email:
-                            var emailContent = JsonConvert.DeserializeObject<EmailNotificationContent>(response.Notification.Content.Data);
-
-                            await _emailService.SendAsync(new EmailMessage
-                            {
-                                MessageType = response.Notification.MessageType,
-                                TemplateId = response.Notification.Content.TemplateId,
-                                UserId = response.Notification.Content.UserId,
-                                RecipientsAddress = emailContent.RecipientsAddress,
-                                ReplyToAddress = emailContent.ReplyToAddress,
-                                Tokens = emailContent.Tokens
-                            });
-                            break;
-
-                        case NotificationFormat.Sms:
-                            var smsContent = JsonConvert.DeserializeObject<SmsMessage>(response.Notification.Content.Data);
-                            throw new NotImplementedException();
-
-                        default:
-                            throw new ArgumentOutOfRangeException(nameof(notificationFormat), "Unsupported notification format");
-                    }
 
                     await message.CompleteAsync();
 
@@ -87,7 +51,8 @@ namespace SFA.DAS.Notifications.Worker.MessageHandlers
                 catch (Exception ex)
                 {
                     Logger.Error(ex, $"Error processing message {message.Content.MessageId} - {ex.Message}");
-                    //todo: abort message?
+
+                    await message.CompleteAsync(); //todo: abort message?
                 }
             }
         }

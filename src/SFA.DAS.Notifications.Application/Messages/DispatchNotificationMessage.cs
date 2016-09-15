@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.Notifications.Application.Messages
 {
-    public class QueuedNotificationMessage
+    public class DispatchNotificationMessage
     {
         public string MessageType { get; set; }
         public string MessageId { get; set; }
