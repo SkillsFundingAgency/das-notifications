@@ -40,7 +40,7 @@ namespace SFA.DAS.Notifications.Infrastructure.LocalEmailService
 
                 var mail = new MailMessage(message.ReplyToAddress, message.RecipientsAddress)
                 {
-                    Subject = "email", //todo: email subject goes here
+                    Subject = message.Subject,
                     Body = JsonConvert.SerializeObject(message)
                 };
 

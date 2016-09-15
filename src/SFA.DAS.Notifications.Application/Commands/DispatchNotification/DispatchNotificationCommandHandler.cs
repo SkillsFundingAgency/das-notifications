@@ -41,6 +41,7 @@ namespace SFA.DAS.Notifications.Application.Commands.DispatchNotification
                     {
                         TemplateId = response.Notification.Content.TemplateId,
                         UserId = response.Notification.Content.UserId,
+                        Subject = emailContent.Subject,
                         RecipientsAddress = emailContent.RecipientsAddress,
                         ReplyToAddress = emailContent.ReplyToAddress,
                         Tokens = emailContent.Tokens

@@ -70,6 +70,7 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
                     TemplateId = message.TemplateId,
                     Data = JsonConvert.SerializeObject(new EmailNotificationContent
                     {
+                        Subject = message.Subject,
                         RecipientsAddress = message.RecipientsAddress,
                         ReplyToAddress = message.ReplyToAddress,
                         Tokens = message.Tokens

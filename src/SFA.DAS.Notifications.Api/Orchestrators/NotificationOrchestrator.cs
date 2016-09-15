@@ -23,17 +23,18 @@ namespace SFA.DAS.Notifications.Api.Orchestrators
             _mediator = mediator;
         }
 
-        public async Task<OrchestratorResponse> SendEmail(SendEmailRequest notification)
+        public async Task<OrchestratorResponse> SendEmail(SendEmailRequest request)
         {
             try
             {
                 var command = new SendEmailCommand
                 {
-                    UserId = notification.UserId,
-                    TemplateId = notification.TemplateId,
-                    RecipientsAddress = notification.RecipientsAddress,
-                    ReplyToAddress = notification.ReplyToAddress,
-                    Tokens = notification.Tokens
+                    UserId = request.UserId,
+                    TemplateId = request.TemplateId,
+                    Subject = request.Subject,
+                    RecipientsAddress = request.RecipientsAddress,
+                    ReplyToAddress = request.ReplyToAddress,
+                    Tokens = request.Tokens
                 };
 
                 var validationResult = ValidateCommand(command);

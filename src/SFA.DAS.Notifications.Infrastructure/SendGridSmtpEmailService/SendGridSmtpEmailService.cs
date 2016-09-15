@@ -38,7 +38,7 @@ namespace SFA.DAS.Notifications.Infrastructure.SendGridSmtpEmailService
 
                 var mail = new MailMessage(message.ReplyToAddress, message.RecipientsAddress)
                 {
-                    Subject = "email", //todo: email subject goes here
+                    Subject = message.Subject,
                     Body = JsonConvert.SerializeObject(message)
                 };
                 await client.SendMailAsync(mail);
