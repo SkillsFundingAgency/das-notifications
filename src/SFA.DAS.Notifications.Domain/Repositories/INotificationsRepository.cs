@@ -7,6 +7,6 @@ namespace SFA.DAS.Notifications.Domain.Repositories
     public interface INotificationsRepository
     {
         Task Create(Notification message);
-        Task<Notification> Get(string messageType, string messageId);
+        Task<Notification> Get(NotificationFormat format, string messageId);
     }
 }

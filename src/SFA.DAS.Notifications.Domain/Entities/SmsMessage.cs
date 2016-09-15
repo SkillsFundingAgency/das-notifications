@@ -6,7 +6,6 @@ namespace SFA.DAS.Notifications.Domain.Entities
     public class SmsMessage
     {
         public string UserId { get; set; }
-        public string MessageType { get; set; }
         public string TemplateId { get; set; }
         public string SendTo { get; set; }
         public string ReplyTo { get; set; }

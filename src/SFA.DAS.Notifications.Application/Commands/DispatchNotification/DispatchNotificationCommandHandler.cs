@@ -27,7 +27,6 @@ namespace SFA.DAS.Notifications.Application.Commands.DispatchNotification
         {
             var response = await _mediator.SendAsync(new GetMessageQueryRequest
             {
-                MessageType = command.MessageType,
                 MessageId = command.MessageId
             });
 
@@ -40,7 +39,6 @@ namespace SFA.DAS.Notifications.Application.Commands.DispatchNotification
 
                     await _emailService.SendAsync(new EmailMessage
                     {
-                        MessageType = response.Notification.MessageType,
                         TemplateId = response.Notification.Content.TemplateId,
                         UserId = response.Notification.Content.UserId,
                         RecipientsAddress = emailContent.RecipientsAddress,

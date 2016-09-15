@@ -8,7 +8,7 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
         public SendEmailCommandValidator()
         {
             RuleFor(model => model.UserId).NotEmpty();
-            RuleFor(model => model.MessageType).NotEmpty();
+            RuleFor(model => model.TemplateId).NotEmpty();
             RuleFor(model => model.RecipientsAddress).NotEmpty();
             RuleFor(model => model.ReplyToAddress).NotEmpty();
         }

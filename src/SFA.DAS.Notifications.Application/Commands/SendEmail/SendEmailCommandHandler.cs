@@ -38,7 +38,7 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
         {
             var messageId = Guid.NewGuid().ToString();
 
-            Logger.Debug($"Received message type {command.MessageType} to send to {command.RecipientsAddress} (message id: {messageId})");
+            Logger.Debug($"Received command to send email to {command.RecipientsAddress} (message id: {messageId})");
 
             var validationResult = Validate(command);
 
@@ -51,7 +51,6 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
 
             await _messagePublisher.PublishAsync(new DispatchNotificationMessage
             {
-                MessageType = command.MessageType,
                 MessageId = messageId
             });
 
@@ -63,7 +62,6 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
             return new Notification
             {
                 MessageId = messageId,
-                MessageType = message.MessageType,
                 Content = new NotificationContent
                 {
                     UserId = message.UserId,

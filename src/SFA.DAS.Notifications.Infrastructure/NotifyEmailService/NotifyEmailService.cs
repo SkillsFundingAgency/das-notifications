@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using NLog;
 using SFA.DAS.Notifications.Application.Interfaces;
-using SFA.DAS.Notifications.Application.Messages;
 using SFA.DAS.Notifications.Domain.Entities;
 
 namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
@@ -23,7 +22,7 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
 
         public async Task SendAsync(EmailMessage message)
         {
-            Logger.Info($"Sending {message.MessageType} to {message.RecipientsAddress}");
+            Logger.Info($"Sending email to {message.RecipientsAddress}");
 
             var notifyMessage = new NotifyMessage
             {

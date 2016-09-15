@@ -19,7 +19,7 @@ namespace SFA.DAS.Notifications.Application.Queries.GetMessage
 
         public async Task<GetMessageQueryResponse> Handle(GetMessageQueryRequest message)
         {
-            var notification = await _messageRepository.Get(message.MessageType, message.MessageId);
+            var notification = await _messageRepository.Get(message.Format, message.MessageId);
 
             return new GetMessageQueryResponse
             {

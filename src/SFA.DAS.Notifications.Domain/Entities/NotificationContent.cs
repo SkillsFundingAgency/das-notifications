@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.Notifications.Domain.Entities
 {
-    public class NotificationContent //todo: should be nested class
+    public class NotificationContent
     {
         public string UserId { get; set; }
         public DateTime Timestamp { get; set; }

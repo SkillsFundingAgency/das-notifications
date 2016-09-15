@@ -37,12 +37,10 @@ namespace SFA.DAS.Notifications.Worker.MessageHandlers
                 {
                     var command = new DispatchNotificationCommand
                     {
-                        MessageType = message.Content.MessageType,
                         MessageId = message.Content.MessageId
                     };
 
                     await _mediator.SendAsync(command);
-
 
                     await message.CompleteAsync();
 

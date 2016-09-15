@@ -30,7 +30,6 @@ namespace SFA.DAS.Notifications.Api.Orchestrators
                 var command = new SendEmailCommand
                 {
                     UserId = notification.UserId,
-                    MessageType = notification.MessageType,
                     TemplateId = notification.TemplateId,
                     RecipientsAddress = notification.RecipientsAddress,
                     ReplyToAddress = notification.ReplyToAddress,
