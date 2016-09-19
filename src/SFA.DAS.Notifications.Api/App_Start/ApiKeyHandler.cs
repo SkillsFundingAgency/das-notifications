@@ -52,7 +52,7 @@ namespace SFA.DAS.Notifications.Api
 
                 var tokenValue = headerValue.Split(' ').ElementAt(1);
                 var tokenAudience = tokenService.Decode(tokenValue, "aud", _apiAudiences, _apiIssuer);
-                var tokenRoles = tokenService.Decode(tokenValue, "value", _apiAudiences, _apiIssuer);
+                var tokenRoles = tokenService.Decode(tokenValue, "data", _apiAudiences, _apiIssuer);
 
                 var roles = tokenRoles.Split(' ');
 
