@@ -40,7 +40,7 @@ Where:
 
 ## Security ##
 
-The API uses JWT bearer tokens to enforce authorised access to the API methods.
+The API uses JWT bearer tokens to enforce authorised access to the API methods. Callers must present a bearer token that contains appropriate permissions.
 
 Supported permissions are:
 
