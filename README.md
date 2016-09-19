@@ -17,17 +17,17 @@ To send a new email:
 
 POST http://host:port/api/email/
 
-  {
-    "templateId": "email_template_id",
-    "subject": "A test email",
-    "recipientsAddress": "user@email.com",
-    "replyToAddress": "noreply@service.com",
-    "tokens": {
-      "Key1": "value1",
-      "Key2": "value2",
-      "Key3": "value3"
+    {
+        "templateId": "email_template_id",
+        "subject": "A test email",
+        "recipientsAddress": "user@email.com",
+        "replyToAddress": "noreply@service.com",
+        "tokens": {
+            "Key1": "value1",
+            "Key2": "value2",
+            "Key3": "value3"
+        }
     }
-  }
 
 Where:
 
