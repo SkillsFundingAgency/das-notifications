@@ -22,7 +22,7 @@ namespace SFA.DAS.Notifications.Api.Controllers
         }
 
         [Route("")]
-        [HttpPost]
+        [Authorize(Roles = "SendSMS")]
         public async Task<HttpResponseMessage> Post(SendSmsRequest notification)
         {
             var response = await _orchestrator.SendSms(notification);
