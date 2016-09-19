@@ -5,7 +5,7 @@ namespace SFA.DAS.Notifications.Api.Models
 {
     public class SendEmailRequest
     {
-        public string SystemId { get; set; } //todo: remove, should be extracted from token
+        public string SystemId { get; set; }
         public string TemplateId { get; set; }
         public string Subject { get; set; }
         public string RecipientsAddress { get; set; }

@@ -25,6 +25,8 @@ namespace SFA.DAS.Notifications.Api.Controllers
         [Authorize(Roles = "SendEmail")]
         public async Task<HttpResponseMessage> Post(SendEmailRequest notification)
         {
+            notification.SystemId = User.Identity.Name;
+
             var response = await _orchestrator.SendEmail(notification);
 
             if (response.Code == NotificationOrchestratorCodes.Post.ValidationFailure)

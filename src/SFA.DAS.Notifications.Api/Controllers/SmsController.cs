@@ -27,6 +27,8 @@ namespace SFA.DAS.Notifications.Api.Controllers
         {
             return new HttpResponseMessage(HttpStatusCode.NotImplemented);
 
+            //notification.SystemId = User.Identity.Name;
+
             //var response = await _orchestrator.SendSms(notification);
 
             //if (response.Code == NotificationOrchestratorCodes.Post.ValidationFailure)
