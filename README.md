@@ -41,3 +41,14 @@ Where:
 ## Security ##
 
 The API uses JWT bearer tokens to enforce authorised access to the API methods.
+
+Supported permissions are:
+
+    SendEmail
+    SendSMS
+
+The token should be passed in an `authorization` header and prefixed with `bearer `, for example:
+
+    Authorization:bearer <token>
+
+Note that tokens can viewed using an online tool such as the one at [http://jwt.io](http://jwt.io "online JWT viewer")
