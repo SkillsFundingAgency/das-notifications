@@ -33,7 +33,7 @@ Where:
 
 - **templateId** is the identifer for the email template to be used (eg. a SendGrid template ID)
 - **subject** is the email subject
-- **recipientsAddress* is the email address to send the message to
+- **recipientsAddress** is the email address to send the message to
 - **replyToAddress** is the "reply to" address that will show as the sender
 - **tokens** is an array of key/value pairs which are used to replace placeholders in the email body
 
