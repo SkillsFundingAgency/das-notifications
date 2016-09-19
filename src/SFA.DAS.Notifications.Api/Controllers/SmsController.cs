@@ -25,12 +25,14 @@ namespace SFA.DAS.Notifications.Api.Controllers
         [Authorize(Roles = "SendSMS")]
         public async Task<HttpResponseMessage> Post(SendSmsRequest notification)
         {
-            var response = await _orchestrator.SendSms(notification);
+            return new HttpResponseMessage(HttpStatusCode.NotImplemented);
 
-            if (response.Code == NotificationOrchestratorCodes.Post.ValidationFailure)
-                return new HttpResponseMessage(HttpStatusCode.BadRequest);
+            //var response = await _orchestrator.SendSms(notification);
 
-            return new HttpResponseMessage(HttpStatusCode.OK);
+            //if (response.Code == NotificationOrchestratorCodes.Post.ValidationFailure)
+            //    return new HttpResponseMessage(HttpStatusCode.BadRequest);
+
+            //return new HttpResponseMessage(HttpStatusCode.OK);
         }
     }
 }
