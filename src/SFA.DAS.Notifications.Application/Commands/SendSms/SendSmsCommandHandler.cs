@@ -5,7 +5,6 @@ using MediatR;
 using Newtonsoft.Json;
 using NLog;
 using SFA.DAS.Messaging;
-using SFA.DAS.Notifications.Application.Commands.SendEmail;
 using SFA.DAS.Notifications.Application.Exceptions;
 using SFA.DAS.Notifications.Application.Messages;
 using SFA.DAS.Notifications.Domain.Entities;

@@ -29,44 +29,39 @@ namespace SFA.DAS.Notifications.Api
 
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            if (!request.Headers.Contains(_apiKeyHeaderName)) return base.SendAsync(request, cancellationToken);
-
-            var headerValue = request.Headers.GetValues(_apiKeyHeaderName).First();
-
-            if (ValidateKeyAndSetPrincipal(headerValue))
-            {
-                return base.SendAsync(request, cancellationToken);
-            }
-
-            var invalidResponse = new HttpResponseMessage(HttpStatusCode.BadRequest);
-            var invalidTsc = new TaskCompletionSource<HttpResponseMessage>();
-            invalidTsc.SetResult(invalidResponse);
-            return invalidTsc.Task;
-        }
-
-        private bool ValidateKeyAndSetPrincipal(string headerValue)
-        {
             try
             {
-                var tokenService = new JwtTokenService(_apiKeySecret);
+                if (!request.Headers.Contains(_apiKeyHeaderName)) return base.SendAsync(request, cancellationToken);
 
-                var tokenValue = headerValue.Split(' ').ElementAt(1);
-                var tokenAudience = tokenService.Decode(tokenValue, "aud", _apiAudiences, _apiIssuer);
-                var tokenRoles = tokenService.Decode(tokenValue, "data", _apiAudiences, _apiIssuer);
+                var headerValue = request.Headers.GetValues(_apiKeyHeaderName).First();
 
-                var roles = tokenRoles.Split(' ');
+                ValidateKeyAndSetPrincipal(headerValue);
 
-                var principal = new GenericPrincipal(new GenericIdentity(tokenAudience), roles);
-
-                Thread.CurrentPrincipal = principal;
-                HttpContext.Current.User = principal;
-
-                return true;
+                return base.SendAsync(request, cancellationToken);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return false;
+                var invalidResponse = new HttpResponseMessage(HttpStatusCode.BadRequest) {ReasonPhrase = ex.GetType().Name};
+                var invalidTsc = new TaskCompletionSource<HttpResponseMessage>();
+                invalidTsc.SetResult(invalidResponse);
+                return invalidTsc.Task;
             }
+        }
+
+        private void ValidateKeyAndSetPrincipal(string headerValue)
+        {
+            var tokenService = new JwtTokenService(_apiKeySecret);
+
+            var tokenValue = headerValue.Split(' ').ElementAt(1);
+            var tokenAudience = tokenService.Decode(tokenValue, "aud", _apiAudiences, _apiIssuer);
+            var tokenRoles = tokenService.Decode(tokenValue, "data", _apiAudiences, _apiIssuer);
+
+            var roles = tokenRoles.Split(' ');
+
+            var principal = new GenericPrincipal(new GenericIdentity(tokenAudience), roles);
+
+            Thread.CurrentPrincipal = principal;
+            HttpContext.Current.User = principal;
         }
 
         private class JwtTokenService
@@ -85,7 +80,7 @@ namespace SFA.DAS.Notifications.Api
                 var tokenValidationParameters = new TokenValidationParameters
                 {
                     ValidAudiences = validAudiences,
-                    ValidIssuers = new[] { validIssuer },
+                    ValidIssuers = new[] {validIssuer},
                     IssuerSigningKey = _signingKey,
                     ClockSkew = TimeSpan.FromMinutes(_allowedClockSkewInMinutes)
                 };
