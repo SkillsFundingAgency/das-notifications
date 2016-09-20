@@ -3,16 +3,18 @@
   <Role name="SFA.DAS.Notifications.Api">
     <Instances count="1" />
     <ConfigurationSettings>
-      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="__StorageConnectionString__" />
       <Setting name="EnvironmentName" value="__EnvironmentName__" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="__StorageConnectionString__" />
+      <Setting name="StorageConnectionString" value="__StorageConnectionString__" />
       <Setting name="ConfigurationStorageConnectionString" value="__ConfigurationStorageConnectionString__" />
     </ConfigurationSettings>
   </Role>
   <Role name="SFA.DAS.Notifications.Worker">
     <Instances count="1" />
     <ConfigurationSettings>
-      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="__StorageConnectionString__" />
       <Setting name="EnvironmentName" value="__EnvironmentName__" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="__StorageConnectionString__" />
+      <Setting name="StorageConnectionString" value="__StorageConnectionString__" />
       <Setting name="ConfigurationStorageConnectionString" value="__ConfigurationStorageConnectionString__" />
     </ConfigurationSettings>
   </Role>

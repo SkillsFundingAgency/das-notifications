@@ -9,8 +9,9 @@
       </Site>
     </Sites>
     <ConfigurationSettings>
-      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
       <Setting name="EnvironmentName" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
+      <Setting name="StorageConnectionString" />
       <Setting name="ConfigurationStorageConnectionString" />
     </ConfigurationSettings>
     <Endpoints>
@@ -19,8 +20,9 @@
   </WebRole>
   <WorkerRole name="SFA.DAS.Notifications.Worker" vmsize="Small">
     <ConfigurationSettings>
-      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
       <Setting name="EnvironmentName" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
+      <Setting name="StorageConnectionString" />
       <Setting name="ConfigurationStorageConnectionString" />
     </ConfigurationSettings>
   </WorkerRole>
