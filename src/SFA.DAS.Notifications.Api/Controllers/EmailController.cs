@@ -27,10 +27,7 @@ namespace SFA.DAS.Notifications.Api.Controllers
         {
             notification.SystemId = User.Identity.Name;
 
-            var response = await _orchestrator.SendEmail(notification);
-
-            if (response.Code == NotificationOrchestratorCodes.Post.ValidationFailure)
-                return new HttpResponseMessage(HttpStatusCode.BadRequest);
+            await _orchestrator.SendEmail(notification);
 
             return new HttpResponseMessage(HttpStatusCode.OK);
         }

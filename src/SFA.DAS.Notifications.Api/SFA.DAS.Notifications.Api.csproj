@@ -196,6 +196,8 @@
     <Compile Include="App_Start\ApiKeyHandler.cs" />
     <Compile Include="App_Start\StructuremapMvc.cs" />
     <Compile Include="App_Start\StructuremapWebApi.cs" />
+    <Compile Include="App_Start\ValidationErrorResult.cs" />
+    <Compile Include="App_Start\ValidationExceptionHandler.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\SmsController.cs" />
     <Compile Include="Controllers\EmailController.cs" />

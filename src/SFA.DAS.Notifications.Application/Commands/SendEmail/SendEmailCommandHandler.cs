@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
-using FluentValidation.Results;
+using FluentValidation;
 using MediatR;
 using Newtonsoft.Json;
 using NLog;
 using SFA.DAS.Messaging;
-using SFA.DAS.Notifications.Application.Exceptions;
 using SFA.DAS.Notifications.Application.Messages;
 using SFA.DAS.Notifications.Domain.Entities;
 using SFA.DAS.Notifications.Domain.Repositories;
@@ -40,10 +39,7 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
 
             Logger.Debug($"Received command to send email to {command.RecipientsAddress} (message id: {messageId})");
 
-            var validationResult = Validate(command);
-
-            if (!validationResult.IsValid)
-                throw new CustomValidationException(validationResult);
+            Validate(command);
 
             await _notificationsRepository.Create(CreateMessageData(command, messageId));
 
@@ -78,11 +74,14 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
             };
         }
 
-        private ValidationResult Validate(SendEmailCommand command)
+        private void Validate(SendEmailCommand command)
         {
             var validator = new SendEmailCommandValidator();
 
-            return validator.Validate(command);
+            var validationResult = validator.Validate(command);
+
+            if (!validationResult.IsValid)
+                throw new ValidationException(validationResult.Errors);
         }
     }
 }

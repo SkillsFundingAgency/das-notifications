@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web.Http;
+using System.Web.Http.ExceptionHandling;
 using Microsoft.Azure;
 
 namespace SFA.DAS.Notifications.Api
@@ -15,6 +16,8 @@ namespace SFA.DAS.Notifications.Api
             config.MessageHandlers.Add(new ApiKeyHandler("Authorization", apiKeySecret, apiIssuer, apiAudiences));
 
             config.MapHttpAttributeRoutes();
+
+            config.Services.Replace(typeof(IExceptionHandler), new ValidationExceptionHandler());
         }
     }
 }

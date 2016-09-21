@@ -98,7 +98,6 @@
     <Compile Include="Commands\SendEmail\SendEmailCommand.cs" />
     <Compile Include="Commands\SendEmail\SendEmailCommandHandler.cs" />
     <Compile Include="Commands\SendEmail\SendEmailCommandValidator.cs" />
-    <Compile Include="Exceptions\CustomValidationException.cs" />
     <Compile Include="Interfaces\IEmailService.cs" />
     <Compile Include="Interfaces\ISmsService.cs" />
     <Compile Include="Messages\DispatchNotificationMessage.cs" />

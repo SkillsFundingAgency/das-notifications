@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
+using FluentValidation;
 using MediatR;
 using NLog;
 using SFA.DAS.Notifications.Api.Core;
 using SFA.DAS.Notifications.Api.Models;
 using SFA.DAS.Notifications.Application.Commands.SendEmail;
 using SFA.DAS.Notifications.Application.Commands.SendSms;
-using SFA.DAS.Notifications.Application.Exceptions;
 
 namespace SFA.DAS.Notifications.Api.Orchestrators
 {
@@ -41,10 +41,10 @@ namespace SFA.DAS.Notifications.Api.Orchestrators
 
                 return GetOrchestratorResponse(NotificationOrchestratorCodes.Post.Success);
             }
-            catch (CustomValidationException ex)
+            catch (ValidationException ex)
             {
                 Logger.Info(ex, $"Validation error {ex.Message}");
-                return GetOrchestratorResponse(NotificationOrchestratorCodes.Post.ValidationFailure, ex.ValidationResult);
+                throw;
             }
             catch (Exception ex)
             {
@@ -69,10 +69,10 @@ namespace SFA.DAS.Notifications.Api.Orchestrators
 
                 return GetOrchestratorResponse(NotificationOrchestratorCodes.Post.Success);
             }
-            catch (CustomValidationException ex)
+            catch (ValidationException ex)
             {
                 Logger.Info(ex, $"Validation error {ex.Message}");
-                return GetOrchestratorResponse(NotificationOrchestratorCodes.Post.ValidationFailure, ex.ValidationResult);
+                throw;
             }
             catch (Exception ex)
             {
