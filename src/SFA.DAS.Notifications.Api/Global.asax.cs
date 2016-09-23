@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Http;
-using System.Web.Routing;
-using SFA.DAS.NLog.Targets.AzureEventHub;
 
 namespace SFA.DAS.Notifications.Api
 {
@@ -13,8 +8,6 @@ namespace SFA.DAS.Notifications.Api
         protected void Application_Start()
         {
             GlobalConfiguration.Configure(WebApiConfig.Register);
-
-            var x = new AzureEventHubTarget();
         }
     }
 }
