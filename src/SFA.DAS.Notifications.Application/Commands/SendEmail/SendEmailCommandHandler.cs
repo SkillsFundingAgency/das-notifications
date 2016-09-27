@@ -37,7 +37,7 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
         {
             var messageId = Guid.NewGuid().ToString();
 
-            Logger.Debug($"Received command to send email to {command.RecipientsAddress} (message id: {messageId})");
+            Logger.Info($"Received command to send email to {command.RecipientsAddress} (message id: {messageId})");
 
             Validate(command);
 

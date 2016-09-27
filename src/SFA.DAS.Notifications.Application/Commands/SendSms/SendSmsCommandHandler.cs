@@ -37,7 +37,7 @@ namespace SFA.DAS.Notifications.Application.Commands.SendSms
         {
             var messageId = Guid.NewGuid().ToString();
 
-            Logger.Debug($"Received command to send SMS to {command.RecipientsNumber} (message id: {messageId})");
+            Logger.Info($"Received command to send SMS to {command.RecipientsNumber} (message id: {messageId})");
 
             Validate(command);
 
