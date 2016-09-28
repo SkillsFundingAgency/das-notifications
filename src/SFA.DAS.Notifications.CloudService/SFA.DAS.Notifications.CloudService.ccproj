@@ -71,9 +71,9 @@
   <Target Name="TransformAppConfig" AfterTargets="AfterPackageComputeService">
     <PropertyGroup>
       <WorkerRoleDir>$(IntermediateOutputPath)$(ProjectName)\</WorkerRoleDir>
-      <AppConfigOriginal>$(WorkerRoleDir)$(ProjectName).dll.config</AppConfigOriginal>
-      <AppConfigTransformer>$(SolutionDir)$(ProjectName)\App.$(Configuration).config</AppConfigTransformer>
-      <AppConfigAfterTransformed>$(WorkerRoleDir)$(ProjectName).Transformed.config</AppConfigAfterTransformed>
+      <AppConfigOriginal>$(WorkerRoleDir)SFA.DAS.Notifications.Worker.dll.config</AppConfigOriginal>
+      <AppConfigTransformer>$(SolutionDir)SFA.DAS.Notifications.Worker\App.$(Configuration).config</AppConfigTransformer>
+      <AppConfigAfterTransformed>$(WorkerRoleDir)SFA.DAS.Notifications.Worker.Transformed.config</AppConfigAfterTransformed>
       <!--<RootFolder>$([System.IO.Path]::GetDirectoryName($(MSBuildProjectDirectory)))</RootFolder>-->
     </PropertyGroup>
     <Message Importance="high" Text="Transforming $(AppConfigOriginal) via $(AppConfigTransformer) to $(AppConfigAfterTransformed)" />
