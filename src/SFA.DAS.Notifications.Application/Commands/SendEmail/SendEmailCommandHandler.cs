@@ -43,7 +43,7 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
 
             await _notificationsRepository.Create(CreateMessageData(command, messageId));
 
-            Logger.Debug($"Stored message '{messageId}' in data store");
+            Logger.Debug($"Stored email message '{messageId}' in data store");
 
             await _messagePublisher.PublishAsync(new DispatchNotificationMessage
             {
@@ -51,7 +51,7 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
                 Format = NotificationFormat.Email
             });
 
-            Logger.Debug($"Published message '{messageId}' to queue");
+            Logger.Debug($"Published email message '{messageId}' to queue");
         }
 
         private static Notification CreateMessageData(SendEmailCommand message, string messageId)

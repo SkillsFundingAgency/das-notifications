@@ -43,7 +43,7 @@ namespace SFA.DAS.Notifications.Application.Commands.SendSms
 
             await _notificationsRepository.Create(CreateMessageData(command, messageId));
 
-            Logger.Debug($"Stored message '{messageId}' in data store");
+            Logger.Debug($"Stored SMS message '{messageId}' in data store");
 
             await _messagePublisher.PublishAsync(new DispatchNotificationMessage
             {
@@ -51,7 +51,7 @@ namespace SFA.DAS.Notifications.Application.Commands.SendSms
                 Format = NotificationFormat.Sms
             });
 
-            Logger.Debug($"Published message '{messageId}' to queue");
+            Logger.Debug($"Published SMS message '{messageId}' to queue");
         }
 
         private static Notification CreateMessageData(SendSmsCommand message, string messageId)
