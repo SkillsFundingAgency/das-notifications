@@ -78,7 +78,7 @@
     </PropertyGroup>
     <Message Importance="high" Text="Transforming $(AppConfigOriginal) via $(AppConfigTransformer) to $(AppConfigAfterTransformed)" />
     <!--<Copy SourceFiles="$(RootFolder)\%(ProjectName)\bin\$(Configuration)\%(EntryPoint).config" DestinationFolder="%(WorkerRoleReferences.OutputDir)" OverwriteReadOnlyFiles="true" />-->
-    <TransformXml Source="$(AppConfigOriginal)" Transform="$(AppConfigTransformer)" Destination="$(AppConfigAfterTransformed)" />
+    <!--<TransformXml Source="$(AppConfigOriginal)" Transform="$(AppConfigTransformer)" Destination="$(AppConfigAfterTransformed)" />-->
     <Copy SourceFiles="$(AppConfigAfterTransformed)" DestinationFolder="%(WorkerRoleReferences.OutputDir)" OverwriteReadOnlyFiles="true" />
   </Target>
 </Project>
