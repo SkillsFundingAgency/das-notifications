@@ -1,26 +1,34 @@
+param (
+    [string[]]$mask = @(throw "Must specify a -mask parameter (eg. -mask web.config, app.config)")
+)
+
+<#
+  call as follows:
+
+  VSTSConfig.ps1 -mask app.config web.config
+  VSTSConfig.ps1 -mask *.cscfg
+#>
+
 $SourcePath = (Get-Item -Path ".\" -Verbose).FullName
 
 $testPath = Test-Path $SourcePath
 
 $regex = "__[A-Za-z0-9.]*__"
-$patterns = @()
 $matches = @()
-
 
 
 if($testPath)
 {
-	Write-Output "Path Exists"
+	Write-Output "Path exists: $SourcePath"
 	
-	$sourceDir = Get-ChildItem $SourcePath -recurse
-	
-	
-	$List = $sourceDir | where {$_.extension -eq ".cscfg" -or $_.name -like "*.config" -or $_.name -like "*.json" -or $_.Name -like "*.csdef" -or $_.Name -like "*.publish.xml"} 
-	
-	
+	$list = Get-ChildItem $SourcePath -recurse -Include $mask
+
 	Foreach($file in $list)
 	{
 		$destinationPath = $file.FullName
+
+    	Write-Host "Processing $destinationPath"
+
 		$tempFile = join-path $file.DirectoryName ($file.BaseName + ".tmp")
 		
 		Copy-Item -Force $file.FullName $tempFile
