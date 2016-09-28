@@ -69,8 +69,10 @@
   </PropertyGroup>
   <Import Project="$(CloudExtensionsDir)Microsoft.WindowsAzure.targets" />
   <Import Project="$(CloudExtensionsDir)Microsoft.WindowsAzure.targets" />
-  <Target Name="CopyWorkerRoleConfigurations" BeforeTargets="AfterPackageComputeService">
-    <Copy SourceFiles="..\SFA.DAS.Notifications.Worker\bin\$(Configuration)\SFA.DAS.Notifications.Worker.dll.config"
-          DestinationFolder="$(IntermediateOutputPath)SFA.DAS.Notifications.Worker" OverwriteReadOnlyFiles="true" />
+  <Target Name="CopyWorkerRoleConfigurations" AfterTargets="CopyWorkerRoleFiles">
+    <PropertyGroup>
+      <RootFolder>$([System.IO.Path]::GetDirectoryName($(MSBuildProjectDirectory)))</RootFolder>
+    </PropertyGroup>
+    <Copy SourceFiles="$(RootFolder)\%(ProjectName)\bin\$(Configuration)\%(EntryPoint).config" DestinationFolder="%(WorkerRoleReferences.OutputDir)" OverwriteReadOnlyFiles="true" />
   </Target>
 </Project>
