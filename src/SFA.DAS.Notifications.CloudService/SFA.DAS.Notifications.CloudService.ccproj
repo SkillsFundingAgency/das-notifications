@@ -68,8 +68,7 @@
     <CloudExtensionsDir Condition=" '$(CloudExtensionsDir)' == '' ">$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Windows Azure Tools\2.9\</CloudExtensionsDir>
   </PropertyGroup>
   <Import Project="$(CloudExtensionsDir)Microsoft.WindowsAzure.targets" />
-  <Import Project="$(CloudExtensionsDir)Microsoft.WindowsAzure.targets" />
-  <Target Name="CopyWorkerRoleConfigurations" AfterTargets="CopyWorkerRoleFiles">
+  <Target Name="CopyWorkerRoleConfigurations" BeforeTargets="PostProcessRoleFiles">
     <PropertyGroup>
       <RootFolder>$([System.IO.Path]::GetDirectoryName($(MSBuildProjectDirectory)))</RootFolder>
     </PropertyGroup>
