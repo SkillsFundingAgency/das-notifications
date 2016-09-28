@@ -68,17 +68,4 @@
     <CloudExtensionsDir Condition=" '$(CloudExtensionsDir)' == '' ">$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Windows Azure Tools\2.9\</CloudExtensionsDir>
   </PropertyGroup>
   <Import Project="$(CloudExtensionsDir)Microsoft.WindowsAzure.targets" />
-  <Target Name="TransformAppConfig" AfterTargets="AfterPackageComputeService">
-    <PropertyGroup>
-      <WorkerRoleDir>$(IntermediateOutputPath)$(ProjectName)\</WorkerRoleDir>
-      <AppConfigOriginal>$(WorkerRoleDir)SFA.DAS.Notifications.Worker.dll.config</AppConfigOriginal>
-      <AppConfigTransformer>$(SolutionDir)SFA.DAS.Notifications.Worker\App.$(Configuration).config</AppConfigTransformer>
-      <AppConfigAfterTransformed>$(WorkerRoleDir)SFA.DAS.Notifications.Worker.Transformed.config</AppConfigAfterTransformed>
-      <!--<RootFolder>$([System.IO.Path]::GetDirectoryName($(MSBuildProjectDirectory)))</RootFolder>-->
-    </PropertyGroup>
-    <Message Importance="high" Text="Transforming $(AppConfigOriginal) via $(AppConfigTransformer) to $(AppConfigAfterTransformed)" />
-    <!--<Copy SourceFiles="$(RootFolder)\%(ProjectName)\bin\$(Configuration)\%(EntryPoint).config" DestinationFolder="%(WorkerRoleReferences.OutputDir)" OverwriteReadOnlyFiles="true" />-->
-    <!--<TransformXml Source="$(AppConfigOriginal)" Transform="$(AppConfigTransformer)" Destination="$(AppConfigAfterTransformed)" />-->
-    <Copy SourceFiles="$(AppConfigAfterTransformed)" DestinationFolder="%(WorkerRoleReferences.OutputDir)" OverwriteReadOnlyFiles="true" />
-  </Target>
 </Project>
