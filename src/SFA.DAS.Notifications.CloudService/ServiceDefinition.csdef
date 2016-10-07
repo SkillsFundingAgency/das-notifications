@@ -13,6 +13,8 @@
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
       <Setting name="StorageConnectionString" />
       <Setting name="ConfigurationStorageConnectionString" />
+      <Setting name="EventHubConnectionString" />
+      <Setting name="EventHubName" />
     </ConfigurationSettings>
     <Endpoints>
       <InputEndpoint name="Endpoint1" protocol="http" port="10095" />
@@ -24,6 +26,8 @@
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
       <Setting name="StorageConnectionString" />
       <Setting name="ConfigurationStorageConnectionString" />
+      <Setting name="EventHubConnectionString" />
+      <Setting name="EventHubName" />
     </ConfigurationSettings>
   </WorkerRole>
 </ServiceDefinition>
