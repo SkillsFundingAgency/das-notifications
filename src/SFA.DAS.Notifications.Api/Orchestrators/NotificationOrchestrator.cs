@@ -43,7 +43,6 @@ namespace SFA.DAS.Notifications.Api.Orchestrators
             }
             catch (ValidationException ex)
             {
-                //todo: this is not logging to eventhub
                 Logger.Warn(ex, "Invalid request");
                 throw;
             }
@@ -72,7 +71,6 @@ namespace SFA.DAS.Notifications.Api.Orchestrators
             }
             catch (ValidationException ex)
             {
-                //todo: this is not logging to eventhub
                 Logger.Warn(ex, "Invalid request");
                 throw;
             }
