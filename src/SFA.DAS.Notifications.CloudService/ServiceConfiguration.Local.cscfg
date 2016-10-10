@@ -20,6 +20,7 @@
       <Setting name="ConfigurationStorageConnectionString" value="UseDevelopmentStorage=true" />
       <Setting name="EventHubConnectionString" value="" />
       <Setting name="EventHubName" value="" />
+      <Setting name="EmailServiceName" value="Local" />
     </ConfigurationSettings>
   </Role>
 </ServiceConfiguration>
