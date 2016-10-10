@@ -28,6 +28,7 @@
       <Setting name="ConfigurationStorageConnectionString" />
       <Setting name="EventHubConnectionString" />
       <Setting name="EventHubName" />
+      <Setting name="EmailServiceName" />
     </ConfigurationSettings>
   </WorkerRole>
 </ServiceDefinition>

@@ -9,6 +9,7 @@ using SFA.DAS.Notifications.Domain.Repositories;
 using SFA.DAS.Notifications.Infrastructure.AzureMessageNotificationRepository;
 using SFA.DAS.Notifications.Infrastructure.Configuration;
 using SFA.DAS.Notifications.Infrastructure.LocalEmailService;
+using SFA.DAS.Notifications.Infrastructure.NotifyEmailService;
 using SFA.DAS.Notifications.Infrastructure.SendGridSmtpEmailService;
 using SFA.DAS.Notifications.Worker.MessageHandlers;
 using StructureMap;
@@ -46,17 +47,31 @@ namespace SFA.DAS.Notifications.Worker.DependencyResolution
 
             For<IConfigurationService>().Use(GetConfigurationService(environment));
 
-            if (environment == DevEnv)
-            {
-                For<IEmailService>().Use<LocalEmailService>();
-            }
-            else
-            {
-                For<IEmailService>().Use<SendGridSmtpEmailService>();
-            }
+            ConfigureEmailService();
+
+            ConfigureSmsService();
 
             For<QueuedNotificationMessageHandler>().Use<QueuedNotificationMessageHandler>();
             For<IMediator>().Use<Mediator>();
+        }
+
+        private void ConfigureEmailService()
+        {
+            For<IEmailService>().AddInstances(x =>
+            {
+                x.Type<LocalEmailService>().Named("Local");
+                x.Type<SendGridSmtpEmailService>().Named("SendGridSmtp");
+                x.Type<NotifyEmailService>().Named("Notify");
+            });
+
+            var emailServiceName = CloudConfigurationManager.GetSetting("EmailServiceName");
+
+            For<IEmailService>().Use(emailServiceName);
+        }
+
+        private void ConfigureSmsService()
+        {
+            //todo: SMS configuration
         }
 
         private NotificationServiceConfiguration GetConfiguration(string environment)

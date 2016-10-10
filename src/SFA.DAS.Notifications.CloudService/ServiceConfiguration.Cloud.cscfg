@@ -20,6 +20,7 @@
       <Setting name="ConfigurationStorageConnectionString" value="__ConfigurationStorageConnectionString__" />
       <Setting name="EventHubConnectionString" value="__EventHubConnectionString__" />
       <Setting name="EventHubName" value="__EventHubName__" />
+      <Setting name="EmailServiceName" value="Notify" />
     </ConfigurationSettings>
   </Role>
 </ServiceConfiguration>
