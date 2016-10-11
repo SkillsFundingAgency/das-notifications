@@ -111,6 +111,10 @@
       <HintPath>..\packages\AzureTableStorageNLogTarget.1.0.9\lib\NLog.Extensions.AzureTableStorage.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="SFA.DAS.ApiTokens.Client, Version=1.3.0.12902, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.ApiTokens.Client.1.3.0.12902\lib\net45\SFA.DAS.ApiTokens.Client.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="SFA.DAS.Configuration, Version=1.0.0.6634, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Configuration.1.0.0.6634\lib\net45\SFA.DAS.Configuration.dll</HintPath>
       <Private>True</Private>
@@ -210,7 +214,6 @@
     <Compile Include="..\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="App_Start\ApiKeyHandler.cs" />
     <Compile Include="App_Start\StructuremapMvc.cs" />
     <Compile Include="App_Start\StructuremapWebApi.cs" />
     <Compile Include="App_Start\ValidationErrorResult.cs" />
