@@ -5,6 +5,7 @@ using MediatR;
 using NLog;
 using SFA.DAS.Notifications.Api.Core;
 using SFA.DAS.Notifications.Api.Models;
+using SFA.DAS.Notifications.Api.Types;
 using SFA.DAS.Notifications.Application.Commands.SendEmail;
 using SFA.DAS.Notifications.Application.Commands.SendSms;
 
@@ -23,7 +24,7 @@ namespace SFA.DAS.Notifications.Api.Orchestrators
             _mediator = mediator;
         }
 
-        public async Task<OrchestratorResponse> SendEmail(SendEmailRequest request)
+        public async Task<OrchestratorResponse> SendEmail(Email request)
         {
             try
             {

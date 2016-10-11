@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using SFA.DAS.Notifications.Api.Models;
 using SFA.DAS.Notifications.Api.Orchestrators;
+using SFA.DAS.Notifications.Api.Types;
 
 namespace SFA.DAS.Notifications.Api.Controllers
 {
@@ -23,7 +24,7 @@ namespace SFA.DAS.Notifications.Api.Controllers
 
         [Route("")]
         [Authorize(Roles = "SendEmail")]
-        public async Task<HttpResponseMessage> Post(SendEmailRequest notification)
+        public async Task<HttpResponseMessage> Post(Email notification)
         {
             notification.SystemId = User.Identity.Name;
 
