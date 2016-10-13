@@ -2,6 +2,7 @@
 using System.Web.Http;
 using System.Web.Http.ExceptionHandling;
 using Microsoft.Azure;
+using SFA.DAS.ApiTokens.Client;
 
 namespace SFA.DAS.Notifications.Api
 {
