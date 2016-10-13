@@ -9,6 +9,9 @@
       <Setting name="ConfigurationStorageConnectionString" value="UseDevelopmentStorage=true" />
       <Setting name="EventHubConnectionString" value="" />
       <Setting name="EventHubName" value="" />
+      <Setting name="ApiTokenSecret" value="THIS IS THE SIGNING SECRET" />
+      <Setting name="ApiIssuer" value="http://localhost:53105" />
+      <Setting name="ApiAudiences" value="http://localhost/notifications" />
     </ConfigurationSettings>
   </Role>
   <Role name="SFA.DAS.Notifications.Worker">
