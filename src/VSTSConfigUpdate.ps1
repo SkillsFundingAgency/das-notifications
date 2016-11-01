@@ -12,7 +12,7 @@ $Default= Get-AzureSubscription -SubscriptionName $env:subscription
 write-host $Default.IsCurrent
 
 $StorageName = "das$env:environmentname$env:type"+"str"
-$myStoreKey = (Get-AzureStorageKey �StorageAccountName $StorageName).Primary 
+$myStoreKey = (Get-AzureStorageKey -StorageAccountName $StorageName).Primary 
 write-host $myStoreKey
 $part1="DefaultEndpointsProtocol=https;AccountName="
 $part2=";AccountKey="
