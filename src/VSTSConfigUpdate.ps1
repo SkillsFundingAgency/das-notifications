@@ -1,3 +1,7 @@
+param (
+    [string[]]$mask = @(throw "Must specify a -mask parameter (eg. -mask web.config, app.config)")
+)
+
 $uid = "e8d34963-8a5c-4d62-8778-0d47ee0f22fa"
 $pwd = $env:spipwd
 $tenantId = "1a92889b-8ea1-4a16-8132-347814051567"
@@ -20,9 +24,7 @@ $part2=";AccountKey="
 $Env:StorageConnectionString= "$part1$StorageName$part2$myStoreKey"
 
 
-param (
-    [string[]]$mask = @(throw "Must specify a -mask parameter (eg. -mask web.config, app.config)")
-)
+
 
 <#
   call as follows:
