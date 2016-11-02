@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ServiceDefinition name="SFA.DAS.Notifications.CloudService" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition" schemaVersion="2015-04.2.6">
-  <WebRole name="SFA.DAS.Notifications.Api" vmsize="Small">
+  <WebRole name="SFA.DAS.Notifications.Api" vmsize="Standard_D2_v2">
     <Sites>
       <Site name="Web">
         <Bindings>
@@ -20,13 +20,10 @@
       <Setting name="ApiAudiences" />
     </ConfigurationSettings>
     <Endpoints>
-      <InputEndpoint name="HttpsIn" protocol="https" port="443" />
+      <InputEndpoint name="HttpsIn" protocol="https" port="443" certificate="WebSslCert" loadBalancer="das-prd-noti-ilb"/>
     </Endpoints>
-    <Certificates>
-      <Certificate name="WebSslCert" storeLocation="LocalMachine" storeName="My" />
-    </Certificates>
   </WebRole>
-  <WorkerRole name="SFA.DAS.Notifications.Worker" vmsize="Small">
+  <WorkerRole name="SFA.DAS.Notifications.Worker" vmsize="Standard_D1_v2">
     <ConfigurationSettings>
       <Setting name="EnvironmentName" />
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
@@ -36,5 +33,8 @@
       <Setting name="EventHubName" />
       <Setting name="EmailServiceName" />
     </ConfigurationSettings>
+    <Endpoints>
+      <InputEndpoint name="Fake" protocol="tcp" port="50121" />
+    </Endpoints>
   </WorkerRole>
 </ServiceDefinition>
