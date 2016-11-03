@@ -33,6 +33,8 @@
   <!-- Items for the project -->
   <ItemGroup>
     <ServiceDefinition Include="ServiceDefinition.csdef" />
+    <None Include="Configuration\ServiceDefinition.Release.csdef" />
+    <ServiceConfiguration Include="ServiceConfiguration.Release.cscfg" />
     <ServiceConfiguration Include="ServiceConfiguration.Local.cscfg" />
     <ServiceConfiguration Include="ServiceConfiguration.Cloud.cscfg" />
   </ItemGroup>
@@ -56,6 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="SFA.DAS.Notifications.ApiContent\" />
+    <Folder Include="Configuration" />
     <Folder Include="SFA.DAS.Notifications.WorkerContent\" />
   </ItemGroup>
   <ItemGroup>
