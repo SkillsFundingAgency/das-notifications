@@ -14,7 +14,7 @@
       <Setting name="ApiAudiences" value="__ApiAudiences__"/>
     </ConfigurationSettings>
     <Certificates>
-      <Certificate name="WebSslCert" thumbprint="0319EE6013CE54044F3C8189383A02C7A2C74EA1" thumbprintAlgorithm="sha1" />
+      <Certificate name="WebSslCert" thumbprint="9FF01F7ED7687D89C8C226703D1BBE6028FB9F8A" thumbprintAlgorithm="sha1" />
     </Certificates>
   </Role>
   <Role name="SFA.DAS.Notifications.Worker">
