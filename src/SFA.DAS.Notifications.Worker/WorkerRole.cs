@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.WindowsAzure.ServiceRuntime;
 using NLog;
+using NLog.Targets;
 using SFA.DAS.Notifications.Infrastructure.DependencyResolution;
 using SFA.DAS.Notifications.Worker.DependencyResolution;
 using SFA.DAS.Notifications.Worker.MessageHandlers;
@@ -15,6 +16,7 @@ namespace SFA.DAS.Notifications.Worker
     public class WorkerRole : RoleEntryPoint
     {
         private const string ServiceName = "SFA.DAS.Notifications";
+        private static RedisTarget _redisTarget; // Required to ensure assembly is copied to output.
 
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
 

@@ -13,11 +13,11 @@
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
       <Setting name="StorageConnectionString" />
       <Setting name="ConfigurationStorageConnectionString" />
-      <Setting name="EventHubConnectionString" />
-      <Setting name="EventHubName" />
       <Setting name="ApiTokenSecret" />
       <Setting name="ApiIssuer" />
       <Setting name="ApiAudiences" />
+      <Setting name="LoggingRedisConnnectionString"/>
+      <Setting name="LoggingRedisKey"/>
     </ConfigurationSettings>
     <Endpoints>
       <InputEndpoint name="HttpsIn" protocol="https" port="443" certificate="WebSslCert"/>
@@ -32,9 +32,9 @@
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
       <Setting name="StorageConnectionString" />
       <Setting name="ConfigurationStorageConnectionString" />
-      <Setting name="EventHubConnectionString" />
-      <Setting name="EventHubName" />
       <Setting name="EmailServiceName" />
+      <Setting name="LoggingRedisConnnectionString"/>
+      <Setting name="LoggingRedisKey"/>
     </ConfigurationSettings>
   </WorkerRole>
 </ServiceDefinition>
