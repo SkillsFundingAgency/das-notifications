@@ -16,7 +16,7 @@
       <Setting name="ApiTokenSecret" />
       <Setting name="ApiIssuer" />
       <Setting name="ApiAudiences" />
-      <Setting name="LoggingRedisConnnectionString"/>
+      <Setting name="LoggingRedisConnectionString"/>
       <Setting name="LoggingRedisKey"/>
     </ConfigurationSettings>
     <Endpoints>
@@ -33,7 +33,7 @@
       <Setting name="StorageConnectionString" />
       <Setting name="ConfigurationStorageConnectionString" />
       <Setting name="EmailServiceName" />
-      <Setting name="LoggingRedisConnnectionString"/>
+      <Setting name="LoggingRedisConnectionString"/>
       <Setting name="LoggingRedisKey"/>
     </ConfigurationSettings>
     <Endpoints>

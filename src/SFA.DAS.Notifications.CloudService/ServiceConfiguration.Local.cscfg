@@ -10,7 +10,7 @@
       <Setting name="ApiTokenSecret" value="THIS IS THE SIGNING SECRET" />
       <Setting name="ApiIssuer" value="http://localhost:53105" />
       <Setting name="ApiAudiences" value="http://localhost/notifications" />
-      <Setting name="LoggingRedisConnnectionString" value="" />
+      <Setting name="LoggingRedisConnectionString" value="" />
       <Setting name="LoggingRedisKey" value="" />
     </ConfigurationSettings>
     <Certificates>
@@ -25,7 +25,7 @@
       <Setting name="StorageConnectionString" value="UseDevelopmentStorage=true" />
       <Setting name="ConfigurationStorageConnectionString" value="UseDevelopmentStorage=true" />
       <Setting name="EmailServiceName" value="Local" />
-      <Setting name="LoggingRedisConnnectionString" value="" />
+      <Setting name="LoggingRedisConnectionString" value="" />
       <Setting name="LoggingRedisKey" value="" />
     </ConfigurationSettings>
   </Role>
