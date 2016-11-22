@@ -26,7 +26,6 @@ namespace SFA.DAS.Notifications.Worker
 
         public override void Run()
         {
-            Logger.Info("Running");
             Trace.TraceInformation(ServiceName + " is running");
 
             _container = new Container(c =>
@@ -41,7 +40,7 @@ namespace SFA.DAS.Notifications.Worker
             }
             catch (Exception ex)
             {
-                Logger.Error(ex, ex.Message);
+                Logger.Fatal(ex, ex.Message);
                 throw;
             }
             finally
@@ -52,7 +51,7 @@ namespace SFA.DAS.Notifications.Worker
 
         public override bool OnStart()
         {
-            Logger.Info("Starting");
+            Logger.Info("Starting Notifications Worker");
 
             // Set the maximum number of concurrent connections
             ServicePointManager.DefaultConnectionLimit = 12;
@@ -69,7 +68,7 @@ namespace SFA.DAS.Notifications.Worker
 
         public override void OnStop()
         {
-            Logger.Info("Stopping");
+            Logger.Info("Starting Notifications Worker");
 
             Trace.TraceInformation("SFA.DAS.Notifications.Worker is stopping");
 
