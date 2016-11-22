@@ -26,60 +26,34 @@ namespace SFA.DAS.Notifications.Api.Orchestrators
 
         public async Task<OrchestratorResponse> SendEmail(Email request)
         {
-            try
+            var command = new SendEmailCommand
             {
-                var command = new SendEmailCommand
-                {
-                    SystemId = request.SystemId,
-                    TemplateId = request.TemplateId,
-                    Subject = request.Subject,
-                    RecipientsAddress = request.RecipientsAddress,
-                    ReplyToAddress = request.ReplyToAddress,
-                    Tokens = request.Tokens
-                };
+                SystemId = request.SystemId,
+                TemplateId = request.TemplateId,
+                Subject = request.Subject,
+                RecipientsAddress = request.RecipientsAddress,
+                ReplyToAddress = request.ReplyToAddress,
+                Tokens = request.Tokens
+            };
 
-                await _mediator.SendAsync(command);
+            await _mediator.SendAsync(command);
 
-                return GetOrchestratorResponse(NotificationOrchestratorCodes.Post.Success);
-            }
-            catch (ValidationException ex)
-            {
-                Logger.Warn(ex, "Invalid request");
-                throw;
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex, ex.Message);
-                throw;
-            }
+            return GetOrchestratorResponse(NotificationOrchestratorCodes.Post.Success);
         }
 
         public async Task<OrchestratorResponse> SendSms(SendSmsRequest request)
         {
-            try
+            var command = new SendSmsCommand
             {
-                var command = new SendSmsCommand
-                {
-                    SystemId = request.SystemId,
-                    TemplateId = request.TemplateId,
-                    RecipientsNumber = request.RecipientsNumber,
-                    Tokens = request.Tokens
-                };
+                SystemId = request.SystemId,
+                TemplateId = request.TemplateId,
+                RecipientsNumber = request.RecipientsNumber,
+                Tokens = request.Tokens
+            };
 
-                await _mediator.SendAsync(command);
+            await _mediator.SendAsync(command);
 
-                return GetOrchestratorResponse(NotificationOrchestratorCodes.Post.Success);
-            }
-            catch (ValidationException ex)
-            {
-                Logger.Warn(ex, "Invalid request");
-                throw;
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex, ex.Message);
-                throw;
-            }
+            return GetOrchestratorResponse(NotificationOrchestratorCodes.Post.Success);
         }
     }
 }
