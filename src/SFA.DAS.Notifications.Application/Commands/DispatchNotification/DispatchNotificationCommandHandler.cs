@@ -41,40 +41,58 @@ namespace SFA.DAS.Notifications.Application.Commands.DispatchNotification
                 case NotificationFormat.Email:
                     Logger.Info($"Handling dispatch email message {command.MessageId}");
 
-                    var emailContent = JsonConvert.DeserializeObject<NotificationEmailContent>(response.Notification.Data);
-
-                    await _notificationsRepository.Update(command.Format, command.MessageId, NotificationStatus.Sending);
-
-                    await _emailService.SendAsync(new EmailMessage
+                    try
                     {
-                        TemplateId = response.Notification.TemplateId,
-                        SystemId = response.Notification.SystemId,
-                        Subject = emailContent.Subject,
-                        RecipientsAddress = emailContent.RecipientsAddress,
-                        ReplyToAddress = emailContent.ReplyToAddress,
-                        Tokens = emailContent.Tokens
-                    });
+                        var emailContent = JsonConvert.DeserializeObject<NotificationEmailContent>(response.Notification.Data);
 
-                    await _notificationsRepository.Update(command.Format, command.MessageId, NotificationStatus.Sent);
+                        await _notificationsRepository.Update(command.Format, command.MessageId, NotificationStatus.Sending);
+
+                        await _emailService.SendAsync(new EmailMessage
+                        {
+                            TemplateId = response.Notification.TemplateId,
+                            SystemId = response.Notification.SystemId,
+                            Subject = emailContent.Subject,
+                            RecipientsAddress = emailContent.RecipientsAddress,
+                            ReplyToAddress = emailContent.ReplyToAddress,
+                            Tokens = emailContent.Tokens
+                        });
+
+                        await _notificationsRepository.Update(command.Format, command.MessageId, NotificationStatus.Sent);
+                    }
+                    catch (Exception)
+                    {
+                        await _notificationsRepository.Update(command.Format, command.MessageId, NotificationStatus.Failed);
+
+                        throw;
+                    }
 
                     break;
 
                 case NotificationFormat.Sms:
                     Logger.Info($"Handling dispatch SMS message {command.MessageId}");
 
-                    var smsContent = JsonConvert.DeserializeObject<NotificationSmsContent>(response.Notification.Data);
-
-                    await _notificationsRepository.Update(command.Format, command.MessageId, NotificationStatus.Sending);
-
-                    await _smsService.SendAsync(new SmsMessage
+                    try
                     {
-                        TemplateId = response.Notification.TemplateId,
-                        SystemId = response.Notification.SystemId,
-                        RecipientsNumber = smsContent.RecipientsNumber,
-                        Tokens = smsContent.Tokens
-                    });
+                        var smsContent = JsonConvert.DeserializeObject<NotificationSmsContent>(response.Notification.Data);
 
-                    await _notificationsRepository.Update(command.Format, command.MessageId, NotificationStatus.Sent);
+                        await _notificationsRepository.Update(command.Format, command.MessageId, NotificationStatus.Sending);
+
+                        await _smsService.SendAsync(new SmsMessage
+                        {
+                            TemplateId = response.Notification.TemplateId,
+                            SystemId = response.Notification.SystemId,
+                            RecipientsNumber = smsContent.RecipientsNumber,
+                            Tokens = smsContent.Tokens
+                        });
+
+                        await _notificationsRepository.Update(command.Format, command.MessageId, NotificationStatus.Sent);
+                    }
+                    catch (Exception)
+                    {
+                        await _notificationsRepository.Update(command.Format, command.MessageId, NotificationStatus.Failed);
+
+                        throw;
+                    }
 
                     break;
 
