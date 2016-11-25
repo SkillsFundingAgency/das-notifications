@@ -4,6 +4,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using NLog;
 using SFA.DAS.Configuration;
 using SFA.DAS.Notifications.Infrastructure.Configuration;
 
@@ -17,6 +18,7 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
     public class NotifyHttpClientWrapper : INotifyHttpClientWrapper
     {
         private readonly IConfigurationService _configurationService;
+        private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
 
         public NotifyHttpClientWrapper(IConfigurationService configurationService)
         {
@@ -40,6 +42,9 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
                 var stringContent = new StringContent(serializeObject, Encoding.UTF8, "application/json");
 
                 //todo: add SMS support for Notify
+
+                Logger.Info($"Sending email request to Notify at {configuration.NotifyServiceConfiguration.ApiBaseUrl}/notifications/email");
+
                 var response = await httpClient.SendAsync(new HttpRequestMessage(HttpMethod.Post, "/notifications/email")
                 {
                     Content = stringContent
@@ -49,7 +54,7 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
             }
         }
 
-        private HttpClient CreateHttpClient(string baseUrl)
+        private static HttpClient CreateHttpClient(string baseUrl)
         {
             return new HttpClient
             {

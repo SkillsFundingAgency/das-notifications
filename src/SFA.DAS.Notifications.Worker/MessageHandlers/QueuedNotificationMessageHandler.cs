@@ -51,7 +51,7 @@ namespace SFA.DAS.Notifications.Worker.MessageHandlers
                 {
                     Logger.Error(ex, $"Error processing message {message.Content.MessageId} - {ex.Message}");
 
-                    await message.CompleteAsync(); //todo: abort or dead letter message?
+                    await message.CompleteAsync();
                 }
             }
         }
