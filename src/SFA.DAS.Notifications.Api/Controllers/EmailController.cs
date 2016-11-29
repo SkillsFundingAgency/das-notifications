@@ -22,7 +22,7 @@ namespace SFA.DAS.Notifications.Api.Controllers
         }
 
         [Route("")]
-        //[Authorize(Roles = "SendEmail")]
+        [Authorize(Roles = "SendEmail")]
         public async Task<HttpResponseMessage> Post(Email notification)
         {
             notification.SystemId = User.Identity.Name;
