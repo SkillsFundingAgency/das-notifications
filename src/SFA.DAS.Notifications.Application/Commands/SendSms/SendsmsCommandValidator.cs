@@ -1,6 +1,4 @@
-﻿using System;
-using FluentValidation;
-using SFA.DAS.Notifications.Application.Commands.SendEmail;
+﻿using FluentValidation;
 
 namespace SFA.DAS.Notifications.Application.Commands.SendSms
 {

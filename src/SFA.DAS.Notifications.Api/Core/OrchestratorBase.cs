@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SFA.DAS.Notifications.Api.Core
+﻿namespace SFA.DAS.Notifications.Api.Core
 {
     public abstract class OrchestratorBase
     {

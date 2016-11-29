@@ -1,5 +1,3 @@
-using System;
-
 namespace SFA.DAS.Notifications.Infrastructure.Configuration
 {
     public class NotifyServiceConfiguration

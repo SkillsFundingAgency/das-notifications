@@ -15,7 +15,6 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System;
 using SFA.DAS.Notifications.Infrastructure.DependencyResolution;
 using StructureMap;
 

@@ -1,5 +1,4 @@
-﻿using System;
-using SFA.DAS.Notifications.Domain.Entities;
+﻿using SFA.DAS.Notifications.Domain.Entities;
 
 namespace SFA.DAS.Notifications.Application.Queries.GetMessage
 {

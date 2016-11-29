@@ -38,6 +38,9 @@
     <Compile Include="..\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Configuration\ITemplateConfigurationService.cs" />
+    <Compile Include="Configuration\Template.cs" />
+    <Compile Include="Configuration\TemplateConfiguration.cs" />
     <Compile Include="Entities\EmailMessage.cs" />
     <Compile Include="Entities\NotificationSmsContent.cs" />
     <Compile Include="Entities\NotificationEmailContent.cs" />

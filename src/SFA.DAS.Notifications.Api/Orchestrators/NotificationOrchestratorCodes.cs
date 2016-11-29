@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SFA.DAS.Notifications.Api.Orchestrators
+﻿namespace SFA.DAS.Notifications.Api.Orchestrators
 {
     public class NotificationOrchestratorCodes
     {

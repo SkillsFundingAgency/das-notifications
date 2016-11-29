@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using FluentValidation;
 using MediatR;
 using NLog;
 using SFA.DAS.Notifications.Api.Core;
