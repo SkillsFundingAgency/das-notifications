@@ -7,6 +7,7 @@ using SFA.DAS.Notifications.Api.Models;
 using SFA.DAS.Notifications.Api.Types;
 using SFA.DAS.Notifications.Application.Commands.SendEmail;
 using SFA.DAS.Notifications.Application.Commands.SendSms;
+using SFA.DAS.Notifications.Application.Queries.GetGovNotifyTemplateId;
 
 namespace SFA.DAS.Notifications.Api.Orchestrators
 {
@@ -25,17 +26,21 @@ namespace SFA.DAS.Notifications.Api.Orchestrators
 
         public async Task<OrchestratorResponse> SendEmail(Email request)
         {
-            var command = new SendEmailCommand
+            var templateId = (await _mediator.SendAsync(new GetGovNotifyTemplateIdQuery { TemplateId = request.TemplateId })).GovNotifyTemplateId;
+            if (string.IsNullOrEmpty(templateId))
+            {
+                return GetOrchestratorResponse(NotificationOrchestratorCodes.Post.ValidationFailure);
+            }
+
+            await _mediator.SendAsync(new SendEmailCommand
             {
                 SystemId = request.SystemId,
-                TemplateId = request.TemplateId,
+                TemplateId = templateId,
                 Subject = request.Subject,
                 RecipientsAddress = request.RecipientsAddress,
                 ReplyToAddress = request.ReplyToAddress,
                 Tokens = request.Tokens
-            };
-
-            await _mediator.SendAsync(command);
+            });
 
             return GetOrchestratorResponse(NotificationOrchestratorCodes.Post.Success);
         }

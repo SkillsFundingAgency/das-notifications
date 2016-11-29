@@ -22,12 +22,16 @@ namespace SFA.DAS.Notifications.Api.Controllers
         }
 
         [Route("")]
-        [Authorize(Roles = "SendEmail")]
+        //[Authorize(Roles = "SendEmail")]
         public async Task<HttpResponseMessage> Post(Email notification)
         {
             notification.SystemId = User.Identity.Name;
 
-            await _orchestrator.SendEmail(notification);
+            var result = await _orchestrator.SendEmail(notification);
+            if (result.Code == NotificationOrchestratorCodes.Post.ValidationFailure)
+            {
+                return new HttpResponseMessage(HttpStatusCode.BadRequest);
+            }
 
             return new HttpResponseMessage(HttpStatusCode.OK);
         }

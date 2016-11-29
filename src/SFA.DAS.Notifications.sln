@@ -25,6 +25,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.Notifications.Api",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.Notifications.Infrastructure.UnitTests", "SFA.DAS.Notifications.Infrastructure.UnitTests\SFA.DAS.Notifications.Infrastructure.UnitTests.csproj", "{80E8AC76-A76B-4C87-A36F-301AD962DECC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.Notifications.Application.UnitTests", "SFA.DAS.Notifications.Application.UnitTests\SFA.DAS.Notifications.Application.UnitTests.csproj", "{D9575102-4B84-4AB6-80AD-C8B6C3301ACC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.Notifications.Api.UnitTests", "SFA.DAS.Notifications.Api.UnitTests\SFA.DAS.Notifications.Api.UnitTests.csproj", "{878167D5-0E8C-48C3-B46D-07705D488A4D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,11 +63,21 @@ Global
 		{80E8AC76-A76B-4C87-A36F-301AD962DECC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{80E8AC76-A76B-4C87-A36F-301AD962DECC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{80E8AC76-A76B-4C87-A36F-301AD962DECC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D9575102-4B84-4AB6-80AD-C8B6C3301ACC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9575102-4B84-4AB6-80AD-C8B6C3301ACC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9575102-4B84-4AB6-80AD-C8B6C3301ACC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9575102-4B84-4AB6-80AD-C8B6C3301ACC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{878167D5-0E8C-48C3-B46D-07705D488A4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{878167D5-0E8C-48C3-B46D-07705D488A4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{878167D5-0E8C-48C3-B46D-07705D488A4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{878167D5-0E8C-48C3-B46D-07705D488A4D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{80E8AC76-A76B-4C87-A36F-301AD962DECC} = {DC080B91-941B-4849-944E-4220115C3523}
+		{D9575102-4B84-4AB6-80AD-C8B6C3301ACC} = {DC080B91-941B-4849-944E-4220115C3523}
+		{878167D5-0E8C-48C3-B46D-07705D488A4D} = {DC080B91-941B-4849-944E-4220115C3523}
 	EndGlobalSection
 EndGlobal
