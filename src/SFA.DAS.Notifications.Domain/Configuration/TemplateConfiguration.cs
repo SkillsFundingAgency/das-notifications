@@ -4,6 +4,6 @@ namespace SFA.DAS.Notifications.Domain.Configuration
 {
     public class TemplateConfiguration
     {
-        public List<Template> GovNotifyTemplates { get; set; }
+        public List<Template> EmailServiceTemplates { get; set; }
     }
 }

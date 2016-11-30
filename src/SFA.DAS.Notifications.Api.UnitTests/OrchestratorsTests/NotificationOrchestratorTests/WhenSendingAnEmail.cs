@@ -7,13 +7,13 @@ using NUnit.Framework;
 using SFA.DAS.Notifications.Api.Orchestrators;
 using SFA.DAS.Notifications.Api.Types;
 using SFA.DAS.Notifications.Application.Commands.SendEmail;
-using SFA.DAS.Notifications.Application.Queries.GetGovNotifyTemplateId;
+using SFA.DAS.Notifications.Application.Queries.GetEmailServiceTemplateId;
 
 namespace SFA.DAS.Notifications.Api.UnitTests.OrchestratorsTests.NotificationOrchestratorTests
 {
     public class WhenSendingAnEmail
     {
-        private const string GovNotifyTemplateId = "b0342171-8774-4477-9adc-38e50bcd9e09";
+        private const string EmailServiceTemplateId = "b0342171-8774-4477-9adc-38e50bcd9e09";
 
         private Mock<IMediator> _mediator;
         private NotificationOrchestrator _orchestrator;
@@ -23,10 +23,10 @@ namespace SFA.DAS.Notifications.Api.UnitTests.OrchestratorsTests.NotificationOrc
         public void Arrange()
         {
             _mediator = new Mock<IMediator>();
-            _mediator.Setup(m => m.SendAsync(It.Is<GetGovNotifyTemplateIdQuery>(q => q.TemplateId == "MyTemplate")))
-                .ReturnsAsync(new GetGovNotifyTemplateIdQueryResponse
+            _mediator.Setup(m => m.SendAsync(It.Is<GetEmailServiceTemplateIdQuery>(q => q.TemplateId == "MyTemplate")))
+                .ReturnsAsync(new GetEmailServiceTemplateIdQueryResponse
                 {
-                    GovNotifyTemplateId = GovNotifyTemplateId
+                    EmailServiceTemplateId = EmailServiceTemplateId
                 });
 
             _orchestrator = new NotificationOrchestrator(_mediator.Object);
@@ -71,23 +71,23 @@ namespace SFA.DAS.Notifications.Api.UnitTests.OrchestratorsTests.NotificationOrc
         }
 
         [Test]
-        public async Task ThenItShouldTranslateTheTemplateIdToTheGovNotifyId()
+        public async Task ThenItShouldTranslateTheTemplateIdToTheEmailServiceId()
         {
             // Act
             await _orchestrator.SendEmail(_email);
 
             // Assert
-            _mediator.Verify(m => m.SendAsync(It.Is<SendEmailCommand>(q => q.TemplateId == GovNotifyTemplateId)), Times.Once);
+            _mediator.Verify(m => m.SendAsync(It.Is<SendEmailCommand>(q => q.TemplateId == EmailServiceTemplateId)), Times.Once);
         }
 
         [Test]
         public async Task ThenItShouldReturnAValidationCodeIfTemplateNotFound()
         {
             // Arrange
-            _mediator.Setup(m => m.SendAsync(It.Is<GetGovNotifyTemplateIdQuery>(q => q.TemplateId == "MyTemplate")))
-                .ReturnsAsync(new GetGovNotifyTemplateIdQueryResponse
+            _mediator.Setup(m => m.SendAsync(It.Is<GetEmailServiceTemplateIdQuery>(q => q.TemplateId == "MyTemplate")))
+                .ReturnsAsync(new GetEmailServiceTemplateIdQueryResponse
                 {
-                    GovNotifyTemplateId = null
+                    EmailServiceTemplateId = null
                 });
 
             // Act

@@ -15,9 +15,9 @@ namespace SFA.DAS.Notifications.Infrastructure.UnitTests.ConfigurationTests.Temp
         protected const string Version = "1.0";
 
         protected const string Template1Id = "Template1";
-        protected const string Template1GovNotifyId = "bd1502ed-27f7-4d94-b96c-c40c0e3eeabe";
+        protected const string Template1EmailServiceId = "bd1502ed-27f7-4d94-b96c-c40c0e3eeabe";
         protected const string Template2Id = "Template2";
-        protected const string Template2GovNotifyId = "6aaa019f-00fc-447f-a933-0313a787e96d";
+        protected const string Template2EmailServiceId = "6aaa019f-00fc-447f-a933-0313a787e96d";
 
         protected string RepositoryResult;
         protected Mock<IConfigurationRepository> ConfigurationRepository;
@@ -27,17 +27,17 @@ namespace SFA.DAS.Notifications.Infrastructure.UnitTests.ConfigurationTests.Temp
         {
             RepositoryResult = JsonConvert.SerializeObject(new TemplateConfiguration
             {
-                GovNotifyTemplates = new List<Template>
+                EmailServiceTemplates = new List<Template>
                 {
                     new Template
                     {
                          Id = Template1Id,
-                         GovNotifyId = Template1GovNotifyId
+                         EmailServiceId = Template1EmailServiceId
                     },
                     new Template
                     {
                          Id = Template2Id,
-                         GovNotifyId = Template2GovNotifyId
+                         EmailServiceId = Template2EmailServiceId
                     }
                 }
             });
@@ -61,16 +61,16 @@ namespace SFA.DAS.Notifications.Infrastructure.UnitTests.ConfigurationTests.Temp
         }
         protected void AssertItHasReturnedCorrectlyDeserializeValues(TemplateConfiguration actual)
         {
-            Assert.IsNotNull(actual.GovNotifyTemplates);
-            Assert.AreEqual(2, actual.GovNotifyTemplates.Count);
+            Assert.IsNotNull(actual.EmailServiceTemplates);
+            Assert.AreEqual(2, actual.EmailServiceTemplates.Count);
 
-            var template1 = actual.GovNotifyTemplates[0];
+            var template1 = actual.EmailServiceTemplates[0];
             Assert.AreEqual(Template1Id, template1.Id);
-            Assert.AreEqual(Template1GovNotifyId, template1.GovNotifyId);
+            Assert.AreEqual(Template1EmailServiceId, template1.EmailServiceId);
 
-            var template2 = actual.GovNotifyTemplates[1];
+            var template2 = actual.EmailServiceTemplates[1];
             Assert.AreEqual(Template2Id, template2.Id);
-            Assert.AreEqual(Template2GovNotifyId, template2.GovNotifyId);
+            Assert.AreEqual(Template2EmailServiceId, template2.EmailServiceId);
         }
     }
 }
