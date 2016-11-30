@@ -12,12 +12,11 @@ namespace SFA.DAS.Notifications.Application.Queries.GetGovNotifyTemplateId
     public class GetGovNotifyTemplateIdQueryHandler : IAsyncRequestHandler<GetGovNotifyTemplateIdQuery, GetGovNotifyTemplateIdQueryResponse>
     {
         private readonly ITemplateConfigurationService _templateConfigurationService;
-        private readonly ILogger _logger;
+        private readonly ILogger _logger = LogManager.GetCurrentClassLogger();
 
-        public GetGovNotifyTemplateIdQueryHandler(ITemplateConfigurationService templateConfigurationService, ILogger logger)
+        public GetGovNotifyTemplateIdQueryHandler(ITemplateConfigurationService templateConfigurationService)
         {
             _templateConfigurationService = templateConfigurationService;
-            _logger = logger;
         }
 
         public async Task<GetGovNotifyTemplateIdQueryResponse> Handle(GetGovNotifyTemplateIdQuery message)
