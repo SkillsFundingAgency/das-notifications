@@ -103,9 +103,6 @@
     <Compile Include="Messages\DispatchNotificationMessage.cs" />
     <Compile Include="Commands\QueueNameAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Queries\GetEmailServiceTemplateId\GetEmailServiceTemplateIdQuery.cs" />
-    <Compile Include="Queries\GetEmailServiceTemplateId\GetEmailServiceTemplateIdQueryHandler.cs" />
-    <Compile Include="Queries\GetEmailServiceTemplateId\GetEmailServiceTemplateIdQueryResponse.cs" />
     <Compile Include="Queries\GetMessage\GetMessageQueryHandler.cs" />
     <Compile Include="Queries\GetMessage\GetMessageQueryRequest.cs" />
     <Compile Include="Queries\GetMessage\GetMessageQueryResponse.cs" />

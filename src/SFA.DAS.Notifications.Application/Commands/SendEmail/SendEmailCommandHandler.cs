@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using FluentValidation;
 using MediatR;
@@ -6,6 +7,7 @@ using Newtonsoft.Json;
 using NLog;
 using SFA.DAS.Messaging;
 using SFA.DAS.Notifications.Application.Messages;
+using SFA.DAS.Notifications.Domain.Configuration;
 using SFA.DAS.Notifications.Domain.Entities;
 using SFA.DAS.Notifications.Domain.Repositories;
 using SFA.DAS.TimeProvider;
@@ -21,8 +23,9 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
 
         private readonly INotificationsRepository _notificationsRepository;
         private readonly IMessagePublisher _messagePublisher;
+        private readonly ITemplateConfigurationService _templateConfigurationService;
 
-        public SendEmailCommandHandler(INotificationsRepository notificationsRepository, IMessagePublisher messagePublisher)
+        public SendEmailCommandHandler(INotificationsRepository notificationsRepository, IMessagePublisher messagePublisher, ITemplateConfigurationService templateConfigurationService)
         {
             if (notificationsRepository == null)
                 throw new ArgumentNullException(nameof(notificationsRepository));
@@ -31,6 +34,7 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
 
             _notificationsRepository = notificationsRepository;
             _messagePublisher = messagePublisher;
+            _templateConfigurationService = templateConfigurationService;
         }
 
         protected override async Task HandleCore(SendEmailCommand command)
@@ -40,6 +44,24 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
             Logger.Info($"Received command to send email to {command.RecipientsAddress} (message id: {messageId})");
 
             Validate(command);
+
+
+            if (!IsGuid(command.TemplateId))
+            {
+                var templateConfiguration = await _templateConfigurationService.GetAsync();
+                var emailServiceTemplateId = templateConfiguration.EmailServiceTemplates.SingleOrDefault(
+                    t => t.Id.Equals(command.TemplateId, StringComparison.CurrentCultureIgnoreCase))?.EmailServiceId;
+                if (string.IsNullOrEmpty(emailServiceTemplateId))
+                {
+                    throw new ValidationException($"No template mapping could be found for {command.TemplateId}");
+                }
+                command.TemplateId = emailServiceTemplateId;
+            }
+            else
+            {
+                // Keep eye on this to make sure consumers migrate
+                Logger.Info($"Request to send template {command.TemplateId} received using email service id");
+            }
 
             await _notificationsRepository.Create(CreateMessageData(command, messageId));
 
@@ -82,6 +104,11 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
 
             if (!validationResult.IsValid)
                 throw new ValidationException(validationResult.Errors);
+        }
+        private bool IsGuid(string value)
+        {
+            Guid x;
+            return Guid.TryParse(value, out x);
         }
     }
 }

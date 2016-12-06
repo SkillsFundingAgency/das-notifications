@@ -7,14 +7,11 @@ using NUnit.Framework;
 using SFA.DAS.Notifications.Api.Orchestrators;
 using SFA.DAS.Notifications.Api.Types;
 using SFA.DAS.Notifications.Application.Commands.SendEmail;
-using SFA.DAS.Notifications.Application.Queries.GetEmailServiceTemplateId;
 
 namespace SFA.DAS.Notifications.Api.UnitTests.OrchestratorsTests.NotificationOrchestratorTests
 {
     public class WhenSendingAnEmail
     {
-        private const string EmailServiceTemplateId = "b0342171-8774-4477-9adc-38e50bcd9e09";
-
         private Mock<IMediator> _mediator;
         private NotificationOrchestrator _orchestrator;
         private Email _email;
@@ -23,11 +20,6 @@ namespace SFA.DAS.Notifications.Api.UnitTests.OrchestratorsTests.NotificationOrc
         public void Arrange()
         {
             _mediator = new Mock<IMediator>();
-            _mediator.Setup(m => m.SendAsync(It.Is<GetEmailServiceTemplateIdQuery>(q => q.TemplateId == "MyTemplate")))
-                .ReturnsAsync(new GetEmailServiceTemplateIdQueryResponse
-                {
-                    EmailServiceTemplateId = EmailServiceTemplateId
-                });
 
             _orchestrator = new NotificationOrchestrator(_mediator.Object);
 
@@ -70,32 +62,5 @@ namespace SFA.DAS.Notifications.Api.UnitTests.OrchestratorsTests.NotificationOrc
             _mediator.Verify(m => m.SendAsync(It.Is<SendEmailCommand>(q => q.Tokens.ContainsKey("Key") && q.Tokens["Key"] == "Value")), Times.Once);
         }
 
-        [Test]
-        public async Task ThenItShouldTranslateTheTemplateIdToTheEmailServiceId()
-        {
-            // Act
-            await _orchestrator.SendEmail(_email);
-
-            // Assert
-            _mediator.Verify(m => m.SendAsync(It.Is<SendEmailCommand>(q => q.TemplateId == EmailServiceTemplateId)), Times.Once);
-        }
-
-        [Test]
-        public async Task ThenItShouldReturnAValidationCodeIfTemplateNotFound()
-        {
-            // Arrange
-            _mediator.Setup(m => m.SendAsync(It.Is<GetEmailServiceTemplateIdQuery>(q => q.TemplateId == "MyTemplate")))
-                .ReturnsAsync(new GetEmailServiceTemplateIdQueryResponse
-                {
-                    EmailServiceTemplateId = null
-                });
-
-            // Act
-            var actual = await _orchestrator.SendEmail(_email);
-
-            // Assert
-            Assert.IsNotNull(actual);
-            Assert.AreEqual(NotificationOrchestratorCodes.Post.ValidationFailure, actual.Code);
-        }
     }
 }

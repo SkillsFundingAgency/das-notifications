@@ -7,7 +7,6 @@ using SFA.DAS.Notifications.Api.Models;
 using SFA.DAS.Notifications.Api.Types;
 using SFA.DAS.Notifications.Application.Commands.SendEmail;
 using SFA.DAS.Notifications.Application.Commands.SendSms;
-using SFA.DAS.Notifications.Application.Queries.GetEmailServiceTemplateId;
 
 namespace SFA.DAS.Notifications.Api.Orchestrators
 {
@@ -26,16 +25,10 @@ namespace SFA.DAS.Notifications.Api.Orchestrators
 
         public async Task<OrchestratorResponse> SendEmail(Email request)
         {
-            var templateId = (await _mediator.SendAsync(new GetEmailServiceTemplateIdQuery { TemplateId = request.TemplateId })).EmailServiceTemplateId;
-            if (string.IsNullOrEmpty(templateId))
-            {
-                return GetOrchestratorResponse(NotificationOrchestratorCodes.Post.ValidationFailure);
-            }
-
             await _mediator.SendAsync(new SendEmailCommand
             {
                 SystemId = request.SystemId,
-                TemplateId = templateId,
+                TemplateId = request.TemplateId,
                 Subject = request.Subject,
                 RecipientsAddress = request.RecipientsAddress,
                 ReplyToAddress = request.ReplyToAddress,
