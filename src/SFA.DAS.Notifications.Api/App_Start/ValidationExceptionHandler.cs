@@ -8,7 +8,7 @@ namespace SFA.DAS.Notifications.Api
 {
     public class ValidationExceptionHandler : ExceptionHandler
     {
-        private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger _logger = LogManager.GetCurrentClassLogger();
 
         public override void Handle(ExceptionHandlerContext context)
         {
@@ -19,10 +19,12 @@ namespace SFA.DAS.Notifications.Api
                 response.Content = new StringContent(message);
                 context.Result = new ValidationErrorResult(context.Request, response);
 
-                Logger.Warn(context.Exception, "Validation error");
+                _logger.Warn(context.Exception, "Validation error");
 
                 return;
             }
+
+            _logger.Error(context.Exception, "Unhandled exception");
 
             base.Handle(context);
         }
