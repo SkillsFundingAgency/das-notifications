@@ -3,7 +3,6 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
-using SFA.DAS.Notifications.Api.Models;
 using SFA.DAS.Notifications.Api.Orchestrators;
 using SFA.DAS.Notifications.Api.Types;
 
@@ -28,7 +27,11 @@ namespace SFA.DAS.Notifications.Api.Controllers
         {
             notification.SystemId = User.Identity.Name;
 
-            await _orchestrator.SendEmail(notification);
+            var result = await _orchestrator.SendEmail(notification);
+            if (result.Code == NotificationOrchestratorCodes.Post.ValidationFailure)
+            {
+                return new HttpResponseMessage(HttpStatusCode.BadRequest);
+            }
 
             return new HttpResponseMessage(HttpStatusCode.OK);
         }

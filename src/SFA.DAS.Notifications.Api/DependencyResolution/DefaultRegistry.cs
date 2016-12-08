@@ -21,6 +21,7 @@ using MediatR;
 using Microsoft.Azure;
 using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
+using SFA.DAS.Notifications.Domain.Configuration;
 using SFA.DAS.Notifications.Domain.Repositories;
 using SFA.DAS.Notifications.Infrastructure.AzureMessageNotificationRepository;
 using SFA.DAS.Notifications.Infrastructure.Configuration;
@@ -46,7 +47,7 @@ namespace SFA.DAS.Notifications.Api.DependencyResolution
                 {
                     scan.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith(ServiceName));
                     scan.RegisterConcreteTypesAgainstTheFirstInterface();
-                    scan.ConnectImplementationsToTypesClosing(typeof (AbstractValidator<>));
+                    scan.ConnectImplementationsToTypesClosing(typeof(AbstractValidator<>));
                 });
 
             For<SingleInstanceFactory>().Use<SingleInstanceFactory>(ctx => t => ctx.GetInstance(t));
@@ -58,6 +59,9 @@ namespace SFA.DAS.Notifications.Api.DependencyResolution
             For<INotificationsRepository>().Use<AzureNotificationRepository>().Ctor<NotificationServiceConfiguration>().Is(config);
 
             For<IConfigurationService>().Use(GetConfigurationService(environment));
+            For<IConfigurationRepository>().Use(GetConfigurationRepository());
+            For<ITemplateConfigurationService>().Use<TemplateConfigurationService>()
+                .Ctor<string>().Is(environment);
         }
 
         private NotificationServiceConfiguration GetConfiguration(string environment)

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SFA.DAS.Notifications.Domain.Entities
+﻿namespace SFA.DAS.Notifications.Domain.Entities
 {
     public enum NotificationStatus
     {

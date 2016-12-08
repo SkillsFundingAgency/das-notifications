@@ -1,5 +1,4 @@
-﻿using System;
-using MediatR;
+﻿using MediatR;
 using SFA.DAS.Notifications.Domain.Entities;
 
 namespace SFA.DAS.Notifications.Application.Commands.DispatchNotification

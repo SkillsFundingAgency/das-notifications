@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using FluentValidation;
 using MediatR;
 using NLog;
 using SFA.DAS.Notifications.Api.Core;
@@ -26,7 +25,7 @@ namespace SFA.DAS.Notifications.Api.Orchestrators
 
         public async Task<OrchestratorResponse> SendEmail(Email request)
         {
-            var command = new SendEmailCommand
+            await _mediator.SendAsync(new SendEmailCommand
             {
                 SystemId = request.SystemId,
                 TemplateId = request.TemplateId,
@@ -34,9 +33,7 @@ namespace SFA.DAS.Notifications.Api.Orchestrators
                 RecipientsAddress = request.RecipientsAddress,
                 ReplyToAddress = request.ReplyToAddress,
                 Tokens = request.Tokens
-            };
-
-            await _mediator.SendAsync(command);
+            });
 
             return GetOrchestratorResponse(NotificationOrchestratorCodes.Post.Success);
         }

@@ -1,5 +1,4 @@
-﻿using System;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
 {

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SFA.DAS.Notifications.Infrastructure.Configuration
+﻿namespace SFA.DAS.Notifications.Infrastructure.Configuration
 {
     public class SmtpConfiguration
     {

@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.WindowsAzure.Storage.Table;
+﻿using Microsoft.WindowsAzure.Storage.Table;
 using SFA.DAS.Notifications.Domain.Entities;
 
 namespace SFA.DAS.Notifications.Infrastructure.AzureMessageNotificationRepository

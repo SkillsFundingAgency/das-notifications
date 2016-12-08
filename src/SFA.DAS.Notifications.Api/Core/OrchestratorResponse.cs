@@ -1,5 +1,4 @@
-﻿using System;
-using FluentValidation.Results;
+﻿using FluentValidation.Results;
 
 namespace SFA.DAS.Notifications.Api.Core
 {
