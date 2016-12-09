@@ -63,6 +63,7 @@
     <Compile Include="ConfigurationTests\TemplateConfigurationServiceTests\TemplateConfigurationServiceTestBase.cs" />
     <Compile Include="ConfigurationTests\TemplateConfigurationServiceTests\WhenGettingAsync.cs" />
     <Compile Include="ConfigurationTests\TemplateConfigurationServiceTests\WhenGetting.cs" />
+    <Compile Include="NotifyEmailServiceTests\NotifyEmailServiceTests\WhenSending.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -70,6 +71,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SFA.DAS.Notifications.Application\SFA.DAS.Notifications.Application.csproj">
+      <Project>{A7D9A608-913C-496D-ACED-4A6D7F2C2758}</Project>
+      <Name>SFA.DAS.Notifications.Application</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.Notifications.Domain\SFA.DAS.Notifications.Domain.csproj">
       <Project>{AC81FD52-7485-4BBF-9C0C-D6EED90F84A1}</Project>
       <Name>SFA.DAS.Notifications.Domain</Name>

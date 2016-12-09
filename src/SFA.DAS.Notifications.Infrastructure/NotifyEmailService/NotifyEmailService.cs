@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using NLog;
@@ -28,7 +29,7 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
             {
                 To = message.RecipientsAddress,
                 Template = message.TemplateId,
-                Personalisation = message.Tokens.ToDictionary(item => item.Key.ToLower(), item => item.Value)
+                Personalisation = (message.Tokens ?? new Dictionary<string, string>()).ToDictionary(item => item.Key.ToLower(), item => item.Value)
             };
 
             await _clientWrapper.SendMessage(notifyMessage);
