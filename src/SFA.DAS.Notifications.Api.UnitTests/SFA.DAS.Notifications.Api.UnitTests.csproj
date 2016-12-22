@@ -51,6 +51,10 @@
       <HintPath>..\packages\NUnit.3.5.0\lib\net45\nunit.framework.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="SFA.DAS.NLog.Logger, Version=1.0.0.17615, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.NLog.Logger.1.0.0.17615\lib\net45\SFA.DAS.NLog.Logger.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="SFA.DAS.Notifications.Api.Types, Version=1.1.0.12760, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Notifications.Api.Types.1.1.0.12760\lib\net45\SFA.DAS.Notifications.Api.Types.dll</HintPath>
       <Private>True</Private>
@@ -69,6 +73,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -80,6 +85,9 @@
       <Project>{A7D9A608-913C-496D-ACED-4A6D7F2C2758}</Project>
       <Name>SFA.DAS.Notifications.Application</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

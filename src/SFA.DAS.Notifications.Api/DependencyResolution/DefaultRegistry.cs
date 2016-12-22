@@ -16,11 +16,13 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
+using System.Web;
 using FluentValidation;
 using MediatR;
 using Microsoft.Azure;
 using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
+using SFA.DAS.NLog.Logger;
 using SFA.DAS.Notifications.Domain.Configuration;
 using SFA.DAS.Notifications.Domain.Repositories;
 using SFA.DAS.Notifications.Infrastructure.AzureMessageNotificationRepository;
@@ -62,6 +64,16 @@ namespace SFA.DAS.Notifications.Api.DependencyResolution
             For<IConfigurationRepository>().Use(GetConfigurationRepository());
             For<ITemplateConfigurationService>().Use<TemplateConfigurationService>()
                 .Ctor<string>().Is(environment);
+
+            ConfigureLogging();
+        }
+
+        private void ConfigureLogging()
+        {
+            For<IRequestContext>().Use(x => new RequestContext(new HttpContextWrapper(HttpContext.Current)));
+            For<ILog>().Use(x => new NLogLogger(
+                x.ParentType,
+                x.GetInstance<IRequestContext>())).AlwaysUnique();
         }
 
         private NotificationServiceConfiguration GetConfiguration(string environment)

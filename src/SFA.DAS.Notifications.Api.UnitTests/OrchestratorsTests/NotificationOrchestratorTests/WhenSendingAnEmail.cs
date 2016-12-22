@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using MediatR;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.NLog.Logger;
 using SFA.DAS.Notifications.Api.Orchestrators;
 using SFA.DAS.Notifications.Api.Types;
 using SFA.DAS.Notifications.Application.Commands.SendEmail;
@@ -21,7 +22,7 @@ namespace SFA.DAS.Notifications.Api.UnitTests.OrchestratorsTests.NotificationOrc
         {
             _mediator = new Mock<IMediator>();
 
-            _orchestrator = new NotificationOrchestrator(_mediator.Object);
+            _orchestrator = new NotificationOrchestrator(_mediator.Object, Mock.Of<ILog>());
 
             _email = new Email
             {

@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Web.Http;
-using NLog;
 using NLog.Targets;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.Notifications.Api
 {
     public class WebApiApplication : System.Web.HttpApplication
     {
-        private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
+        private static readonly ILog Logger = new NLogLogger();
+
         private static RedisTarget _redisTarget; // Required to ensure assembly is copied to output.
 
         protected void Application_Start()
