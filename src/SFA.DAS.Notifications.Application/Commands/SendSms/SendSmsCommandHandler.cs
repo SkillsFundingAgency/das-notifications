@@ -5,6 +5,7 @@ using MediatR;
 using Newtonsoft.Json;
 using NLog;
 using SFA.DAS.Messaging;
+using SFA.DAS.NLog.Logger;
 using SFA.DAS.Notifications.Application.Messages;
 using SFA.DAS.Notifications.Domain.Entities;
 using SFA.DAS.Notifications.Domain.Repositories;
@@ -17,33 +18,35 @@ namespace SFA.DAS.Notifications.Application.Commands.SendSms
         [QueueName]
         public string send_notifications { get; set; }
 
-        private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
-
+        private readonly ILog _logger;
         private readonly INotificationsRepository _notificationsRepository;
         private readonly IMessagePublisher _messagePublisher;
 
-        public SendSmsCommandHandler(INotificationsRepository notificationsRepository, IMessagePublisher messagePublisher)
+        public SendSmsCommandHandler(INotificationsRepository notificationsRepository, IMessagePublisher messagePublisher, ILog logger)
         {
             if (notificationsRepository == null)
                 throw new ArgumentNullException(nameof(notificationsRepository));
             if (messagePublisher == null)
                 throw new ArgumentNullException(nameof(messagePublisher));
+            if (logger == null)
+                throw new ArgumentNullException(nameof(logger));
 
             _notificationsRepository = notificationsRepository;
             _messagePublisher = messagePublisher;
+            _logger = logger;
         }
 
         protected override async Task HandleCore(SendSmsCommand command)
         {
             var messageId = Guid.NewGuid().ToString();
 
-            Logger.Info($"Received command to send SMS to {command.RecipientsNumber} (message id: {messageId})");
+            _logger.Info($"Received command to send SMS to {command.RecipientsNumber} (message id: {messageId})");
 
             Validate(command);
 
             await _notificationsRepository.Create(CreateMessageData(command, messageId));
 
-            Logger.Debug($"Stored SMS message '{messageId}' in data store");
+            _logger.Debug($"Stored SMS message '{messageId}' in data store");
 
             await _messagePublisher.PublishAsync(new DispatchNotificationMessage
             {
@@ -51,7 +54,7 @@ namespace SFA.DAS.Notifications.Application.Commands.SendSms
                 Format = NotificationFormat.Sms
             });
 
-            Logger.Debug($"Published SMS message '{messageId}' to queue");
+            _logger.Debug($"Published SMS message '{messageId}' to queue");
         }
 
         private static Notification CreateMessageData(SendSmsCommand message, string messageId)
