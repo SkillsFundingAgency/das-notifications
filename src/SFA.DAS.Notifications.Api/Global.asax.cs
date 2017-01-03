@@ -2,6 +2,8 @@
 using System.Web.Http;
 using NLog.Targets;
 using SFA.DAS.NLog.Logger;
+using Microsoft.ApplicationInsights.Extensibility;
+using Microsoft.Azure;
 
 namespace SFA.DAS.Notifications.Api
 {
@@ -15,6 +17,7 @@ namespace SFA.DAS.Notifications.Api
         {
             Logger.Info("Starting Notifications Api Application");
             GlobalConfiguration.Configure(WebApiConfig.Register);
+            TelemetryConfiguration.Active.InstrumentationKey = CloudConfigurationManager.GetSetting("InstrumentationKey");
         }
 
         protected void Application_End()
