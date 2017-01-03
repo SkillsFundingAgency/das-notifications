@@ -25,7 +25,7 @@ using WebActivatorEx;
 namespace SFA.DAS.Notifications.Api.App_Start {
     using System;
     using System.Web.Mvc;
-
+    using global::NLog;
     using Microsoft.Web.Infrastructure.DynamicModuleHelper;
     using NLog;
     using SFA.DAS.Notifications.Api.DependencyResolution;

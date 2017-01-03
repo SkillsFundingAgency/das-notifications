@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using MediatR;
 using NLog;
+using SFA.DAS.NLog.Logger;
 using SFA.DAS.Notifications.Api.Core;
 using SFA.DAS.Notifications.Api.Models;
 using SFA.DAS.Notifications.Api.Types;
@@ -12,19 +13,24 @@ namespace SFA.DAS.Notifications.Api.Orchestrators
 {
     public class NotificationOrchestrator : OrchestratorBase, INotificationOrchestrator
     {
-        private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
-
+        private readonly ILog _logger;
         private readonly IMediator _mediator;
 
-        public NotificationOrchestrator(IMediator mediator)
+        public NotificationOrchestrator(IMediator mediator, ILog logger)
         {
             if (mediator == null)
                 throw new ArgumentNullException(nameof(mediator));
+            if (logger == null)
+                throw new ArgumentNullException(nameof(logger));
+
             _mediator = mediator;
+            _logger = logger;
         }
 
         public async Task<OrchestratorResponse> SendEmail(Email request)
         {
+            _logger.Info($"Received request to send email to {request.RecipientsAddress}");
+
             await _mediator.SendAsync(new SendEmailCommand
             {
                 SystemId = request.SystemId,
@@ -40,6 +46,8 @@ namespace SFA.DAS.Notifications.Api.Orchestrators
 
         public async Task<OrchestratorResponse> SendSms(SendSmsRequest request)
         {
+            _logger.Info($"Received request to send sms to {request.RecipientsNumber}");
+
             var command = new SendSmsCommand
             {
                 SystemId = request.SystemId,

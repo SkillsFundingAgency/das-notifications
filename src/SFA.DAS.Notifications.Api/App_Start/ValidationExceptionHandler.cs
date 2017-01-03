@@ -2,13 +2,13 @@
 using System.Net.Http;
 using System.Web.Http.ExceptionHandling;
 using FluentValidation;
-using NLog;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.Notifications.Api
 {
     public class ValidationExceptionHandler : ExceptionHandler
     {
-        private static readonly ILogger _logger = LogManager.GetCurrentClassLogger();
+        private static readonly ILog Logger = new NLogLogger();
 
         public override void Handle(ExceptionHandlerContext context)
         {
@@ -19,12 +19,12 @@ namespace SFA.DAS.Notifications.Api
                 response.Content = new StringContent(message);
                 context.Result = new ValidationErrorResult(context.Request, response);
 
-                _logger.Warn(context.Exception, "Validation error");
+                Logger.Warn(context.Exception, "Validation error");
 
                 return;
             }
 
-            _logger.Error(context.Exception, "Unhandled exception");
+            Logger.Error(context.Exception, "Unhandled exception");
 
             base.Handle(context);
         }

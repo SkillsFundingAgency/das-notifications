@@ -6,6 +6,7 @@ using MediatR;
 using Newtonsoft.Json;
 using NLog;
 using SFA.DAS.Messaging;
+using SFA.DAS.NLog.Logger;
 using SFA.DAS.Notifications.Application.Messages;
 using SFA.DAS.Notifications.Domain.Configuration;
 using SFA.DAS.Notifications.Domain.Entities;
@@ -19,29 +20,33 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
         [QueueName]
         public string send_notifications { get; set; }
 
-        private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
-
+        private readonly ILog _logger;
         private readonly INotificationsRepository _notificationsRepository;
         private readonly IMessagePublisher _messagePublisher;
         private readonly ITemplateConfigurationService _templateConfigurationService;
 
-        public SendEmailCommandHandler(INotificationsRepository notificationsRepository, IMessagePublisher messagePublisher, ITemplateConfigurationService templateConfigurationService)
+        public SendEmailCommandHandler(INotificationsRepository notificationsRepository, IMessagePublisher messagePublisher, ITemplateConfigurationService templateConfigurationService, ILog logger)
         {
             if (notificationsRepository == null)
                 throw new ArgumentNullException(nameof(notificationsRepository));
             if (messagePublisher == null)
                 throw new ArgumentNullException(nameof(messagePublisher));
+            if (templateConfigurationService == null)
+                throw new ArgumentNullException(nameof(templateConfigurationService));
+            if (logger == null)
+                throw new ArgumentNullException(nameof(logger));
 
             _notificationsRepository = notificationsRepository;
             _messagePublisher = messagePublisher;
             _templateConfigurationService = templateConfigurationService;
+            _logger = logger;
         }
 
         protected override async Task HandleCore(SendEmailCommand command)
         {
             var messageId = Guid.NewGuid().ToString();
 
-            Logger.Info($"Received command to send email to {command.RecipientsAddress} (message id: {messageId})");
+            _logger.Info($"Received command to send email to {command.RecipientsAddress} (message id: {messageId})");
 
             Validate(command);
 
@@ -60,12 +65,12 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
             else
             {
                 // Keep eye on this to make sure consumers migrate
-                Logger.Info($"Request to send template {command.TemplateId} received using email service id");
+                _logger.Info($"Request to send template {command.TemplateId} received using email service id");
             }
 
             await _notificationsRepository.Create(CreateMessageData(command, messageId));
 
-            Logger.Debug($"Stored email message '{messageId}' in data store");
+            _logger.Debug($"Stored email message '{messageId}' in data store");
 
             await _messagePublisher.PublishAsync(new DispatchNotificationMessage
             {
@@ -73,7 +78,7 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
                 Format = NotificationFormat.Email
             });
 
-            Logger.Debug($"Published email message '{messageId}' to queue");
+            _logger.Debug($"Published email message '{messageId}' to queue");
         }
 
         private static Notification CreateMessageData(SendEmailCommand message, string messageId)
