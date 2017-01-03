@@ -21,7 +21,7 @@
       <Setting name="InstrumentationKey" />
     </ConfigurationSettings>
     <Endpoints>
-      <InputEndpoint name="HttpsIn" protocol="https" port="443" certificate="WebSslCert" loadBalancer="das-prd-noti-ilb"/>
+      <InputEndpoint name="HttpsIn" protocol="https" port="443" certificate="WebSslCert"/>
     </Endpoints>
     <Certificates>
       <Certificate name="WebSslCert" storeLocation="LocalMachine" storeName="My" />
