@@ -18,6 +18,7 @@
       <Setting name="ApiAudiences" />
       <Setting name="LoggingRedisConnectionString"/>
       <Setting name="LoggingRedisKey"/>
+      <Setting name="InstrumentationKey" />
     </ConfigurationSettings>
     <Endpoints>
       <InputEndpoint name="HttpsIn" protocol="https" port="443" certificate="WebSslCert"/>
@@ -35,6 +36,10 @@
       <Setting name="EmailServiceName" />
       <Setting name="LoggingRedisConnectionString"/>
       <Setting name="LoggingRedisKey"/>
+      <Setting name="InstrumentationKey" />
     </ConfigurationSettings>
+    <Endpoints>
+      <InputEndpoint name="Fake" protocol="tcp" port="50121" />
+    </Endpoints>
   </WorkerRole>
 </ServiceDefinition>
