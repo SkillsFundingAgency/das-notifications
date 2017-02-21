@@ -10,5 +10,6 @@ namespace SFA.DAS.Notifications.Domain.Entities
         public string RecipientsAddress { get; set; }
         public string ReplyToAddress { get; set; }
         public Dictionary<string, string> Tokens { get; set; }
+        public string Reference { get; set; }
     }
 }

@@ -54,7 +54,8 @@ namespace SFA.DAS.Notifications.Application.Commands.DispatchNotification
                             Subject = emailContent.Subject,
                             RecipientsAddress = emailContent.RecipientsAddress,
                             ReplyToAddress = emailContent.ReplyToAddress,
-                            Tokens = emailContent.Tokens
+                            Tokens = emailContent.Tokens,
+                            Reference = command.MessageId
                         });
 
                         await _notificationsRepository.Update(command.Format, command.MessageId, NotificationStatus.Sent);
