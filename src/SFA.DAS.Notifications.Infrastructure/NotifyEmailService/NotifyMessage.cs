@@ -11,5 +11,7 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
         public string Template { get; set; }
         [JsonProperty(PropertyName = "personalisation")]
         public Dictionary<string, string> Personalisation { get; set; }
+        [JsonProperty(PropertyName = "reference")]
+        public object Reference { get; set; }
     }
 }
