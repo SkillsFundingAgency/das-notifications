@@ -31,7 +31,7 @@ namespace SFA.DAS.Notifications.Infrastructure.ExecutionPolicies
 
         private void OnRetryableFailure(Exception ex)
         {
-            _logger.Info(ex, $"Error calling HMRC - {ex.Message} - Will retry");
+            _logger.Info(ex, $"Error sending email - {ex.Message} - Will retry");
         }
     }
 }

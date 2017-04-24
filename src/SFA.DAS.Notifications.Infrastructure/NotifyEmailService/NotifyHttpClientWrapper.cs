@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using NLog;
 using SFA.DAS.Configuration;
+using SFA.DAS.Notifications.Domain.Http;
 using SFA.DAS.Notifications.Infrastructure.Configuration;
 
 namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
@@ -50,7 +51,7 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
                     Content = stringContent
                 });
 
-                response.EnsureSuccessStatusCode();
+                EnsureSuccessfulResponse(response);
             }
         }
 
@@ -60,6 +61,25 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
             {
                 BaseAddress = new Uri(baseUrl)
             };
+        }
+
+        private void EnsureSuccessfulResponse(HttpResponseMessage response)
+        {
+            if (response.IsSuccessStatusCode)
+            {
+                return;
+            }
+            switch ((int)response.StatusCode)
+            {
+                case 404:
+                    throw new ResourceNotFoundException(response.RequestMessage.RequestUri.ToString());
+                case 429:
+                    throw new TooManyRequestsException();
+                case 500:
+                    throw new ServiceUnavailableException();
+                default:
+                    throw new HttpException((int)response.StatusCode, $"Unexpected HTTP exception - ({(int)response.StatusCode}): {response.ReasonPhrase}");
+            }
         }
     }
 }

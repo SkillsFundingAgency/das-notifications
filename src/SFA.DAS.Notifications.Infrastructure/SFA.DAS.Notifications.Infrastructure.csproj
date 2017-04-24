@@ -131,6 +131,7 @@
     <Compile Include="Configuration\NotifyServiceConfiguration.cs" />
     <Compile Include="Configuration\SmtpConfiguration.cs" />
     <Compile Include="Configuration\TemplateConfigurationService.cs" />
+    <Compile Include="DependencyResolution\ExecutionPolicyPolicy.cs" />
     <Compile Include="DependencyResolution\LoggingPolicy.cs" />
     <Compile Include="DependencyResolution\MessagePolicy.cs" />
     <Compile Include="AzureMessageNotificationRepository\NotificationTableEntity.cs" />

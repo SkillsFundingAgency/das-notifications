@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Notifications.Domain.Entities;
+using SFA.DAS.Notifications.Infrastructure.ExecutionPolicies;
 using SFA.DAS.Notifications.Infrastructure.NotifyEmailService;
 
 namespace SFA.DAS.Notifications.Infrastructure.UnitTests.NotifyEmailServiceTests.NotifyEmailServiceTests
@@ -20,13 +18,16 @@ namespace SFA.DAS.Notifications.Infrastructure.UnitTests.NotifyEmailServiceTests
         private Mock<INotifyHttpClientWrapper> _httpClient;
         private NotifyEmailService.NotifyEmailService _service;
         private EmailMessage _email;
+        private NoopExecutionPolicy _executionPolicy;
 
         [SetUp]
         public void Arrange()
         {
             _httpClient = new Mock<INotifyHttpClientWrapper>();
 
-            _service = new NotifyEmailService.NotifyEmailService(_httpClient.Object);
+            _executionPolicy = new NoopExecutionPolicy();
+
+            _service = new NotifyEmailService.NotifyEmailService(_httpClient.Object, _executionPolicy);
 
             _email = new EmailMessage
             {

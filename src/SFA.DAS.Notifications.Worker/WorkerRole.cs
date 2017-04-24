@@ -32,6 +32,7 @@ namespace SFA.DAS.Notifications.Worker
             {
                 c.Policies.Add(new MessagePolicy(ServiceName));
                 c.Policies.Add<LoggingPolicy>();
+                c.Policies.Add<ExecutionPolicyPolicy>();
                 c.AddRegistry<DefaultRegistry>();
             });
 
