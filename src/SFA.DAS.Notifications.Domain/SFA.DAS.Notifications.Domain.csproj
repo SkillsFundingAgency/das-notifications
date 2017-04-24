@@ -48,6 +48,10 @@
     <Compile Include="Entities\NotificationFormat.cs" />
     <Compile Include="Entities\NotificationStatus.cs" />
     <Compile Include="Entities\SmsMessage.cs" />
+    <Compile Include="Http\HttpException.cs" />
+    <Compile Include="Http\ResourceNotFoundException.cs" />
+    <Compile Include="Http\ServiceUnavailableException.cs" />
+    <Compile Include="Http\TooManyRequestsException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\INotificationsRepository.cs" />
   </ItemGroup>
