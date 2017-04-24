@@ -53,6 +53,8 @@ namespace SFA.DAS.Notifications.Worker.DependencyResolution
 
             For<QueuedNotificationMessageHandler>().Use<QueuedNotificationMessageHandler>();
             For<IMediator>().Use<Mediator>();
+
+            RegisterExecutionPolicies();
         }
 
         private void ConfigureEmailService()
@@ -90,6 +92,13 @@ namespace SFA.DAS.Notifications.Worker.DependencyResolution
         {
             var configurationRepository = GetConfigurationRepository();
             return new ConfigurationService(configurationRepository, new ConfigurationOptions(ServiceName, environment, Version));
+        }
+
+        private void RegisterExecutionPolicies()
+        {
+            For<Infrastructure.ExecutionPolicies.ExecutionPolicy>()
+                .Use<Infrastructure.ExecutionPolicies.SendEmailExecutionPolicy>()
+                .Named(Infrastructure.ExecutionPolicies.SendEmailExecutionPolicy.Name);
         }
     }
 }
