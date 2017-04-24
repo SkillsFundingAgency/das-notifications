@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
+using SFA.DAS.Notifications.Api.Attributes;
 using SFA.DAS.Notifications.Api.Models;
 using SFA.DAS.Notifications.Api.Orchestrators;
 
@@ -22,7 +23,7 @@ namespace SFA.DAS.Notifications.Api.Controllers
         }
 
         [Route("")]
-        [Authorize(Roles = "SendSMS")]
+        [ApiAuthorize(Roles = "SendSMS")]
         public async Task<HttpResponseMessage> Post(SendSmsRequest notification)
         {
             return new HttpResponseMessage(HttpStatusCode.NotImplemented);

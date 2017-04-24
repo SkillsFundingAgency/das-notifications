@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
+using SFA.DAS.Notifications.Api.Attributes;
 using SFA.DAS.Notifications.Api.Orchestrators;
 using SFA.DAS.Notifications.Api.Types;
 
@@ -22,10 +23,10 @@ namespace SFA.DAS.Notifications.Api.Controllers
         }
 
         [Route("")]
-        [Authorize(Roles = "SendEmail")]
+        [ApiAuthorize(Roles = "SendEmail")]
         public async Task<HttpResponseMessage> Post(Email notification)
         {
-            notification.SystemId = User.Identity.Name;
+            //notification.SystemId = User.Identity.Name;
 
             var result = await _orchestrator.SendEmail(notification);
             if (result.Code == NotificationOrchestratorCodes.Post.ValidationFailure)
