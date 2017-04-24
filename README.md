@@ -40,15 +40,11 @@ Where:
 
 ## Security ##
 
-The API uses JWT bearer tokens to enforce authorised access to the API methods. Callers must present a bearer token that contains appropriate permissions.
+The API uses Azure Active Directory to enforce authorised access to the API methods. When not running locally, callers must have a valid client id and secret.
 
 Supported permissions are:
 
     SendEmail
     SendSMS
 
-The token should be passed in an `authorization` header and prefixed with `bearer `, for example:
 
-    Authorization:bearer <token>
-
-Note that tokens can viewed using an online tool such as the one at [http://jwt.io](http://jwt.io "online JWT viewer")
