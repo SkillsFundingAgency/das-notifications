@@ -31,6 +31,8 @@ namespace SFA.DAS.Notifications.Worker
             _container = new Container(c =>
             {
                 c.Policies.Add(new MessagePolicy(ServiceName));
+                c.Policies.Add<LoggingPolicy>();
+                c.Policies.Add<ExecutionPolicyPolicy>();
                 c.AddRegistry<DefaultRegistry>();
             });
 

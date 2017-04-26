@@ -14,6 +14,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{CB97712B-FA0E-450D-AA94-07D986D172AE}"
 	ProjectSection(SolutionItems) = preProject
 		Build.fsx = Build.fsx
+		CustomTargets.fsx = CustomTargets.fsx
+		DefaultTargets.fsx = DefaultTargets.fsx
+		RunBuild.bat = RunBuild.bat
 		SharedAssemblyInfo.cs = SharedAssemblyInfo.cs
 	EndProjectSection
 EndProject
@@ -28,6 +31,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.Notifications.Application.UnitTests", "SFA.DAS.Notifications.Application.UnitTests\SFA.DAS.Notifications.Application.UnitTests.csproj", "{D9575102-4B84-4AB6-80AD-C8B6C3301ACC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.Notifications.Api.UnitTests", "SFA.DAS.Notifications.Api.UnitTests\SFA.DAS.Notifications.Api.UnitTests.csproj", "{878167D5-0E8C-48C3-B46D-07705D488A4D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.Notifications.Api.Client", "SFA.DAS.Notifications.Api.Client\SFA.DAS.Notifications.Api.Client.csproj", "{BB8D986E-3551-467B-B07A-1A3B0DB16DDA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.Notifications.Api.Types", "SFA.DAS.Notifications.Api.Types\SFA.DAS.Notifications.Api.Types.csproj", "{5E500F50-5F57-482C-A5D0-4F12DD1C3A46}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.Notifications.Api.Client.UnitTests", "SFA.DAS.Notifications.Api.Client.UnitTests\SFA.DAS.Notifications.Api.Client.UnitTests.csproj", "{8CDBE4ED-3F95-4E5B-A15D-4E99D36B1C06}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -71,6 +80,18 @@ Global
 		{878167D5-0E8C-48C3-B46D-07705D488A4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{878167D5-0E8C-48C3-B46D-07705D488A4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{878167D5-0E8C-48C3-B46D-07705D488A4D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB8D986E-3551-467B-B07A-1A3B0DB16DDA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB8D986E-3551-467B-B07A-1A3B0DB16DDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB8D986E-3551-467B-B07A-1A3B0DB16DDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB8D986E-3551-467B-B07A-1A3B0DB16DDA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E500F50-5F57-482C-A5D0-4F12DD1C3A46}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E500F50-5F57-482C-A5D0-4F12DD1C3A46}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E500F50-5F57-482C-A5D0-4F12DD1C3A46}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E500F50-5F57-482C-A5D0-4F12DD1C3A46}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8CDBE4ED-3F95-4E5B-A15D-4E99D36B1C06}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8CDBE4ED-3F95-4E5B-A15D-4E99D36B1C06}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8CDBE4ED-3F95-4E5B-A15D-4E99D36B1C06}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8CDBE4ED-3F95-4E5B-A15D-4E99D36B1C06}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -79,5 +100,6 @@ Global
 		{80E8AC76-A76B-4C87-A36F-301AD962DECC} = {DC080B91-941B-4849-944E-4220115C3523}
 		{D9575102-4B84-4AB6-80AD-C8B6C3301ACC} = {DC080B91-941B-4849-944E-4220115C3523}
 		{878167D5-0E8C-48C3-B46D-07705D488A4D} = {DC080B91-941B-4849-944E-4220115C3523}
+		{8CDBE4ED-3F95-4E5B-A15D-4E99D36B1C06} = {DC080B91-941B-4849-944E-4220115C3523}
 	EndGlobalSection
 EndGlobal

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 using MediatR;
 using Newtonsoft.Json;
@@ -6,6 +7,7 @@ using NLog;
 using SFA.DAS.Notifications.Application.Interfaces;
 using SFA.DAS.Notifications.Application.Queries.GetMessage;
 using SFA.DAS.Notifications.Domain.Entities;
+using SFA.DAS.Notifications.Domain.Http;
 using SFA.DAS.Notifications.Domain.Repositories;
 
 namespace SFA.DAS.Notifications.Application.Commands.DispatchNotification
@@ -60,11 +62,17 @@ namespace SFA.DAS.Notifications.Application.Commands.DispatchNotification
 
                         await _notificationsRepository.Update(command.Format, command.MessageId, NotificationStatus.Sent);
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
                         await _notificationsRepository.Update(command.Format, command.MessageId, NotificationStatus.Failed);
 
-                        throw;
+                        var httpException = ex as HttpException;
+
+                        if (httpException != null && httpException.StatusCode.Equals(HttpStatusCode.BadRequest))
+                        {
+                            Logger.Warn(ex,"Bad Request - Message will not be re-processed.");
+                            throw;
+                        }   
                     }
 
                     break;
