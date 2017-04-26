@@ -76,6 +76,8 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
                 case 429:
                     throw new TooManyRequestsException();
                 case 500:
+                    throw new InternalServerErrorException();
+                case 503:
                     throw new ServiceUnavailableException();
                 default:
                     throw new HttpException((int)response.StatusCode, $"Unexpected HTTP exception - ({(int)response.StatusCode}): {response.ReasonPhrase}");

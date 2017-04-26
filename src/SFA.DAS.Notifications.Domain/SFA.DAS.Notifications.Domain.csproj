@@ -49,6 +49,7 @@
     <Compile Include="Entities\NotificationStatus.cs" />
     <Compile Include="Entities\SmsMessage.cs" />
     <Compile Include="Http\HttpException.cs" />
+    <Compile Include="Http\InternalServerErrorException.cs" />
     <Compile Include="Http\ResourceNotFoundException.cs" />
     <Compile Include="Http\ServiceUnavailableException.cs" />
     <Compile Include="Http\TooManyRequestsException.cs" />
