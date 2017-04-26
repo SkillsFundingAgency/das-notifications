@@ -23,7 +23,7 @@ namespace SFA.DAS.Notifications.Api.Controllers
         }
 
         [Route("")]
-        [Authorize(Roles = "SendEmail")]
+        [ApiAuthorize(Roles = "SendEmail")]
         public async Task<HttpResponseMessage> Post(Email notification)
         {
             if (!string.IsNullOrEmpty(User.Identity.Name))
