@@ -287,6 +287,7 @@
     <Compile Include="App_Start\ValidationExceptionHandler.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Attributes\ApiAuthorizeAttribute.cs" />
+    <Compile Include="Controllers\HealthCheckController.cs" />
     <Compile Include="Controllers\SmsController.cs" />
     <Compile Include="Controllers\EmailController.cs" />
     <Compile Include="Core\OrchestratorBase.cs" />
