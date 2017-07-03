@@ -11,7 +11,7 @@ namespace SFA.DAS.Notifications.Api
     {
         public void Configuration(IAppBuilder app)
         {
-            //ConfigureAuth(app);
+            ConfigureAuth(app);
         }
     }
 }
