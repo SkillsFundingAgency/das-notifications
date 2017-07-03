@@ -73,7 +73,8 @@ namespace SFA.DAS.Notifications.Api.DependencyResolution
             For<IRequestContext>().Use(x => new RequestContext(new HttpContextWrapper(HttpContext.Current)));
             For<ILog>().Use(x => new NLogLogger(
                 x.ParentType,
-                x.GetInstance<IRequestContext>())).AlwaysUnique();
+                x.GetInstance<IRequestContext>(),
+                null)).AlwaysUnique();
         }
 
         private NotificationServiceConfiguration GetConfiguration(string environment)
