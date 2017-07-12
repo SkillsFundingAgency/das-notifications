@@ -1,4 +1,6 @@
-﻿namespace SFA.DAS.Notifications.Api.Client.Configuration
+﻿using System;
+
+namespace SFA.DAS.Notifications.Api.Client.Configuration
 {
     public class NotificationsApiClientConfiguration : INotificationsApiClientConfiguration
     {
@@ -7,5 +9,8 @@
         public string ClientSecret { get; set; }
         public string IdentifierUri { get; set; }
         public string Tenant { get; set; }
+
+        [Obsolete("Jwt token usage is obsolete. Use Azure AD authentication.")]
+        public string ClientToken { get; set; }
     }
 }
