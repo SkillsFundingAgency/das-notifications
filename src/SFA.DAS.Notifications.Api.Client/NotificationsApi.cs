@@ -1,26 +1,19 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Newtonsoft.Json;
 using SFA.DAS.Notifications.Api.Client.Configuration;
 using SFA.DAS.Notifications.Api.Types;
+using SFA.DAS.Http;
+using System.Net.Http;
 
 namespace SFA.DAS.Notifications.Api.Client
 {
-    public class NotificationsApi : INotificationsApi
+    public class NotificationsApi : ApiClientBase, INotificationsApi
     {
         private readonly INotificationsApiClientConfiguration _configuration;
-        private readonly SecureHttpClient _httpClient;
 
-        public NotificationsApi(INotificationsApiClientConfiguration configuration)
+        public NotificationsApi(HttpClient client, INotificationsApiClientConfiguration configuration) : base(client)
         {
             _configuration = configuration;
-            _httpClient = new SecureHttpClient(configuration);
-        }
-
-        internal NotificationsApi(INotificationsApiClientConfiguration configuration, SecureHttpClient httpClient)
-        {
-            _configuration = configuration;
-            _httpClient = httpClient;
         }
 
         public async Task SendEmail(Email email)
@@ -31,8 +24,7 @@ namespace SFA.DAS.Notifications.Api.Client
 
             var url = $"{baseUrl}api/email";
 
-            await _httpClient.PostAsync(url, email);
+            await base.PostAsync(url, JsonConvert.SerializeObject(email));
         }
-        
     }
 }
