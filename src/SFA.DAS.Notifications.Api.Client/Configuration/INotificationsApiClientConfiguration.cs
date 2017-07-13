@@ -3,7 +3,7 @@ using System;
 
 namespace SFA.DAS.Notifications.Api.Client.Configuration
 {
-    public interface INotificationsApiClientConfiguration : IApiClientConfiguration
+    public interface INotificationsApiClientConfiguration : IJwtClientConfiguration, IAzureADClientConfiguration
     {
         /// <summary>
         /// The base url (schema, server, port and application path as appropriate)
