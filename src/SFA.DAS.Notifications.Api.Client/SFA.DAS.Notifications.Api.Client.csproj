@@ -57,7 +57,7 @@
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Configuration\INotificationsApiClientConfiguration.cs" />
-    <Compile Include="Configuration\NotificationsesApiClientConfigration.cs" />
+    <Compile Include="Configuration\NotificationsApiClientConfiguration.cs" />
     <Compile Include="INotificationsApi.cs" />
     <Compile Include="NotificationsApi.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
