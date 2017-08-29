@@ -16,6 +16,7 @@ namespace SFA.DAS.Notifications.Api
         protected void Application_Start()
         {
             Logger.Info("Starting Notifications Api Application");
+            FilterConfig.RegisterGlobalFilters(GlobalConfiguration.Configuration.Filters);
             GlobalConfiguration.Configure(WebApiConfig.Register);
             TelemetryConfiguration.Active.InstrumentationKey = CloudConfigurationManager.GetSetting("InstrumentationKey");
         }
