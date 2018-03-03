@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ServiceDefinition name="SFA.DAS.Notifications.CloudService" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition" schemaVersion="2015-04.2.6" upgradeDomainCount="5">
-  <WebRole name="SFA.DAS.Notifications.Api" vmsize="Standard_D2_v2">
+<ServiceDefinition name="SFA.DAS.Notifications.CloudService" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition" schemaVersion="2015-04.2.6">
+  <WebRole name="SFA.DAS.Notifications.Api" vmsize="Small">
     <Sites>
       <Site name="Web">
         <Bindings>
@@ -21,13 +21,13 @@
       <Setting name="InstrumentationKey" />
     </ConfigurationSettings>
     <Endpoints>
-      <InputEndpoint name="HttpsIn" protocol="https" port="443" certificate="WebSslCert" loadBalancer="das-pp-noti-ilb"/>
+      <InputEndpoint name="HttpsIn" protocol="https" port="443" certificate="WebSslCert"/>
     </Endpoints>
     <Certificates>
       <Certificate name="WebSslCert" storeLocation="LocalMachine" storeName="My" />
     </Certificates>
   </WebRole>
-  <WorkerRole name="SFA.DAS.Notifications.Worker" vmsize="Standard_D1_v2">
+  <WorkerRole name="SFA.DAS.Notifications.Worker" vmsize="Small">
     <ConfigurationSettings>
       <Setting name="EnvironmentName" />
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
