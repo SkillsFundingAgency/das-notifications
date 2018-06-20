@@ -51,7 +51,15 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
                     Content = stringContent
                 });
 
-                EnsureSuccessfulResponse(response);
+                try
+                {
+                    EnsureSuccessfulResponse(response);
+                }
+                catch (Exception e)
+                {
+                    Logger.Error(e, "Email request to Notify failed.");
+                    throw;
+                }
             }
         }
 
