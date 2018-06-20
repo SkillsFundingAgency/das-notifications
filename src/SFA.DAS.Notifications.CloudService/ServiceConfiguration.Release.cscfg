@@ -44,9 +44,9 @@
           <Subnet name="__subnet__" />
         </Subnets>
       </InstanceAddress>
-        <ReservedIPs>	
--        <ReservedIP name="__rip__" />	
--      </ReservedIPs>
+      <ReservedIPs>
+        <ReservedIP name="__rip__" />
+      </ReservedIPs>
     </AddressAssignments>
     <LoadBalancers>
       <LoadBalancer name="__ilbname__">
