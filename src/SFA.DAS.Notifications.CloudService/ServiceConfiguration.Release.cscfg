@@ -15,7 +15,7 @@
       <Setting name="InstrumentationKey" value="__InstrumentationKey__" />
     </ConfigurationSettings>
     <Certificates>
-      <Certificate name="WebSslCert" thumbprint="706A2AD1C6B7C489E9613DDFFC4CBE9E3C37AFE2" thumbprintAlgorithm="sha1" />
+      <Certificate name="WebSslCert" thumbprint="DE93B5EB3E4E74A0C91C6AA805AED932F4FA5F4A" thumbprintAlgorithm="sha1" />
     </Certificates>
   </Role>
   <Role name="SFA.DAS.Notifications.Worker">
