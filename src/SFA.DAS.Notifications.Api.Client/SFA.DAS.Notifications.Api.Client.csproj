@@ -17,8 +17,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
-    <PackageReference Include="SFA.DAS.Http" Version="1.2.4" />
+    <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
+    <PackageReference Include="SFA.DAS.Http" Version="1.2.112" />
   </ItemGroup>
 
   <ItemGroup>
