@@ -16,7 +16,9 @@ namespace SFA.DAS.Notifications.Worker
     public class WorkerRole : RoleEntryPoint
     {
         private const string ServiceName = "SFA.DAS.Notifications";
+#pragma warning disable IDE0044 // Add readonly modifier
         private static RedisTarget _redisTarget; // Required to ensure assembly is copied to output.
+#pragma warning restore IDE0044 // Add readonly modifier
 
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
 

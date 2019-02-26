@@ -186,10 +186,6 @@
     <Reference Include="SFA.DAS.NLog.Targets.Redis, Version=1.0.0.34273, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.NLog.Targets.Redis.1.0.0.34273\lib\net45\SFA.DAS.NLog.Targets.Redis.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Notifications.Api.Types, Version=1.1.0.12760, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Notifications.Api.Types.1.1.0.12760\lib\net45\SFA.DAS.Notifications.Api.Types.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="StackExchange.Redis, Version=1.1.608.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\StackExchange.Redis.1.1.608\lib\net45\StackExchange.Redis.dll</HintPath>
       <Private>True</Private>
@@ -331,6 +327,10 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SFA.DAS.Notifications.Api.Types\SFA.DAS.Notifications.Api.Types.csproj">
+      <Project>{5e500f50-5f57-482c-a5d0-4f12dd1c3a46}</Project>
+      <Name>SFA.DAS.Notifications.Api.Types</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.Notifications.Application\SFA.DAS.Notifications.Application.csproj">
       <Project>{A7D9A608-913C-496D-ACED-4A6D7F2C2758}</Project>
       <Name>SFA.DAS.Notifications.Application</Name>

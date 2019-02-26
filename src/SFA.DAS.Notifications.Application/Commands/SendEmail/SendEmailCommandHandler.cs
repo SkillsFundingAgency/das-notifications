@@ -18,7 +18,9 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
     public class SendEmailCommandHandler : AsyncRequestHandler<SendEmailCommand>
     {
         [QueueName]
+#pragma warning disable IDE1006 // Naming Styles
         public string send_notifications { get; set; }
+#pragma warning restore IDE1006 // Naming Styles
 
         private readonly ILog _logger;
         private readonly INotificationsRepository _notificationsRepository;

@@ -57,6 +57,7 @@ namespace SFA.DAS.Notifications.Api.UnitTests.OrchestratorsTests.NotificationOrc
 
             // Assert
             _mediator.Verify(m => m.SendAsync(It.Is<SendEmailCommand>(q => q.SystemId == _email.SystemId)), Times.Once);
+            _mediator.Verify(m => m.SendAsync(It.Is<SendEmailCommand>(q => q.TemplateId == _email.TemplateId)), Times.Once);
             _mediator.Verify(m => m.SendAsync(It.Is<SendEmailCommand>(q => q.RecipientsAddress == _email.RecipientsAddress)), Times.Once);
             _mediator.Verify(m => m.SendAsync(It.Is<SendEmailCommand>(q => q.ReplyToAddress == _email.ReplyToAddress)), Times.Once);
             _mediator.Verify(m => m.SendAsync(It.Is<SendEmailCommand>(q => q.Subject == _email.Subject)), Times.Once);
