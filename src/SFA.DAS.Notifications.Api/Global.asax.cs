@@ -11,7 +11,9 @@ namespace SFA.DAS.Notifications.Api
     {
         private static readonly ILog Logger = new NLogLogger();
 
+#pragma warning disable IDE0044 // Add readonly modifier
         private static RedisTarget _redisTarget; // Required to ensure assembly is copied to output.
+#pragma warning restore IDE0044 // Add readonly modifier
 
         protected void Application_Start()
         {
