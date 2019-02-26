@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using FluentValidation;
 using Moq;
@@ -45,10 +43,11 @@ namespace SFA.DAS.Notifications.Application.UnitTests.CommandsTests.SendEmailTes
                     }
                 });
 
-            _handler = new SendEmailCommandHandler(_notificationsRepository.Object,
-                                                   _messagePublisher.Object,
-                                                   _templateConfigurationService.Object,
-                                                   Mock.Of<ILog>());
+            _handler = new SendEmailCommandHandler(
+                _notificationsRepository.Object,
+                _messagePublisher.Object,
+                _templateConfigurationService.Object,
+                Mock.Of<ILog>());
 
             _command = new SendEmailCommand
             {

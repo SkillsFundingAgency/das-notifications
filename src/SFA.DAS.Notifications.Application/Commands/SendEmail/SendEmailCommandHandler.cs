@@ -27,7 +27,11 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
         private readonly IMessagePublisher _messagePublisher;
         private readonly ITemplateConfigurationService _templateConfigurationService;
 
-        public SendEmailCommandHandler(INotificationsRepository notificationsRepository, IMessagePublisher messagePublisher, ITemplateConfigurationService templateConfigurationService, ILog logger)
+        public SendEmailCommandHandler(
+            INotificationsRepository notificationsRepository,
+            IMessagePublisher messagePublisher,
+            ITemplateConfigurationService templateConfigurationService,
+            ILog logger)
         {
             if (notificationsRepository == null)
                 throw new ArgumentNullException(nameof(notificationsRepository));
@@ -55,8 +59,8 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
 
             if (!IsGuid(command.TemplateId))
             {
-                var templateConfiguration = await _templateConfigurationService.GetAsync();
-                var emailServiceTemplateId = templateConfiguration.EmailServiceTemplates.SingleOrDefault(
+                TemplateConfiguration templateConfiguration = await _templateConfigurationService.GetAsync();
+                string emailServiceTemplateId = templateConfiguration.EmailServiceTemplates.SingleOrDefault(
                     t => t.Id.Equals(command.TemplateId, StringComparison.CurrentCultureIgnoreCase))?.EmailServiceId;
                 if (string.IsNullOrEmpty(emailServiceTemplateId))
                 {

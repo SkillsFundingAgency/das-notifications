@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using FluentValidation;
 using MediatR;
@@ -7,6 +8,7 @@ using NLog;
 using SFA.DAS.Messaging;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Notifications.Application.Messages;
+using SFA.DAS.Notifications.Domain.Configuration;
 using SFA.DAS.Notifications.Domain.Entities;
 using SFA.DAS.Notifications.Domain.Repositories;
 using SFA.DAS.TimeProvider;
@@ -23,18 +25,26 @@ namespace SFA.DAS.Notifications.Application.Commands.SendSms
         private readonly ILog _logger;
         private readonly INotificationsRepository _notificationsRepository;
         private readonly IMessagePublisher _messagePublisher;
+        private readonly ITemplateConfigurationService _templateConfigurationService;
 
-        public SendSmsCommandHandler(INotificationsRepository notificationsRepository, IMessagePublisher messagePublisher, ILog logger)
+        public SendSmsCommandHandler(
+            INotificationsRepository notificationsRepository,
+            IMessagePublisher messagePublisher,
+            ITemplateConfigurationService templateConfigurationService,
+            ILog logger)
         {
             if (notificationsRepository == null)
                 throw new ArgumentNullException(nameof(notificationsRepository));
             if (messagePublisher == null)
                 throw new ArgumentNullException(nameof(messagePublisher));
+            if (templateConfigurationService == null)
+                throw new ArgumentNullException(nameof(templateConfigurationService));
             if (logger == null)
                 throw new ArgumentNullException(nameof(logger));
 
             _notificationsRepository = notificationsRepository;
             _messagePublisher = messagePublisher;
+            _templateConfigurationService = templateConfigurationService;
             _logger = logger;
         }
 
@@ -45,6 +55,22 @@ namespace SFA.DAS.Notifications.Application.Commands.SendSms
             _logger.Info($"Received command to send SMS to {command.RecipientsNumber} (message id: {messageId})");
 
             Validate(command);
+
+            if (!Guid.TryParse(command.TemplateId, out Guid templateIdGuid))
+            {
+                var templateConfiguration = await _templateConfigurationService.GetAsync();
+                string smsServiceTemplateId = templateConfiguration.SmsServiceTemplates
+                    .SingleOrDefault(x => string.Equals(command.TemplateId, x.Id, StringComparison.InvariantCultureIgnoreCase))?.ServiceId;
+                if (string.IsNullOrEmpty(smsServiceTemplateId))
+                {
+                    throw new ValidationException($"No template mapping could be found for {command.TemplateId}");
+                }
+                command.TemplateId = smsServiceTemplateId;
+            }
+            else
+            {
+                _logger.Info($"Request to send template {command.TemplateId} received using SMS Service ID (Guid) - this should not happen");
+            }
 
             await _notificationsRepository.Create(CreateMessageData(command, messageId));
 
