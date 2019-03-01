@@ -51,7 +51,9 @@ namespace SFA.DAS.Notifications.Application.Commands.SendSms
                 .SingleOrDefault(x => string.Equals(command.TemplateId, x.Id, StringComparison.InvariantCultureIgnoreCase))?.ServiceId;
             if (string.IsNullOrEmpty(smsServiceTemplateId))
             {
-                throw new ValidationException($"No template mapping could be found for {command.TemplateId}");
+                var validCodes = string.Join(",", templateConfiguration.SmsServiceTemplates.Select(x => x.Id).OrderBy(x => x));
+                throw new ValidationException($"No template mapping could be found for {command.TemplateId}. " +
+                    $"Potentially value values are {validCodes}");
             }
             command.TemplateId = smsServiceTemplateId;
 
