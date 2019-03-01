@@ -6,5 +6,6 @@ namespace SFA.DAS.Notifications.Api.Client
     public interface INotificationsApi
     {
         Task SendEmail(Email email);
+        Task SendSms(Sms sms);
     }
 }

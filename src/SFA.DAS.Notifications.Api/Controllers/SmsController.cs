@@ -4,8 +4,9 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using SFA.DAS.Notifications.Api.Attributes;
-using SFA.DAS.Notifications.Api.Models;
+using SFA.DAS.Notifications.Api.Core;
 using SFA.DAS.Notifications.Api.Orchestrators;
+using SFA.DAS.Notifications.Api.Types;
 
 namespace SFA.DAS.Notifications.Api.Controllers
 {
@@ -24,15 +25,19 @@ namespace SFA.DAS.Notifications.Api.Controllers
 
         [Route("")]
         [ApiAuthorize(Roles = "SendSMS")]
-        public async Task<HttpResponseMessage> Post(SendSmsRequest notification)
+        public async Task<HttpResponseMessage> Post(Sms notification)
         {
-            return new HttpResponseMessage(HttpStatusCode.NotImplemented);
+            if (!string.IsNullOrEmpty(User.Identity.Name))
+            {
+                notification.SystemId = User.Identity.Name;
+            }
 
-            //notification.SystemId = User.Identity.Name;
-
-            //await _orchestrator.SendSms(notification);
-
-            //return new HttpResponseMessage(HttpStatusCode.OK);
+            OrchestratorResponse result = await _orchestrator.SendSms(notification);
+            if (result.Code == NotificationOrchestratorCodes.Post.ValidationFailure)
+            {
+                return new HttpResponseMessage(HttpStatusCode.BadRequest);
+            }
+            return new HttpResponseMessage(HttpStatusCode.OK);
         }
     }
 }

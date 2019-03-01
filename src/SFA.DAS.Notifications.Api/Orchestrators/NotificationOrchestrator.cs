@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MediatR;
-using NLog;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Notifications.Api.Core;
-using SFA.DAS.Notifications.Api.Models;
 using SFA.DAS.Notifications.Api.Types;
 using SFA.DAS.Notifications.Application.Commands.SendEmail;
 using SFA.DAS.Notifications.Application.Commands.SendSms;
@@ -44,7 +42,7 @@ namespace SFA.DAS.Notifications.Api.Orchestrators
             return GetOrchestratorResponse(NotificationOrchestratorCodes.Post.Success);
         }
 
-        public async Task<OrchestratorResponse> SendSms(SendSmsRequest request)
+        public async Task<OrchestratorResponse> SendSms(Sms request)
         {
             _logger.Info($"Received request to send sms to {request.RecipientsNumber}");
 

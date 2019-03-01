@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using FluentValidation;
 using MediatR;
 using Newtonsoft.Json;
-using NLog;
 using SFA.DAS.Messaging;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Notifications.Application.Messages;
@@ -18,24 +17,21 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
     public class SendEmailCommandHandler : AsyncRequestHandler<SendEmailCommand>
     {
         [QueueName]
+#pragma warning disable IDE1006 // Naming Styles
         public string send_notifications { get; set; }
+#pragma warning restore IDE1006 // Naming Styles
 
         private readonly ILog _logger;
         private readonly INotificationsRepository _notificationsRepository;
         private readonly IMessagePublisher _messagePublisher;
         private readonly ITemplateConfigurationService _templateConfigurationService;
 
-        public SendEmailCommandHandler(INotificationsRepository notificationsRepository, IMessagePublisher messagePublisher, ITemplateConfigurationService templateConfigurationService, ILog logger)
+        public SendEmailCommandHandler(
+            INotificationsRepository notificationsRepository,
+            IMessagePublisher messagePublisher,
+            ITemplateConfigurationService templateConfigurationService,
+            ILog logger)
         {
-            if (notificationsRepository == null)
-                throw new ArgumentNullException(nameof(notificationsRepository));
-            if (messagePublisher == null)
-                throw new ArgumentNullException(nameof(messagePublisher));
-            if (templateConfigurationService == null)
-                throw new ArgumentNullException(nameof(templateConfigurationService));
-            if (logger == null)
-                throw new ArgumentNullException(nameof(logger));
-
             _notificationsRepository = notificationsRepository;
             _messagePublisher = messagePublisher;
             _templateConfigurationService = templateConfigurationService;
@@ -53,8 +49,8 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
 
             if (!IsGuid(command.TemplateId))
             {
-                var templateConfiguration = await _templateConfigurationService.GetAsync();
-                var emailServiceTemplateId = templateConfiguration.EmailServiceTemplates.SingleOrDefault(
+                TemplateConfiguration templateConfiguration = await _templateConfigurationService.GetAsync();
+                string emailServiceTemplateId = templateConfiguration.EmailServiceTemplates.SingleOrDefault(
                     t => t.Id.Equals(command.TemplateId, StringComparison.CurrentCultureIgnoreCase))?.EmailServiceId;
                 if (string.IsNullOrEmpty(emailServiceTemplateId))
                 {
@@ -72,8 +68,7 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
 
             _logger.Debug($"Stored email message '{messageId}' in data store");
 
-            await _messagePublisher.PublishAsync(new DispatchNotificationMessage
-            {
+            await _messagePublisher.PublishAsync(new DispatchNotificationMessage {
                 MessageId = messageId,
                 Format = NotificationFormat.Email
             });
@@ -83,16 +78,14 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
 
         private static Notification CreateMessageData(SendEmailCommand message, string messageId)
         {
-            return new Notification
-            {
+            return new Notification {
                 MessageId = messageId,
                 SystemId = message.SystemId,
                 Timestamp = DateTimeProvider.Current.UtcNow,
                 Status = NotificationStatus.New,
                 Format = NotificationFormat.Email,
                 TemplateId = message.TemplateId,
-                Data = JsonConvert.SerializeObject(new NotificationEmailContent
-                {
+                Data = JsonConvert.SerializeObject(new NotificationEmailContent {
                     Subject = message.Subject,
                     RecipientsAddress = message.RecipientsAddress,
                     ReplyToAddress = message.ReplyToAddress,

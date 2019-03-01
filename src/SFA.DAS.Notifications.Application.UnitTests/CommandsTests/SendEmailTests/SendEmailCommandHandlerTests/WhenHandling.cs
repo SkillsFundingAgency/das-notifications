@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using FluentValidation;
 using Moq;
@@ -45,10 +43,11 @@ namespace SFA.DAS.Notifications.Application.UnitTests.CommandsTests.SendEmailTes
                     }
                 });
 
-            _handler = new SendEmailCommandHandler(_notificationsRepository.Object,
-                                                   _messagePublisher.Object,
-                                                   _templateConfigurationService.Object,
-                                                   Mock.Of<ILog>());
+            _handler = new SendEmailCommandHandler(
+                _notificationsRepository.Object,
+                _messagePublisher.Object,
+                _templateConfigurationService.Object,
+                Mock.Of<ILog>());
 
             _command = new SendEmailCommand
             {
@@ -78,10 +77,13 @@ namespace SFA.DAS.Notifications.Application.UnitTests.CommandsTests.SendEmailTes
                 ReplyToAddress = _command.ReplyToAddress,
                 Tokens = _command.Tokens
             });
-            _notificationsRepository.Verify(r => r.Create(It.Is<Notification>(n => n.Status == NotificationStatus.New)), Times.Once);
-            _notificationsRepository.Verify(r => r.Create(It.Is<Notification>(n => n.Format == NotificationFormat.Email)), Times.Once);
-            _notificationsRepository.Verify(r => r.Create(It.Is<Notification>(n => n.TemplateId == _command.TemplateId)), Times.Once);
-            _notificationsRepository.Verify(r => r.Create(It.Is<Notification>(n => n.Data == expectedData)), Times.Once);
+            _notificationsRepository.Verify(r => r.Create(
+                It.Is<Notification>(n => 
+                    n.Status == NotificationStatus.New
+                    && n.Format == NotificationFormat.Email
+                    && n.TemplateId == _command.TemplateId
+                    && n.Data == expectedData)),
+                Times.Once);
         }
 
         [Test]

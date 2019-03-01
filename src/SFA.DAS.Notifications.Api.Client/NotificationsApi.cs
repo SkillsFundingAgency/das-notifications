@@ -9,22 +9,25 @@ namespace SFA.DAS.Notifications.Api.Client
 {
     public class NotificationsApi : ApiClientBase, INotificationsApi
     {
-        private readonly INotificationsApiClientConfiguration _configuration;
+        private readonly string ApiBaseUrl;
 
         public NotificationsApi(HttpClient client, INotificationsApiClientConfiguration configuration) : base(client)
         {
-            _configuration = configuration;
+            ApiBaseUrl = configuration.ApiBaseUrl.EndsWith("/")
+                ? configuration.ApiBaseUrl
+                : configuration.ApiBaseUrl + "/";
         }
 
-        public async Task SendEmail(Email email)
+        public Task SendEmail(Email email)
         {
-            var baseUrl = _configuration.ApiBaseUrl.EndsWith("/")
-                ? _configuration.ApiBaseUrl
-                : _configuration.ApiBaseUrl + "/";
+            var url = $"{ApiBaseUrl}api/email";
+            return PostAsync(url, JsonConvert.SerializeObject(email));
+        }
 
-            var url = $"{baseUrl}api/email";
-
-            await base.PostAsync(url, JsonConvert.SerializeObject(email));
+        public Task SendSms(Sms sms)
+        {
+            string url = $"{ApiBaseUrl}api/sms";
+            return PostAsync(url, JsonConvert.SerializeObject(sms));
         }
     }
 }
