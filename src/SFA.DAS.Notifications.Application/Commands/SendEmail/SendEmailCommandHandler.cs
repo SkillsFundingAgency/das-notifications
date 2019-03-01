@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using FluentValidation;
 using MediatR;
 using Newtonsoft.Json;
-using NLog;
 using SFA.DAS.Messaging;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Notifications.Application.Messages;
@@ -33,15 +32,6 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
             ITemplateConfigurationService templateConfigurationService,
             ILog logger)
         {
-            if (notificationsRepository == null)
-                throw new ArgumentNullException(nameof(notificationsRepository));
-            if (messagePublisher == null)
-                throw new ArgumentNullException(nameof(messagePublisher));
-            if (templateConfigurationService == null)
-                throw new ArgumentNullException(nameof(templateConfigurationService));
-            if (logger == null)
-                throw new ArgumentNullException(nameof(logger));
-
             _notificationsRepository = notificationsRepository;
             _messagePublisher = messagePublisher;
             _templateConfigurationService = templateConfigurationService;
@@ -78,8 +68,7 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
 
             _logger.Debug($"Stored email message '{messageId}' in data store");
 
-            await _messagePublisher.PublishAsync(new DispatchNotificationMessage
-            {
+            await _messagePublisher.PublishAsync(new DispatchNotificationMessage {
                 MessageId = messageId,
                 Format = NotificationFormat.Email
             });
@@ -89,16 +78,14 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
 
         private static Notification CreateMessageData(SendEmailCommand message, string messageId)
         {
-            return new Notification
-            {
+            return new Notification {
                 MessageId = messageId,
                 SystemId = message.SystemId,
                 Timestamp = DateTimeProvider.Current.UtcNow,
                 Status = NotificationStatus.New,
                 Format = NotificationFormat.Email,
                 TemplateId = message.TemplateId,
-                Data = JsonConvert.SerializeObject(new NotificationEmailContent
-                {
+                Data = JsonConvert.SerializeObject(new NotificationEmailContent {
                     Subject = message.Subject,
                     RecipientsAddress = message.RecipientsAddress,
                     ReplyToAddress = message.ReplyToAddress,

@@ -53,7 +53,7 @@ namespace SFA.DAS.Notifications.Application.UnitTests.CommandsTests.SendSmsTests
             {
                 SystemId = Guid.NewGuid().ToString(),
                 RecipientsNumber = "999",
-                TemplateId = Guid.NewGuid().ToString(),
+                TemplateId = TemplateName,
                 Tokens = new Dictionary<string, string>
                 {
                     {"Key1", "Value1"}
@@ -73,10 +73,13 @@ namespace SFA.DAS.Notifications.Application.UnitTests.CommandsTests.SendSmsTests
                 RecipientsNumber = _command.RecipientsNumber,
                 Tokens = _command.Tokens
             });
-            _notificationsRepository.Verify(r => r.Create(It.Is<Notification>(n => n.Status == NotificationStatus.New)), Times.Once);
-            _notificationsRepository.Verify(r => r.Create(It.Is<Notification>(n => n.Format == NotificationFormat.Sms)), Times.Once);
-            _notificationsRepository.Verify(r => r.Create(It.Is<Notification>(n => n.TemplateId == _command.TemplateId)), Times.Once);
-            _notificationsRepository.Verify(r => r.Create(It.Is<Notification>(n => n.Data == expectedData)), Times.Once);
+            _notificationsRepository.Verify(r => r.Create(
+                It.Is<Notification>(n => 
+                    n.Status == NotificationStatus.New
+                    && n.Format == NotificationFormat.Sms
+                    && n.TemplateId == _command.TemplateId
+                    && n.Data == expectedData))
+                , Times.Once);
         }
 
         [Test]

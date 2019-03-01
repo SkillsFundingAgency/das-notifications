@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using FluentValidation;
 using MediatR;
 using Newtonsoft.Json;
-using NLog;
 using SFA.DAS.Messaging;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Notifications.Application.Messages;
@@ -33,15 +32,6 @@ namespace SFA.DAS.Notifications.Application.Commands.SendSms
             ITemplateConfigurationService templateConfigurationService,
             ILog logger)
         {
-            if (notificationsRepository == null)
-                throw new ArgumentNullException(nameof(notificationsRepository));
-            if (messagePublisher == null)
-                throw new ArgumentNullException(nameof(messagePublisher));
-            if (templateConfigurationService == null)
-                throw new ArgumentNullException(nameof(templateConfigurationService));
-            if (logger == null)
-                throw new ArgumentNullException(nameof(logger));
-
             _notificationsRepository = notificationsRepository;
             _messagePublisher = messagePublisher;
             _templateConfigurationService = templateConfigurationService;
@@ -69,8 +59,7 @@ namespace SFA.DAS.Notifications.Application.Commands.SendSms
 
             _logger.Debug($"Stored SMS message '{messageId}' in data store");
 
-            await _messagePublisher.PublishAsync(new DispatchNotificationMessage
-            {
+            await _messagePublisher.PublishAsync(new DispatchNotificationMessage {
                 MessageId = messageId,
                 Format = NotificationFormat.Sms
             });
@@ -80,16 +69,14 @@ namespace SFA.DAS.Notifications.Application.Commands.SendSms
 
         private static Notification CreateMessageData(SendSmsCommand message, string messageId)
         {
-            return new Notification
-            {
+            return new Notification {
                 MessageId = messageId,
                 SystemId = message.SystemId,
                 Timestamp = DateTimeProvider.Current.UtcNow,
                 Status = NotificationStatus.New,
                 Format = NotificationFormat.Sms,
                 TemplateId = message.TemplateId,
-                Data = JsonConvert.SerializeObject(new NotificationSmsContent
-                {
+                Data = JsonConvert.SerializeObject(new NotificationSmsContent {
                     RecipientsNumber = message.RecipientsNumber,
                     Tokens = message.Tokens
                 })

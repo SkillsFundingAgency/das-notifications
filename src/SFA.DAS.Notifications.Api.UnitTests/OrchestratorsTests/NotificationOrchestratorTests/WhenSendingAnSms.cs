@@ -55,10 +55,13 @@ namespace SFA.DAS.Notifications.Api.UnitTests.OrchestratorsTests.NotificationOrc
             await _orchestrator.SendSms(_sms);
 
             // Assert
-            _mediator.Verify(m => m.SendAsync(It.Is<SendSmsCommand>(q => q.SystemId == _sms.SystemId)), Times.Once);
-            _mediator.Verify(m => m.SendAsync(It.Is<SendSmsCommand>(q => q.TemplateId == _sms.TemplateId)), Times.Once);
-            _mediator.Verify(m => m.SendAsync(It.Is<SendSmsCommand>(q => q.RecipientsNumber == _sms.RecipientsNumber)), Times.Once);
-            _mediator.Verify(m => m.SendAsync(It.Is<SendSmsCommand>(q => q.Tokens.ContainsKey("Key") && q.Tokens["Key"] == "Value")), Times.Once);
+            _mediator.Verify(m => m.SendAsync(
+                It.Is<SendSmsCommand>(q => 
+                    q.SystemId == _sms.SystemId
+                    && q.TemplateId == _sms.TemplateId
+                    && q.RecipientsNumber == _sms.RecipientsNumber
+                    && q.Tokens["Key"] == "Value"))
+                , Times.Once);
         }
 
     }
