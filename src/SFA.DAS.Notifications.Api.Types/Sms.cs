@@ -20,5 +20,15 @@ namespace SFA.DAS.Notifications.Api.Types
         /// Keys + values of tokens to substitute in the template text
         /// </summary>
         public Dictionary<string, string> Tokens { get; set; }
+
+        public Sms() { }
+
+        public Sms(string systemId, string templateId, string recipientsNumber, Dictionary<string, string> tokens)
+        {
+            SystemId = systemId;
+            TemplateId = templateId;
+            RecipientsNumber = recipientsNumber;
+            Tokens = tokens;
+        }
     }
 }
