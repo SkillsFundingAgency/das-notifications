@@ -56,12 +56,15 @@ namespace SFA.DAS.Notifications.Api.UnitTests.OrchestratorsTests.NotificationOrc
             await _orchestrator.SendEmail(_email);
 
             // Assert
-            _mediator.Verify(m => m.SendAsync(It.Is<SendEmailCommand>(q => q.SystemId == _email.SystemId)), Times.Once);
-            _mediator.Verify(m => m.SendAsync(It.Is<SendEmailCommand>(q => q.TemplateId == _email.TemplateId)), Times.Once);
-            _mediator.Verify(m => m.SendAsync(It.Is<SendEmailCommand>(q => q.RecipientsAddress == _email.RecipientsAddress)), Times.Once);
-            _mediator.Verify(m => m.SendAsync(It.Is<SendEmailCommand>(q => q.ReplyToAddress == _email.ReplyToAddress)), Times.Once);
-            _mediator.Verify(m => m.SendAsync(It.Is<SendEmailCommand>(q => q.Subject == _email.Subject)), Times.Once);
-            _mediator.Verify(m => m.SendAsync(It.Is<SendEmailCommand>(q => q.Tokens.ContainsKey("Key") && q.Tokens["Key"] == "Value")), Times.Once);
+            _mediator.Verify(m => m.SendAsync(
+                It.Is<SendEmailCommand>(q => 
+                    q.SystemId == _email.SystemId
+                    && q.TemplateId == _email.TemplateId
+                    && q.RecipientsAddress == _email.RecipientsAddress
+                    && q.ReplyToAddress == _email.ReplyToAddress
+                    && q.Subject == _email.Subject
+                    && q.Tokens["Key"] == "Value")),
+                Times.Once);
         }
 
     }

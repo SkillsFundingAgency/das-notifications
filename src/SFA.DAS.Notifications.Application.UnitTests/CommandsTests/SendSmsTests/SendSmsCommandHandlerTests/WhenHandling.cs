@@ -78,8 +78,8 @@ namespace SFA.DAS.Notifications.Application.UnitTests.CommandsTests.SendSmsTests
                     n.Status == NotificationStatus.New
                     && n.Format == NotificationFormat.Sms
                     && n.TemplateId == _command.TemplateId
-                    && n.Data == expectedData))
-                , Times.Once);
+                    && n.Data == expectedData)),
+                Times.Once);
         }
 
         [Test]

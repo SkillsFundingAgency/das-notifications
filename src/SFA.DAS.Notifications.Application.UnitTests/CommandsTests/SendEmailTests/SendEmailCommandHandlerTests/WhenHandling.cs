@@ -77,10 +77,13 @@ namespace SFA.DAS.Notifications.Application.UnitTests.CommandsTests.SendEmailTes
                 ReplyToAddress = _command.ReplyToAddress,
                 Tokens = _command.Tokens
             });
-            _notificationsRepository.Verify(r => r.Create(It.Is<Notification>(n => n.Status == NotificationStatus.New)), Times.Once);
-            _notificationsRepository.Verify(r => r.Create(It.Is<Notification>(n => n.Format == NotificationFormat.Email)), Times.Once);
-            _notificationsRepository.Verify(r => r.Create(It.Is<Notification>(n => n.TemplateId == _command.TemplateId)), Times.Once);
-            _notificationsRepository.Verify(r => r.Create(It.Is<Notification>(n => n.Data == expectedData)), Times.Once);
+            _notificationsRepository.Verify(r => r.Create(
+                It.Is<Notification>(n => 
+                    n.Status == NotificationStatus.New
+                    && n.Format == NotificationFormat.Email
+                    && n.TemplateId == _command.TemplateId
+                    && n.Data == expectedData)),
+                Times.Once);
         }
 
         [Test]
