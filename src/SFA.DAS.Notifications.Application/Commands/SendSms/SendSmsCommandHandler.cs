@@ -56,21 +56,14 @@ namespace SFA.DAS.Notifications.Application.Commands.SendSms
 
             Validate(command);
 
-            if (!Guid.TryParse(command.TemplateId, out Guid templateIdGuid))
+            var templateConfiguration = await _templateConfigurationService.GetAsync();
+            string smsServiceTemplateId = templateConfiguration.SmsServiceTemplates
+                .SingleOrDefault(x => string.Equals(command.TemplateId, x.Id, StringComparison.InvariantCultureIgnoreCase))?.ServiceId;
+            if (string.IsNullOrEmpty(smsServiceTemplateId))
             {
-                var templateConfiguration = await _templateConfigurationService.GetAsync();
-                string smsServiceTemplateId = templateConfiguration.SmsServiceTemplates
-                    .SingleOrDefault(x => string.Equals(command.TemplateId, x.Id, StringComparison.InvariantCultureIgnoreCase))?.ServiceId;
-                if (string.IsNullOrEmpty(smsServiceTemplateId))
-                {
-                    throw new ValidationException($"No template mapping could be found for {command.TemplateId}");
-                }
-                command.TemplateId = smsServiceTemplateId;
+                throw new ValidationException($"No template mapping could be found for {command.TemplateId}");
             }
-            else
-            {
-                _logger.Info($"Request to send template {command.TemplateId} received using SMS Service ID (Guid) - this should not happen");
-            }
+            command.TemplateId = smsServiceTemplateId;
 
             await _notificationsRepository.Create(CreateMessageData(command, messageId));
 
