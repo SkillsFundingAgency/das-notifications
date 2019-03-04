@@ -54,7 +54,8 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
                     t => t.Id.Equals(command.TemplateId, StringComparison.CurrentCultureIgnoreCase))?.EmailServiceId;
                 if (string.IsNullOrEmpty(emailServiceTemplateId))
                 {
-                    throw new ValidationException($"No template mapping could be found for {command.TemplateId}");
+                    throw new ValidationException($"No template mapping could be found for {command.TemplateId} " +
+                        string.Join(",", templateConfiguration.EmailServiceTemplates.Select(x => x.Id).ToArray()));
                 }
                 command.TemplateId = emailServiceTemplateId;
             }
