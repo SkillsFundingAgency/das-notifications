@@ -6,4 +6,5 @@ namespace SFA.DAS.Notifications.Domain.Configuration
     {
         public List<Template> EmailServiceTemplates { get; set; }
         public List<SmsTemplate> SmsServiceTemplates { get; set; }
+    }
 }
