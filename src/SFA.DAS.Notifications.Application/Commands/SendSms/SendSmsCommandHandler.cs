@@ -52,7 +52,9 @@ namespace SFA.DAS.Notifications.Application.Commands.SendSms
 
             if (template == null)
             {
-                throw new ValidationException($"No template mapping could be found for {command.TemplateId}.");
+                string validOptions = '"' + string.Join("\",\"", templateConfiguration.SmsServiceTemplates.Select(x => x.Id));
+                throw new ValidationException($"No template mapping could be found for {command.TemplateId}. "
+                    + $"Valid options are {validOptions}");
             }
             if (string.IsNullOrEmpty(template.ServiceId))
             {

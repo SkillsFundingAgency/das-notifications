@@ -57,7 +57,10 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
 
                 if (emailServiceTemplate == null)
                 {
-                    throw new ValidationException($"No template mapping could be found for {command.TemplateId}");
+                    string validOptions = '"' + string.Join("\",\"", templateConfiguration.EmailServiceTemplates.Select(x => x.Id));
+                    throw new ValidationException($"No template mapping could be found for {command.TemplateId}. "
+                        + $"Valid options are {validOptions}");
+
                 }
                 if (string.IsNullOrEmpty(emailServiceTemplate.EmailServiceId))
                 {
