@@ -63,7 +63,7 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
                 {
                     throw new NullReferenceException($"{nameof(Template.EmailServiceId)} for template {command.TemplateId} is null or empty");
                 }
-                command.TemplateId = emailServiceTemplate.Id;
+                command.TemplateId = emailServiceTemplate.EmailServiceId;
             }
             else
             {
