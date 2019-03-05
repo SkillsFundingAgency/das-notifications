@@ -47,13 +47,18 @@ namespace SFA.DAS.Notifications.Application.Commands.SendSms
             Validate(command);
 
             var templateConfiguration = await _templateConfigurationService.GetAsync();
-            string smsServiceTemplateId = templateConfiguration.SmsServiceTemplates
-                .SingleOrDefault(x => string.Equals(command.TemplateId, x.Id, StringComparison.InvariantCultureIgnoreCase))?.ServiceId;
-            if (string.IsNullOrEmpty(smsServiceTemplateId))
+            SmsTemplate template = templateConfiguration.SmsServiceTemplates
+                .SingleOrDefault(x => string.Equals(command.TemplateId, x.Id, StringComparison.InvariantCultureIgnoreCase));
+
+            if (template == null)
             {
-                throw new ValidationException($"No template mapping could be found for {command.TemplateId}");
+                throw new ValidationException($"No template mapping could be found for {command.TemplateId}.");
             }
-            command.TemplateId = smsServiceTemplateId;
+            if (string.IsNullOrEmpty(template.ServiceId))
+            {
+                throw new NullReferenceException($"Configuration for template {command.TemplateId} has no ServiceId.");
+            }
+            command.TemplateId = template.ServiceId;
 
             await _notificationsRepository.Create(CreateMessageData(command, messageId));
 

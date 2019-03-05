@@ -50,13 +50,20 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
             if (!IsGuid(command.TemplateId))
             {
                 TemplateConfiguration templateConfiguration = await _templateConfigurationService.GetAsync();
-                string emailServiceTemplateId = templateConfiguration.EmailServiceTemplates.SingleOrDefault(
-                    t => t.Id.Equals(command.TemplateId, StringComparison.CurrentCultureIgnoreCase))?.EmailServiceId;
-                if (string.IsNullOrEmpty(emailServiceTemplateId))
+                Template emailServiceTemplate = templateConfiguration.EmailServiceTemplates
+                    .SingleOrDefault(
+                        t => t.Id.Equals(command.TemplateId, StringComparison.InvariantCultureIgnoreCase)
+                    );
+
+                if (emailServiceTemplate == null)
                 {
-                    throw new ValidationException($"No template mapping could be found for {command.TemplateId}");
+                    throw new ValidationException($"No template mapping could be found for {command.TemplateId}.");
                 }
-                command.TemplateId = emailServiceTemplateId;
+                if (string.IsNullOrEmpty(emailServiceTemplate.EmailServiceId))
+                {
+                    throw new NullReferenceException($"{nameof(Template.EmailServiceId)} for template {command.TemplateId} is null or empty");
+                }
+                command.TemplateId = emailServiceTemplate.EmailServiceId;
             }
             else
             {
