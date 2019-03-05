@@ -64,6 +64,8 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
                 }
                 if (string.IsNullOrEmpty(emailServiceTemplate.EmailServiceId))
                 {
+                    string configJson = Newtonsoft.Json.JsonConvert.SerializeObject(templateConfiguration);
+                    _logger.Info("Template configuration\r\n" + configJson);
                     throw new NullReferenceException($"{nameof(Template.EmailServiceId)} for template {command.TemplateId} is null or empty");
                 }
                 command.TemplateId = emailServiceTemplate.EmailServiceId;
