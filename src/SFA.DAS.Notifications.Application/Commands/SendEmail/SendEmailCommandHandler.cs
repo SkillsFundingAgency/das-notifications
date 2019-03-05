@@ -57,15 +57,10 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
 
                 if (emailServiceTemplate == null)
                 {
-                    string validOptions = '"' + string.Join("\",\"", templateConfiguration.EmailServiceTemplates.Select(x => x.Id));
-                    throw new ValidationException($"No template mapping could be found for {command.TemplateId}. "
-                        + $"Valid options are {validOptions}");
-
+                    throw new ValidationException($"No template mapping could be found for {command.TemplateId}.";
                 }
                 if (string.IsNullOrEmpty(emailServiceTemplate.EmailServiceId))
                 {
-                    string configJson = Newtonsoft.Json.JsonConvert.SerializeObject(templateConfiguration);
-                    _logger.Info("Template configuration\r\n" + configJson);
                     throw new NullReferenceException($"{nameof(Template.EmailServiceId)} for template {command.TemplateId} is null or empty");
                 }
                 command.TemplateId = emailServiceTemplate.EmailServiceId;
