@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using SFA.DAS.Notifications.Application.Interfaces;
 using SFA.DAS.Notifications.Domain.Entities;
 
-namespace SFA.DAS.Notifications.Infrastructure.GovNotifyService
+namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
 {
     public class NotifySmsService : ISmsService
     {

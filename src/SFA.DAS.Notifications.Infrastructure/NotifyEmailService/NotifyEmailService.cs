@@ -7,7 +7,7 @@ using SFA.DAS.Notifications.Application.Interfaces;
 using SFA.DAS.Notifications.Domain.Entities;
 using SFA.DAS.Notifications.Infrastructure.ExecutionPolicies;
 
-namespace SFA.DAS.Notifications.Infrastructure.GovNotifyService
+namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
 {
     public class NotifyEmailService : IEmailService
     {

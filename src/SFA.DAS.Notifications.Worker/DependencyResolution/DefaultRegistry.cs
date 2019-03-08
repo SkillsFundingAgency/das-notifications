@@ -9,7 +9,7 @@ using SFA.DAS.Notifications.Domain.Repositories;
 using SFA.DAS.Notifications.Infrastructure.AzureMessageNotificationRepository;
 using SFA.DAS.Notifications.Infrastructure.Configuration;
 using SFA.DAS.Notifications.Infrastructure.LocalEmailService;
-using SFA.DAS.Notifications.Infrastructure.GovNotifyService;
+using SFA.DAS.Notifications.Infrastructure.NotifyEmailService;
 using SFA.DAS.Notifications.Infrastructure.SendGridSmtpEmailService;
 using SFA.DAS.Notifications.Worker.MessageHandlers;
 using StructureMap;

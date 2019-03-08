@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace SFA.DAS.Notifications.Infrastructure.GovNotifyService
+namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
 {
     public class NotifyMessage
     {

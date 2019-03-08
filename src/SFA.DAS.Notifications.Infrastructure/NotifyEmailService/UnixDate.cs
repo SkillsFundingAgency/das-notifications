@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SFA.DAS.Notifications.Infrastructure.GovNotifyService
+namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
 {
     public static class UnixDate
     {

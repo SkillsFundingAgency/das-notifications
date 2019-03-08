@@ -4,7 +4,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.Notifications.Domain.Entities;
 using SFA.DAS.Notifications.Infrastructure.ExecutionPolicies;
-using SFA.DAS.Notifications.Infrastructure.GovNotifyService;
+using SFA.DAS.Notifications.Infrastructure.NotifyEmailService;
 
 namespace SFA.DAS.Notifications.Infrastructure.UnitTests.NotifyEmailServiceTests.NotifyEmailServiceTests
 {
@@ -16,7 +16,7 @@ namespace SFA.DAS.Notifications.Infrastructure.UnitTests.NotifyEmailServiceTests
         private const string TokenValue = "Value1";
 
         private Mock<INotifyHttpClientWrapper> _httpClient;
-        private NotifyEmailService _service;
+        private NotifyEmailService.NotifyEmailService _service;
         private EmailMessage _email;
         private NoopExecutionPolicy _executionPolicy;
 
@@ -27,7 +27,7 @@ namespace SFA.DAS.Notifications.Infrastructure.UnitTests.NotifyEmailServiceTests
 
             _executionPolicy = new NoopExecutionPolicy();
 
-            _service = new NotifyEmailService(_httpClient.Object, _executionPolicy);
+            _service = new NotifyEmailService.NotifyEmailService(_httpClient.Object, _executionPolicy);
 
             _email = new EmailMessage
             {
