@@ -13,7 +13,7 @@ namespace SFA.DAS.Notifications.Infrastructure.GovNotifyService
 {
     public interface INotifyHttpClientWrapper
     {
-        Task SendMessage(NotifyEmailMessage content);
+        Task SendMessage(NotifyMessage content);
     }
 
     public class NotifyHttpClientWrapper : INotifyHttpClientWrapper
@@ -28,7 +28,7 @@ namespace SFA.DAS.Notifications.Infrastructure.GovNotifyService
             _configurationService = configurationService;
         }
 
-        public async Task SendMessage(NotifyEmailMessage content)
+        public async Task SendMessage(NotifyMessage content)
         {
             var configuration = await _configurationService.GetAsync<NotificationServiceConfiguration>();
 

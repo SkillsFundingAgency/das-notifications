@@ -28,7 +28,7 @@ namespace SFA.DAS.Notifications.Infrastructure.GovNotifyService
         {
             Logger.Info($"Sending email to {message.RecipientsAddress}");
 
-            var notifyMessage = new NotifyEmailMessage
+            var notifyMessage = new NotifyMessage
             {
                 To = message.RecipientsAddress,
                 Template = message.TemplateId,

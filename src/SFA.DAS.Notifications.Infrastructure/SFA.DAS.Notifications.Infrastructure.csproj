@@ -148,9 +148,9 @@
     <Compile Include="ExecutionPolicies\SendEmailExecutionPolicy.cs" />
     <Compile Include="GovNotifyService\GovNotifyPayload.cs" />
     <Compile Include="GovNotifyService\JwtTokenUtility.cs" />
-    <Compile Include="GovNotifyService\NotifyEmailMessage.cs" />
     <Compile Include="GovNotifyService\NotifyEmailService.cs" />
     <Compile Include="GovNotifyService\NotifyHttpClientWrapper.cs" />
+    <Compile Include="GovNotifyService\NotifyMessage.cs" />
     <Compile Include="GovNotifyService\NotifySmsService.cs" />
     <Compile Include="GovNotifyService\UnixDate.cs" />
     <Compile Include="LocalEmailService\LocalEmailService.cs" />
