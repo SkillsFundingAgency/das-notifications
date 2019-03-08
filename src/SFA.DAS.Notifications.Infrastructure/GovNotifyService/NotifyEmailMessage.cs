@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace SFA.DAS.Notifications.Infrastructure.GovNotifyService
 {
-    public class NotifyMessage
+    public class NotifyEmailMessage
     {
         [JsonProperty(PropertyName = "to")]
         public string To { get; set; }

@@ -47,7 +47,7 @@ namespace SFA.DAS.Notifications.Infrastructure.UnitTests.NotifyEmailServiceTests
             await _service.SendAsync(_email);
 
             // Assert
-            _httpClient.Verify(c => c.SendMessage(It.Is<NotifyMessage>(m => m.To == ToAddress)));
+            _httpClient.Verify(c => c.SendMessage(It.Is<NotifyEmailMessage>(m => m.To == ToAddress)));
         }
 
         [Test]
@@ -57,7 +57,7 @@ namespace SFA.DAS.Notifications.Infrastructure.UnitTests.NotifyEmailServiceTests
             await _service.SendAsync(_email);
 
             // Assert
-            _httpClient.Verify(c => c.SendMessage(It.Is<NotifyMessage>(m => m.Template == TemplateId)));
+            _httpClient.Verify(c => c.SendMessage(It.Is<NotifyEmailMessage>(m => m.Template == TemplateId)));
         }
 
         [Test]
@@ -67,7 +67,7 @@ namespace SFA.DAS.Notifications.Infrastructure.UnitTests.NotifyEmailServiceTests
             await _service.SendAsync(_email);
 
             // Assert
-            _httpClient.Verify(c => c.SendMessage(It.Is<NotifyMessage>(m => m.Personalisation != null
+            _httpClient.Verify(c => c.SendMessage(It.Is<NotifyEmailMessage>(m => m.Personalisation != null
                                                                          && m.Personalisation.ContainsKey(TokenKey.ToLower())
                                                                          && m.Personalisation[TokenKey.ToLower()] == TokenValue)));
         }
@@ -82,7 +82,7 @@ namespace SFA.DAS.Notifications.Infrastructure.UnitTests.NotifyEmailServiceTests
             await _service.SendAsync(_email);
 
             // Assert
-            _httpClient.Verify(c => c.SendMessage(It.Is<NotifyMessage>(m => m.Personalisation != null)));
+            _httpClient.Verify(c => c.SendMessage(It.Is<NotifyEmailMessage>(m => m.Personalisation != null)));
         }
     }
 }

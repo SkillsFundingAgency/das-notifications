@@ -20,7 +20,7 @@ namespace SFA.DAS.Notifications.Infrastructure.GovNotifyService
 
         public async Task SendAsync(SmsMessage message)
         {
-            var notifyMessage = new NotifyMessage
+            var notifyMessage = new NotifyEmailMessage
             {
                 To = message.RecipientsNumber,
                 Template = message.TemplateId,
