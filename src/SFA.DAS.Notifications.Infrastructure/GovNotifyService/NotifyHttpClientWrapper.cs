@@ -9,7 +9,7 @@ using SFA.DAS.Configuration;
 using SFA.DAS.Notifications.Domain.Http;
 using SFA.DAS.Notifications.Infrastructure.Configuration;
 
-namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
+namespace SFA.DAS.Notifications.Infrastructure.GovNotifyService
 {
     public interface INotifyHttpClientWrapper
     {
@@ -41,8 +41,6 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
 
                 var serializeObject = JsonConvert.SerializeObject(content);
                 var stringContent = new StringContent(serializeObject, Encoding.UTF8, "application/json");
-
-                //todo: add SMS support for Notify
 
                 Logger.Info($"Sending email request to Notify at {configuration.NotifyServiceConfiguration.ApiBaseUrl}/notifications/email");
 

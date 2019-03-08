@@ -2,7 +2,7 @@
 using JWT;
 using Newtonsoft.Json;
 
-namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
+namespace SFA.DAS.Notifications.Infrastructure.GovNotifyService
 {
     public class JwtTokenUtility
     {
