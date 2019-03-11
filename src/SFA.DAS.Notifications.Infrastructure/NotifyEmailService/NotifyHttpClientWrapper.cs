@@ -65,7 +65,7 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
                     Content = stringContent
                 };
                 //TODO: PeteM - D1
-                Logger.Info($"Sending HTTP request: " + JsonConvert.SerializeObject(request) + "\r\nWith content=" + stringContent);
+                Logger.Info($"Sending HTTP request: " + JsonConvert.SerializeObject(request) + "\r\nWith content=" + serializeObject);
                 var response = await httpClient.SendAsync(request);
 
                 EnsureSuccessfulResponse(response);
