@@ -61,7 +61,7 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
 
                 Logger.Info($"Sending communication request to Notify at {configuration.NotifyServiceConfiguration.ApiBaseUrl}/notifications/{notificationsEndPoint}");
 
-                var request = new HttpRequestMessage(HttpMethod.Post, $"/notifications/{notificationsEndPoint}") {
+                var request = new HttpRequestMessage(HttpMethod.Post, $"/{notificationsEndPoint}") {
                     Content = stringContent
                 };
                 //TODO: PeteM - D1
