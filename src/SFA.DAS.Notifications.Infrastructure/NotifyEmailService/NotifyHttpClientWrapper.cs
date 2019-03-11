@@ -59,13 +59,13 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
                 var serializeObject = JsonConvert.SerializeObject(content);
                 var stringContent = new StringContent(serializeObject, Encoding.UTF8, "application/json");
 
-                Logger.Info($"Sending communication request to Notify at {configuration.NotifyServiceConfiguration.ApiBaseUrl}/notifications/{notificationsEndPoint}");
+                Logger.Info($"Sending communication request to Notify at {configuration.NotifyServiceConfiguration.ApiBaseUrl}/{notificationsEndPoint}");
 
                 var request = new HttpRequestMessage(HttpMethod.Post, $"/{notificationsEndPoint}") {
                     Content = stringContent
                 };
                 //TODO: PeteM - D1
-                Logger.Info($"Sending SMS HTTP request: " + JsonConvert.SerializeObject(request));
+                Logger.Info($"Sending HTTP request: " + JsonConvert.SerializeObject(request) + "\r\nWith content=" + stringContent);
                 var response = await httpClient.SendAsync(request);
 
                 EnsureSuccessfulResponse(response);
