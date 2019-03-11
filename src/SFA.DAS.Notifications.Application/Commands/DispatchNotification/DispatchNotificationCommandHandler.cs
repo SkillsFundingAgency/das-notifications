@@ -30,7 +30,8 @@ namespace SFA.DAS.Notifications.Application.Commands.DispatchNotification
 
         protected override async Task HandleCore(DispatchNotificationCommand command)
         {
-            Logger.Debug($"{nameof(DispatchNotificationCommand)} = " + JsonConvert.SerializeObject(command));
+            //TODO: PeteM - D1
+            Logger.Info($"{nameof(DispatchNotificationCommand)} = " + JsonConvert.SerializeObject(command));
             var response = await _mediator.SendAsync(new GetMessageQueryRequest
             {
                 Format = command.Format,

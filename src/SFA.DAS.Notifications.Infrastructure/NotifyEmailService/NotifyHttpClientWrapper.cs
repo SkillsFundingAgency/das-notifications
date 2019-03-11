@@ -64,7 +64,8 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
                 var request = new HttpRequestMessage(HttpMethod.Post, $"/notifications/{notificationsEndPoint}") {
                     Content = stringContent
                 };
-                Logger.Debug($"Sending SMS HTTP request: " + JsonConvert.SerializeObject(request));
+                //TODO: PeteM - D1
+                Logger.Info($"Sending SMS HTTP request: " + JsonConvert.SerializeObject(request));
                 var response = await httpClient.SendAsync(request);
 
                 EnsureSuccessfulResponse(response);
