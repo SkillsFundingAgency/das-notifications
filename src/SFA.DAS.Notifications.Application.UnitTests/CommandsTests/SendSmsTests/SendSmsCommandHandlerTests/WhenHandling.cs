@@ -96,7 +96,7 @@ namespace SFA.DAS.Notifications.Application.UnitTests.CommandsTests.SendSmsTests
         }
 
         [Test]
-        public void ThenItShouldThrowAValidationExceptionItTemplateIdNotFound()
+        public void ThenItShouldThrowAValidationExceptionIfTemplateIdNotFound()
         {
             // Arrange
             _command.TemplateId = "ThisIsNotAValidTemplateName";

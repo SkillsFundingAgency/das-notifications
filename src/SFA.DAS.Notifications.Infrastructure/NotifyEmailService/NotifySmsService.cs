@@ -27,7 +27,7 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
                 Personalisation = message.Tokens.ToDictionary(item => item.Key.ToLower(), item => item.Value)
             };
 
-            await _httpClientWrapper.SendMessage(notifyMessage);
+            await _httpClientWrapper.SendSms(notifyMessage);
         }
     }
 }

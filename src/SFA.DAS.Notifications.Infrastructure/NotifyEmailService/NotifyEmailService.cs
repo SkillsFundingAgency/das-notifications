@@ -38,7 +38,7 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
 
             await _executionPolicy.ExecuteAsync(async () =>
             {
-                await _clientWrapper.SendMessage(notifyMessage);
+                await _clientWrapper.SendEmail(notifyMessage);
             });
             
         }
