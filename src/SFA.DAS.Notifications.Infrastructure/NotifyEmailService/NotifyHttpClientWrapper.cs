@@ -80,6 +80,8 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
 
         private void EnsureSuccessfulResponse(HttpResponseMessage response)
         {
+            //TODO: PeteM - D1
+            Logger.Info("GovNotifyResponse= " + JsonConvert.SerializeObject(response));
             if (response.IsSuccessStatusCode)
             {
                 return;
