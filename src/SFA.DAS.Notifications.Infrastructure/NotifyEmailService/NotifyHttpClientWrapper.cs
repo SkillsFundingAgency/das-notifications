@@ -66,7 +66,7 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
                     Content = stringContent
                 };
                 //TODO: PeteM - D1
-                Logger.Info($"Sending communication request to {configuration.NotifyServiceConfiguration.ApiBaseUrl}/{notificationsEndPoint} with request\r\n"
+                Logger.Info($"PeteM: Sending communication request to {configuration.NotifyServiceConfiguration.ApiBaseUrl}/{notificationsEndPoint} with request\r\n"
                     + JsonConvert.SerializeObject(request) + "\r\nWith token " + token);
                 var response = await httpClient.SendAsync(request);
 
