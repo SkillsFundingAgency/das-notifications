@@ -53,7 +53,7 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
 
             using (var httpClient = CreateHttpClient(configuration.NotifyServiceConfiguration.ApiBaseUrl))
             {
-                string token = JwtTokenUtility.CreateToken(configuration.NotifyServiceConfiguration.ServiceId, configuration.NotifyServiceConfiguration.ApiKey);
+                var token = JwtTokenUtility.CreateToken(configuration.NotifyServiceConfiguration.ServiceId, configuration.NotifyServiceConfiguration.ApiKey);
                 httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
                 var serializeObject = JsonConvert.SerializeObject(content);
@@ -61,18 +61,10 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
 
                 Logger.Info($"Sending communication request to Notify at {configuration.NotifyServiceConfiguration.ApiBaseUrl}/{notificationsEndPoint}");
 
-
                 var request = new HttpRequestMessage(HttpMethod.Post, $"/{notificationsEndPoint}") {
                     Content = stringContent
                 };
-                //TODO: PeteM - D1
-                Logger.Info($"PeteM: Sending communication request to {configuration.NotifyServiceConfiguration.ApiBaseUrl}/{notificationsEndPoint} with request\r\n"
-                    + JsonConvert.SerializeObject(request) + "\r\nWith token " + token + "\r\nWith content " + serializeObject);
                 var response = await httpClient.SendAsync(request);
-
-                //TODO: PeteM - D2
-                //string responseContent = await response.Content.ReadAsStringAsync();
-                //Logger.Info("PeteM: Response content " + responseContent);
 
                 EnsureSuccessfulResponse(response);
             }
@@ -88,8 +80,6 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
 
         private void EnsureSuccessfulResponse(HttpResponseMessage response)
         {
-            //TODO: PeteM - D1
-            Logger.Info("GovNotifyResponse= " + JsonConvert.SerializeObject(response));
             if (response.IsSuccessStatusCode)
             {
                 return;
