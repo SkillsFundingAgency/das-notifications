@@ -7,7 +7,6 @@ using NUnit.Framework;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Notifications.Api.Orchestrators;
 using SFA.DAS.Notifications.Api.Types;
-using SFA.DAS.Notifications.Application.Commands.SendEmail;
 using SFA.DAS.Notifications.Application.Commands.SendSms;
 
 namespace SFA.DAS.Notifications.Api.UnitTests.OrchestratorsTests.NotificationOrchestratorTests
@@ -25,8 +24,7 @@ namespace SFA.DAS.Notifications.Api.UnitTests.OrchestratorsTests.NotificationOrc
 
             _orchestrator = new NotificationOrchestrator(_mediator.Object, Mock.Of<ILog>());
 
-            _sms = new Sms
-            {
+            _sms = new Sms {
                 SystemId = Guid.NewGuid().ToString(),
                 TemplateId = "MyTemplate",
                 RecipientsNumber = "999",
@@ -56,7 +54,7 @@ namespace SFA.DAS.Notifications.Api.UnitTests.OrchestratorsTests.NotificationOrc
 
             // Assert
             _mediator.Verify(m => m.SendAsync(
-                It.Is<SendSmsCommand>(q => 
+                It.Is<SendSmsCommand>(q =>
                     q.SystemId == _sms.SystemId
                     && q.TemplateId == _sms.TemplateId
                     && q.RecipientsNumber == _sms.RecipientsNumber
