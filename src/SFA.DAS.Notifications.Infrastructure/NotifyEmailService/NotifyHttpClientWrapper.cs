@@ -53,7 +53,7 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
 
             using (var httpClient = CreateHttpClient(configuration.NotifyServiceConfiguration.ApiBaseUrl))
             {
-                var token = JwtTokenUtility.CreateToken(configuration.NotifyServiceConfiguration.ServiceId, configuration.NotifyServiceConfiguration.ApiKey);
+                string token = JwtTokenUtility.CreateToken(configuration.NotifyServiceConfiguration.ServiceId, configuration.NotifyServiceConfiguration.ApiKey);
                 httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
                 var serializeObject = JsonConvert.SerializeObject(content);
@@ -61,9 +61,13 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
 
                 Logger.Info($"Sending communication request to Notify at {configuration.NotifyServiceConfiguration.ApiBaseUrl}/{notificationsEndPoint}");
 
+
                 var request = new HttpRequestMessage(HttpMethod.Post, $"/{notificationsEndPoint}") {
                     Content = stringContent
                 };
+                //TODO: PeteM - D1
+                Logger.Info($"Sending communication request to {configuration.NotifyServiceConfiguration.ApiBaseUrl}/{notificationsEndPoint} with request\r\n"
+                    + JsonConvert.SerializeObject(request) + "\r\nWith token " + token);
                 var response = await httpClient.SendAsync(request);
 
                 EnsureSuccessfulResponse(response);
