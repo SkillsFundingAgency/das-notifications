@@ -71,8 +71,8 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
                 var response = await httpClient.SendAsync(request);
 
                 //TODO: PeteM - D2
-                string responseContent = await response.Content.ReadAsStringAsync();
-                Logger.Info("PeteM: Response content " + responseContent);
+                //string responseContent = await response.Content.ReadAsStringAsync();
+                //Logger.Info("PeteM: Response content " + responseContent);
 
                 EnsureSuccessfulResponse(response);
             }
