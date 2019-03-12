@@ -80,6 +80,9 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
 
         private async Task EnsureSuccessfulResponse(HttpResponseMessage response)
         {
+            // Wait for the whole response to come in, otherwise the server at the other end doesn't actually send the communication
+            string responseContent = await response.Content.ReadAsStringAsync();
+
             if (response.IsSuccessStatusCode)
             {
                 return;
@@ -95,7 +98,6 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
                 case 503:
                     throw new ServiceUnavailableException();
                 default:
-                    string responseContent = await response.Content.ReadAsStringAsync();
                     throw new HttpException((int)response.StatusCode, $"Unexpected HTTP exception - ({(int)response.StatusCode}): {response.ReasonPhrase})\r\n{responseContent}");
             }
         }
