@@ -44,7 +44,7 @@ namespace SFA.DAS.Notifications.Api.Client.UnitTests.NotificationApiClientTests
         {
             var expectedSms = new Sms
             {
-                RecipientsNumber = "999",
+                RecipientsNumber = "299792458",
                 SystemId = "123asd",
                 TemplateId = "123",
                 Tokens = new Dictionary<string, string> { { "Token1","Token Value"} }

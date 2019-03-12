@@ -52,7 +52,7 @@ namespace SFA.DAS.Notifications.Application.UnitTests.CommandsTests.SendSmsTests
             _command = new SendSmsCommand
             {
                 SystemId = Guid.NewGuid().ToString(),
-                RecipientsNumber = "999",
+                RecipientsNumber = "299792458",
                 TemplateId = TemplateName,
                 Tokens = new Dictionary<string, string>
                 {

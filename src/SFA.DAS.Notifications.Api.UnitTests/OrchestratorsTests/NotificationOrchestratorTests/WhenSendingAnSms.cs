@@ -27,7 +27,7 @@ namespace SFA.DAS.Notifications.Api.UnitTests.OrchestratorsTests.NotificationOrc
             _sms = new Sms {
                 SystemId = Guid.NewGuid().ToString(),
                 TemplateId = "MyTemplate",
-                RecipientsNumber = "999",
+                RecipientsNumber = "299792458",
                 Tokens = new Dictionary<string, string>
                 {
                     { "Key", "Value" }
