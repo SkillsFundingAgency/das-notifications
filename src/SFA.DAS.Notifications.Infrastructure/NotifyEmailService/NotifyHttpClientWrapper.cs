@@ -66,7 +66,7 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
                 };
                 var response = await httpClient.SendAsync(request);
 
-                EnsureSuccessfulResponse(response);
+                await EnsureSuccessfulResponse(response);
             }
         }
 
@@ -78,7 +78,7 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
             };
         }
 
-        private void EnsureSuccessfulResponse(HttpResponseMessage response)
+        private async Task EnsureSuccessfulResponse(HttpResponseMessage response)
         {
             if (response.IsSuccessStatusCode)
             {
@@ -95,7 +95,8 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
                 case 503:
                     throw new ServiceUnavailableException();
                 default:
-                    throw new HttpException((int)response.StatusCode, $"Unexpected HTTP exception - ({(int)response.StatusCode}): {response.ReasonPhrase}");
+                    string responseContent = await response.Content.ReadAsStringAsync();
+                    throw new HttpException((int)response.StatusCode, $"Unexpected HTTP exception - ({(int)response.StatusCode}): {response.ReasonPhrase})\r\n{responseContent}");
             }
         }
     }
