@@ -19,9 +19,9 @@ namespace SFA.DAS.Notifications.Api.UnitTests.ControllerTests.GivenEmailControll
             var mockNotificationOrchestrator = new Mock<INotificationOrchestrator>();
             mockNotificationOrchestrator.Setup(x => x.SendEmail(It.IsAny<Email>())).Returns(Task.FromResult(orchestratorResponse));
 
-            var sut = new SmsController(mockNotificationOrchestrator.Object);
+            var sut = new EmailController(mockNotificationOrchestrator.Object);
 
-            var request = new Sms();
+            var request = new Email();
             HttpResponseMessage controllerResponse = await sut.Post(request);
 
             Assert.AreEqual(HttpStatusCode.BadRequest, controllerResponse.StatusCode);
