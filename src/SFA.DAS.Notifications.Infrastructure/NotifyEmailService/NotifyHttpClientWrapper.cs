@@ -81,7 +81,9 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
         private async Task EnsureSuccessfulResponse(HttpResponseMessage response)
         {
             // Wait for the whole response to come in, otherwise the server at the other end doesn't actually send the communication
-            string responseContent = await response.Content.ReadAsStringAsync();
+            //TODO: PeteM - UC1, D1
+            string responseContent;// = await response.Content.ReadAsStringAsync();
+            responseContent = "N/A";
 
             if (response.IsSuccessStatusCode)
             {
