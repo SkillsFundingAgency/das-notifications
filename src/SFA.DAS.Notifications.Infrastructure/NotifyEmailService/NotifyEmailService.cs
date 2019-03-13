@@ -16,7 +16,7 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
         private readonly INotifyHttpClientWrapper _clientWrapper;
         private readonly ExecutionPolicy _executionPolicy;
 
-        public NotifyEmailService(INotifyHttpClientWrapper clientWrapper, [RequiredPolicy(SendEmailExecutionPolicy.Name)]ExecutionPolicy executionPolicy)
+        public NotifyEmailService(INotifyHttpClientWrapper clientWrapper, [RequiredPolicy(SendMessageExecutionPolicy.Name)]ExecutionPolicy executionPolicy)
         {
             if (clientWrapper == null)
                 throw new ArgumentNullException(nameof(clientWrapper));
@@ -24,7 +24,7 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
             _executionPolicy = executionPolicy;
         }
 
-        public async Task SendAsync(EmailMessage message)
+        public Task SendAsync(EmailMessage message)
         {
             Logger.Info($"Sending email to {message.RecipientsAddress}");
 
@@ -36,11 +36,7 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
                 Reference = message.Reference
             };
 
-            await _executionPolicy.ExecuteAsync(async () =>
-            {
-                await _clientWrapper.SendMessage(notifyMessage);
-            });
-            
+            return _executionPolicy.ExecuteAsync(() => _clientWrapper.SendEmail(notifyMessage));
         }
     }
 }

@@ -13,7 +13,8 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
 {
     public interface INotifyHttpClientWrapper
     {
-        Task SendMessage(NotifyMessage content);
+        Task SendEmail(NotifyMessage content);
+        Task SendSms(NotifyMessage content);
     }
 
     public class NotifyHttpClientWrapper : INotifyHttpClientWrapper
@@ -28,8 +29,24 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
             _configurationService = configurationService;
         }
 
-        public async Task SendMessage(NotifyMessage content)
+        public Task SendEmail(NotifyMessage content)
         {
+            return SendMessage(content, "notifications/email");
+        }
+
+        public Task SendSms(NotifyMessage content)
+        {
+            return SendMessage(content, "notifications/sms");
+        }
+
+
+        private async Task SendMessage(NotifyMessage content, string notificationsEndPoint)
+        {
+            if (string.IsNullOrEmpty(notificationsEndPoint))
+                throw new ArgumentNullException(nameof(notificationsEndPoint));
+            if (notificationsEndPoint.StartsWith("/"))
+                throw new ArgumentException("Cannot start with a /", nameof(notificationsEndPoint));
+
             var configuration = await _configurationService.GetAsync<NotificationServiceConfiguration>();
 
             content.Template = content.Template;
@@ -42,16 +59,14 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
                 var serializeObject = JsonConvert.SerializeObject(content);
                 var stringContent = new StringContent(serializeObject, Encoding.UTF8, "application/json");
 
-                //todo: add SMS support for Notify
+                Logger.Info($"Sending communication request to Notify at {configuration.NotifyServiceConfiguration.ApiBaseUrl}/{notificationsEndPoint}");
 
-                Logger.Info($"Sending email request to Notify at {configuration.NotifyServiceConfiguration.ApiBaseUrl}/notifications/email");
-
-                var response = await httpClient.SendAsync(new HttpRequestMessage(HttpMethod.Post, "/notifications/email")
-                {
+                var request = new HttpRequestMessage(HttpMethod.Post, $"/{notificationsEndPoint}") {
                     Content = stringContent
-                });
+                };
+                var response = await httpClient.SendAsync(request);
 
-                EnsureSuccessfulResponse(response);
+                await EnsureSuccessfulResponse(response);
             }
         }
 
@@ -63,7 +78,7 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
             };
         }
 
-        private void EnsureSuccessfulResponse(HttpResponseMessage response)
+        private async Task EnsureSuccessfulResponse(HttpResponseMessage response)
         {
             if (response.IsSuccessStatusCode)
             {
@@ -80,7 +95,8 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
                 case 503:
                     throw new ServiceUnavailableException();
                 default:
-                    throw new HttpException((int)response.StatusCode, $"Unexpected HTTP exception - ({(int)response.StatusCode}): {response.ReasonPhrase}");
+                    string responseContent = await response.Content.ReadAsStringAsync();
+                    throw new HttpException((int)response.StatusCode, $"Unexpected HTTP exception - ({(int)response.StatusCode}): {response.ReasonPhrase})\r\n{responseContent}");
             }
         }
     }

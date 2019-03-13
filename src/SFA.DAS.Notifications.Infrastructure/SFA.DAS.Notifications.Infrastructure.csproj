@@ -145,7 +145,7 @@
     <Compile Include="ExecutionPolicies\NoopExecutionPolicy.cs" />
     <Compile Include="ExecutionPolicies\PolicyNameAttribute.cs" />
     <Compile Include="ExecutionPolicies\RequiredPolicyAttribute.cs" />
-    <Compile Include="ExecutionPolicies\SendEmailExecutionPolicy.cs" />
+    <Compile Include="ExecutionPolicies\SendMessageExecutionPolicy.cs" />
     <Compile Include="LocalEmailService\LocalEmailService.cs" />
     <Compile Include="NotifyEmailService\GovNotifyPayload.cs" />
     <Compile Include="NotifyEmailService\JwtTokenUtility.cs" />

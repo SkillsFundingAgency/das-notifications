@@ -12,7 +12,9 @@ namespace SFA.DAS.Notifications.Worker.MessageHandlers
     public class QueuedNotificationMessageHandler
     {
         [QueueName]
+#pragma warning disable IDE1006 // Naming Styles
         public string send_notifications { get; set; }
+#pragma warning restore IDE1006 // Naming Styles
 
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
 

@@ -91,7 +91,8 @@ namespace SFA.DAS.Notifications.Application.Commands.DispatchNotification
                             TemplateId = response.Notification.TemplateId,
                             SystemId = response.Notification.SystemId,
                             RecipientsNumber = smsContent.RecipientsNumber,
-                            Tokens = smsContent.Tokens
+                            Tokens = smsContent.Tokens,
+                            Reference = command.MessageId
                         });
 
                         await _notificationsRepository.Update(command.Format, command.MessageId, NotificationStatus.Sent);

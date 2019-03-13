@@ -6,16 +6,16 @@ using SFA.DAS.Notifications.Domain.Http;
 namespace SFA.DAS.Notifications.Infrastructure.ExecutionPolicies
 {
     [PolicyName(Name)]
-    public class SendEmailExecutionPolicy : ExecutionPolicy
+    public class SendMessageExecutionPolicy : ExecutionPolicy
     {
-        public const string Name = "Send Email Policy";
+        public const string Name = "Send message policy";
 
         private readonly ILogger _logger;
         private readonly Policy TooManyRequestsPolicy;
         private readonly Policy ServiceUnavailablePolicy;
         private readonly Policy InternalServerErrorPolicy;
 
-        public SendEmailExecutionPolicy(ILogger logger)
+        public SendMessageExecutionPolicy(ILogger logger)
         {
             _logger = logger;
 

@@ -97,8 +97,8 @@ namespace SFA.DAS.Notifications.Worker.DependencyResolution
         private void RegisterExecutionPolicies()
         {
             For<Infrastructure.ExecutionPolicies.ExecutionPolicy>()
-                .Use<Infrastructure.ExecutionPolicies.SendEmailExecutionPolicy>()
-                .Named(Infrastructure.ExecutionPolicies.SendEmailExecutionPolicy.Name);
+                .Use<Infrastructure.ExecutionPolicies.SendMessageExecutionPolicy>()
+                .Named(Infrastructure.ExecutionPolicies.SendMessageExecutionPolicy.Name);
         }
     }
 }
