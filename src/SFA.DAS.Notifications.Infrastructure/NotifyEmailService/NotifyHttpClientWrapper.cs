@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Configuration;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -21,6 +23,10 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
     {
         private readonly IConfigurationService _configurationService;
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
+
+        private const int ServiceIdStartPosition = 73;
+        private const int ServiceApiKeyStartPosition = 36;
+        private const int GuidLength = 36;
 
         public NotifyHttpClientWrapper(IConfigurationService configurationService)
         {
@@ -53,7 +59,11 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
 
             using (var httpClient = CreateHttpClient(configuration.NotifyServiceConfiguration.ApiBaseUrl))
             {
-                var token = JwtTokenUtility.CreateToken(configuration.NotifyServiceConfiguration.ServiceId, configuration.NotifyServiceConfiguration.ApiKey);
+                var serviceCredentials = GetServiceCredentials(configuration, content.SystemId);
+                var serviceId = serviceCredentials.Item1;
+                var apiKey = serviceCredentials.Item2;
+
+                var token = JwtTokenUtility.CreateToken(serviceId, apiKey);
                 httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
                 var serializeObject = JsonConvert.SerializeObject(content);
@@ -69,13 +79,43 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
                 await EnsureSuccessfulResponse(response);
             }
         }
-
+        
         private static HttpClient CreateHttpClient(string baseUrl)
         {
             return new HttpClient
             {
                 BaseAddress = new Uri(baseUrl)
             };
+        }
+
+        private static Tuple<string, string> GetServiceCredentials(NotificationServiceConfiguration configuration, string systemId)
+        {
+            var service =
+                configuration.NotifyServiceConfiguration.ConsumerConfiguration?.FirstOrDefault(s =>
+                    s.ServiceName == systemId);
+
+            if (service != null)
+            {
+                return ExtractServiceIdAndApiKey(service.ApiKey);
+            }
+            else
+            {
+                return Tuple.Create(configuration.NotifyServiceConfiguration.ServiceId,
+                    configuration.NotifyServiceConfiguration.ApiKey);
+            }
+        }
+
+        private static Tuple<string, string> ExtractServiceIdAndApiKey(string fromApiKey)
+        {
+            if (fromApiKey.Length < 74)
+            {
+                throw new ConfigurationErrorsException("The API Key provided is invalid. Please ensure you are using a v2 API Key that is not empty or null");
+            }
+
+            var serviceId = fromApiKey.Substring(fromApiKey.Length - ServiceIdStartPosition, GuidLength);
+            var apiKey = fromApiKey.Substring(fromApiKey.Length - ServiceApiKeyStartPosition, GuidLength);
+
+            return Tuple.Create(serviceId, apiKey);
         }
 
         private async Task EnsureSuccessfulResponse(HttpResponseMessage response)
