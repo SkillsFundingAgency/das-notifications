@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -22,6 +22,7 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
     public class NotifyHttpClientWrapper : INotifyHttpClientWrapper
     {
         private readonly IConfigurationService _configurationService;
+        private readonly IDictionary<string, Tuple<string, string>> _consumerConfigurationLookup;
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
 
         private const int ServiceIdStartPosition = 73;
@@ -33,6 +34,7 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
             if (configurationService == null)
                 throw new ArgumentNullException(nameof(configurationService));
             _configurationService = configurationService;
+            _consumerConfigurationLookup = GetConsumerConfiguration();
         }
 
         public Task SendEmail(NotifyMessage content)
@@ -54,7 +56,6 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
                 throw new ArgumentException("Cannot start with a /", nameof(notificationsEndPoint));
 
             var configuration = await _configurationService.GetAsync<NotificationServiceConfiguration>();
-
             content.Template = content.Template;
 
             using (var httpClient = CreateHttpClient(configuration.NotifyServiceConfiguration.ApiBaseUrl))
@@ -88,21 +89,32 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
             };
         }
 
-        private static Tuple<string, string> GetServiceCredentials(NotificationServiceConfiguration configuration, string systemId)
+        private Tuple<string, string> GetServiceCredentials(NotificationServiceConfiguration configuration, string systemId)
         {
-            var service =
-                configuration.NotifyServiceConfiguration.ConsumerConfiguration?.FirstOrDefault(s =>
-                    s.ServiceName == systemId);
-
-            if (service != null)
-            {
-                return ExtractServiceIdAndApiKey(service.ApiKey);
-            }
-            else
-            {
-                return Tuple.Create(configuration.NotifyServiceConfiguration.ServiceId,
+            return _consumerConfigurationLookup.TryGetValue(systemId, out var serviceAndApiKey)
+                ? serviceAndApiKey
+                : Tuple.Create(configuration.NotifyServiceConfiguration.ServiceId,
                     configuration.NotifyServiceConfiguration.ApiKey);
+        }
+
+        private IDictionary<string, Tuple<string, string>> GetConsumerConfiguration()
+        {
+            var lookup = new Dictionary<string, Tuple<string, string>>();
+
+            var consumerConfiguration = _configurationService
+                .Get<NotificationServiceConfiguration>()
+                .NotifyServiceConfiguration
+                .ConsumerConfiguration;
+
+            if (consumerConfiguration != null)
+            {
+                foreach (var config in consumerConfiguration)
+                {
+                    lookup.Add(config.ServiceName, ExtractServiceIdAndApiKey(config.ApiKey));
+                }
             }
+
+            return lookup;
         }
 
         private static Tuple<string, string> ExtractServiceIdAndApiKey(string fromApiKey)
