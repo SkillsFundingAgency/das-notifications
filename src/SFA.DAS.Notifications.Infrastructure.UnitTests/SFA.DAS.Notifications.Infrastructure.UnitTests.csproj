@@ -62,6 +62,7 @@
     <Compile Include="ConfigurationTests\TemplateConfigurationServiceTests\TemplateConfigurationServiceTestBase.cs" />
     <Compile Include="ConfigurationTests\TemplateConfigurationServiceTests\WhenGettingAsync.cs" />
     <Compile Include="ConfigurationTests\TemplateConfigurationServiceTests\WhenGetting.cs" />
+    <Compile Include="GovNotifyServiceCredentialTests\WhenCreatingFromV2ApiKey.cs" />
     <Compile Include="NotifyEmailServiceTests\WhenSendingAnSms.cs" />
     <Compile Include="NotifyEmailServiceTests\WhenSendingAnEmail.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

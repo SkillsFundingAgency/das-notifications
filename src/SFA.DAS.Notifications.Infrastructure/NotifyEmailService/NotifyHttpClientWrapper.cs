@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -22,12 +21,8 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
     public class NotifyHttpClientWrapper : INotifyHttpClientWrapper
     {
         private readonly IConfigurationService _configurationService;
-        private readonly IDictionary<string, Tuple<string, string>> _consumerConfigurationLookup;
+        private readonly IDictionary<string, GovNotifyServiceCredentials> _consumerConfigurationLookup;
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
-
-        private const int ServiceIdStartPosition = 73;
-        private const int ServiceApiKeyStartPosition = 36;
-        private const int GuidLength = 36;
 
         public NotifyHttpClientWrapper(IConfigurationService configurationService)
         {
@@ -46,8 +41,7 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
         {
             return SendMessage(content, "notifications/sms");
         }
-
-
+        
         private async Task SendMessage(NotifyMessage content, string notificationsEndPoint)
         {
             if (string.IsNullOrEmpty(notificationsEndPoint))
@@ -61,10 +55,8 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
             using (var httpClient = CreateHttpClient(configuration.NotifyServiceConfiguration.ApiBaseUrl))
             {
                 var serviceCredentials = GetServiceCredentials(configuration, content.SystemId);
-                var serviceId = serviceCredentials.Item1;
-                var apiKey = serviceCredentials.Item2;
 
-                var token = JwtTokenUtility.CreateToken(serviceId, apiKey);
+                var token = JwtTokenUtility.CreateToken(serviceCredentials.ServiceId, serviceCredentials.ApiKey);
                 httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
                 var serializeObject = JsonConvert.SerializeObject(content);
@@ -89,17 +81,18 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
             };
         }
 
-        private Tuple<string, string> GetServiceCredentials(NotificationServiceConfiguration configuration, string systemId)
+        private GovNotifyServiceCredentials GetServiceCredentials(NotificationServiceConfiguration configuration, string systemId)
         {
-            return _consumerConfigurationLookup.TryGetValue(systemId, out var serviceAndApiKey)
-                ? serviceAndApiKey
-                : Tuple.Create(configuration.NotifyServiceConfiguration.ServiceId,
+            return _consumerConfigurationLookup.TryGetValue(systemId, out var serviceCredential)
+                ? serviceCredential
+                : new GovNotifyServiceCredentials(
+                    configuration.NotifyServiceConfiguration.ServiceId,
                     configuration.NotifyServiceConfiguration.ApiKey);
         }
 
-        private IDictionary<string, Tuple<string, string>> GetConsumerConfiguration()
+        private IDictionary<string, GovNotifyServiceCredentials> GetConsumerConfiguration()
         {
-            var lookup = new Dictionary<string, Tuple<string, string>>();
+            var lookup = new Dictionary<string, GovNotifyServiceCredentials>();
 
             var consumerConfiguration = _configurationService
                 .Get<NotificationServiceConfiguration>()
@@ -110,24 +103,12 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
             {
                 foreach (var config in consumerConfiguration)
                 {
-                    lookup.Add(config.ServiceName, ExtractServiceIdAndApiKey(config.ApiKey));
+                    lookup.Add(config.ServiceName,
+                        GovNotifyServiceCredentials.FromV2ApiKey(config.ApiKey));
                 }
             }
 
             return lookup;
-        }
-
-        private static Tuple<string, string> ExtractServiceIdAndApiKey(string fromApiKey)
-        {
-            if (fromApiKey.Length < 74)
-            {
-                throw new ConfigurationErrorsException("The API Key provided is invalid. Please ensure you are using a v2 API Key that is not empty or null");
-            }
-
-            var serviceId = fromApiKey.Substring(fromApiKey.Length - ServiceIdStartPosition, GuidLength);
-            var apiKey = fromApiKey.Substring(fromApiKey.Length - ServiceApiKeyStartPosition, GuidLength);
-
-            return Tuple.Create(serviceId, apiKey);
         }
 
         private async Task EnsureSuccessfulResponse(HttpResponseMessage response)
