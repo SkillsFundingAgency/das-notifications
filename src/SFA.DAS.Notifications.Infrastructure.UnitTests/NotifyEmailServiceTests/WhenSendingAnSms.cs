@@ -6,7 +6,7 @@ using SFA.DAS.Notifications.Domain.Entities;
 using SFA.DAS.Notifications.Infrastructure.ExecutionPolicies;
 using SFA.DAS.Notifications.Infrastructure.NotifyEmailService;
 
-namespace SFA.DAS.Notifications.Infrastructure.UnitTests.NotifyEmailServiceTests.NotifyEmailServiceTests
+namespace SFA.DAS.Notifications.Infrastructure.UnitTests.NotifyEmailServiceTests
 {
     public class WhenSendingAnSms
     {
@@ -14,6 +14,7 @@ namespace SFA.DAS.Notifications.Infrastructure.UnitTests.NotifyEmailServiceTests
         private const string TemplateId = "81476cee-9863-40ee-8b18-33dcb898e9c9";
         private const string TokenKey = "Key1";
         private const string TokenValue = "Value1";
+        private const string SystemId = "TestSystem";
 
         private Mock<INotifyHttpClientWrapper> _httpClient;
         private NotifyEmailService.NotifySmsService _service;
@@ -36,7 +37,8 @@ namespace SFA.DAS.Notifications.Infrastructure.UnitTests.NotifyEmailServiceTests
                 Tokens = new Dictionary<string, string>
                 {
                     { TokenKey, TokenValue }
-                }
+                },
+                SystemId = SystemId
             };
         }
 
@@ -83,6 +85,16 @@ namespace SFA.DAS.Notifications.Infrastructure.UnitTests.NotifyEmailServiceTests
 
             // Assert
             _httpClient.Verify(c => c.SendSms(It.Is<NotifyMessage>(m => m.Personalisation != null)));
+        }
+
+        [Test]
+        public async Task ThenItShouldSendAMessageWithTheCorrectSystemId()
+        {
+            // Act
+            await _service.SendAsync(_sms);
+
+            // Assert
+            _httpClient.Verify(c => c.SendSms(It.Is<NotifyMessage>(m => m.SystemId == SystemId)));
         }
     }
 }

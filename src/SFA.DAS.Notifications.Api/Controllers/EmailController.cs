@@ -25,7 +25,8 @@ namespace SFA.DAS.Notifications.Api.Controllers
         [Authorize(Roles = "SendEmail")]
         public async Task<HttpResponseMessage> Post(Email notification)
         {
-            if (!string.IsNullOrEmpty(User.Identity.Name))
+            if (string.IsNullOrEmpty(notification.SystemId)
+                && !string.IsNullOrEmpty(User.Identity.Name))
             {
                 notification.SystemId = User.Identity.Name;
             }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -20,6 +21,7 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
     public class NotifyHttpClientWrapper : INotifyHttpClientWrapper
     {
         private readonly IConfigurationService _configurationService;
+        private readonly IDictionary<string, GovNotifyServiceCredentials> _consumerConfigurationLookup;
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
 
         public NotifyHttpClientWrapper(IConfigurationService configurationService)
@@ -27,6 +29,7 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
             if (configurationService == null)
                 throw new ArgumentNullException(nameof(configurationService));
             _configurationService = configurationService;
+            _consumerConfigurationLookup = GetConsumerConfiguration();
         }
 
         public Task SendEmail(NotifyMessage content)
@@ -38,8 +41,7 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
         {
             return SendMessage(content, "notifications/sms");
         }
-
-
+        
         private async Task SendMessage(NotifyMessage content, string notificationsEndPoint)
         {
             if (string.IsNullOrEmpty(notificationsEndPoint))
@@ -48,12 +50,13 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
                 throw new ArgumentException("Cannot start with a /", nameof(notificationsEndPoint));
 
             var configuration = await _configurationService.GetAsync<NotificationServiceConfiguration>();
-
             content.Template = content.Template;
 
             using (var httpClient = CreateHttpClient(configuration.NotifyServiceConfiguration.ApiBaseUrl))
             {
-                var token = JwtTokenUtility.CreateToken(configuration.NotifyServiceConfiguration.ServiceId, configuration.NotifyServiceConfiguration.ApiKey);
+                var serviceCredentials = GetServiceCredentials(configuration, content.SystemId);
+
+                var token = JwtTokenUtility.CreateToken(serviceCredentials.ServiceId, serviceCredentials.ApiKey);
                 httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
                 var serializeObject = JsonConvert.SerializeObject(content);
@@ -69,13 +72,43 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
                 await EnsureSuccessfulResponse(response);
             }
         }
-
+        
         private static HttpClient CreateHttpClient(string baseUrl)
         {
             return new HttpClient
             {
                 BaseAddress = new Uri(baseUrl)
             };
+        }
+
+        private GovNotifyServiceCredentials GetServiceCredentials(NotificationServiceConfiguration configuration, string systemId)
+        {
+            return _consumerConfigurationLookup.TryGetValue(systemId, out var serviceCredential)
+                ? serviceCredential
+                : new GovNotifyServiceCredentials(
+                    configuration.NotifyServiceConfiguration.ServiceId,
+                    configuration.NotifyServiceConfiguration.ApiKey);
+        }
+
+        private IDictionary<string, GovNotifyServiceCredentials> GetConsumerConfiguration()
+        {
+            var lookup = new Dictionary<string, GovNotifyServiceCredentials>();
+
+            var consumerConfiguration = _configurationService
+                .Get<NotificationServiceConfiguration>()
+                .NotifyServiceConfiguration
+                .ConsumerConfiguration;
+
+            if (consumerConfiguration != null)
+            {
+                foreach (var config in consumerConfiguration)
+                {
+                    lookup.Add(config.ServiceName,
+                        GovNotifyServiceCredentials.FromV2ApiKey(config.ApiKey));
+                }
+            }
+
+            return lookup;
         }
 
         private async Task EnsureSuccessfulResponse(HttpResponseMessage response)

@@ -27,7 +27,8 @@ namespace SFA.DAS.Notifications.Api.Controllers
         [ApiAuthorize(Roles = "SendSMS")]
         public async Task<HttpResponseMessage> Post(Sms notification)
         {
-            if (!string.IsNullOrEmpty(User.Identity.Name))
+            if (string.IsNullOrEmpty(notification.SystemId)
+                && !string.IsNullOrEmpty(User.Identity.Name))
             {
                 notification.SystemId = User.Identity.Name;
             }
