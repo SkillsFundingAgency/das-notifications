@@ -6,5 +6,7 @@
         public AzureServiceBusMessageServiceConfiguration AzureServiceBusMessageServiceConfiguration { get; set; }
         public NotificationsStorageConfiguration NotificationsStorageConfiguration { get; set; }
         public NotifyServiceConfiguration NotifyServiceConfiguration { get; set; }
+        public NServiceBusConfiguration NServiceBusConfiguration { get; set; }
+
     }
 }

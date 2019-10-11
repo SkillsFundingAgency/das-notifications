@@ -8,6 +8,7 @@ namespace SFA.DAS.Notifications.MessageHandlers.DependencyResolution
         {
             return new Container(c =>
             {
+                c.AddRegistry<ConfigurationRegistry>();
                 c.AddRegistry<StartupRegistry>();
                 c.AddRegistry<DefaultRegistry>();
             });
