@@ -286,8 +286,8 @@
     <Reference Include="SFA.DAS.Configuration.AzureTableStorage, Version=1.1.161.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Configuration.AzureTableStorage.1.1.161\lib\net45\SFA.DAS.Configuration.AzureTableStorage.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.NServiceBus, Version=7.0.14.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.NServiceBus.7.0.14\lib\net462\SFA.DAS.NServiceBus.dll</HintPath>
+    <Reference Include="SFA.DAS.NServiceBus, Version=15.0.8.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.NServiceBus.15.0.8\lib\net462\SFA.DAS.NServiceBus.dll</HintPath>
     </Reference>
     <Reference Include="StructureMap, Version=4.6.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\StructureMap.4.6.1\lib\net45\StructureMap.dll</HintPath>

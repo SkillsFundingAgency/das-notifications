@@ -1,13 +1,12 @@
-﻿using System.Data.Common;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using NServiceBus;
 using SFA.DAS.Notifications.Infrastructure.Configuration;
 using SFA.DAS.Notifications.MessageHandlers.Extensions;
-using SFA.DAS.NServiceBus;
-using SFA.DAS.NServiceBus.NewtonsoftJsonSerializer;
-using SFA.DAS.NServiceBus.NLog;
-using SFA.DAS.NServiceBus.StructureMap;
+using SFA.DAS.NServiceBus.Configuration;
+using SFA.DAS.NServiceBus.Configuration.NewtonsoftJsonSerializer;
+using SFA.DAS.NServiceBus.Configuration.NLog;
+using SFA.DAS.NServiceBus.Configuration.StructureMap;
 using StructureMap;
 using IStartup = SFA.DAS.Notifications.MessageHandlers.Startup.IStartup;
 
