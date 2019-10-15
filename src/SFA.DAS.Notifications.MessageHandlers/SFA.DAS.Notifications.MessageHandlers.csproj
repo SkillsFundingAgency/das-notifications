@@ -460,6 +460,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommandHandlers\SendEmailCommandHandler.cs" />
     <Compile Include="DependencyResolution\CompositeDecorator.cs" />
     <Compile Include="DependencyResolution\ConfigurationRegistry.cs" />
     <Compile Include="DependencyResolution\DefaultRegistry.cs" />
