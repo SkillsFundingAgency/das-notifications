@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Hosting;
 using NServiceBus;
 using SFA.DAS.Notifications.Infrastructure.Configuration;
-using SFA.DAS.Notifications.MessageHandlers.Extensions;
 using SFA.DAS.NServiceBus.Configuration;
+using SFA.DAS.NServiceBus.Configuration.AzureServiceBus;
 using SFA.DAS.NServiceBus.Configuration.NewtonsoftJsonSerializer;
 using SFA.DAS.NServiceBus.Configuration.NLog;
 using SFA.DAS.NServiceBus.Configuration.StructureMap;
@@ -29,8 +29,6 @@ namespace SFA.DAS.Notifications.MessageHandlers
         public async Task StartAsync()
         {
             var endpointConfiguration = new EndpointConfiguration("SFA.DAS.Notifications.MessageHandlers")
-                .UseAzureServiceBusTransport(() => _config.ServiceBusConnectionString,
-                    _hostingEnvironment.IsDevelopment())
                 .UseErrorQueue()
                 .UseInstallers()
                 .UseLicense(_config.NServiceBusLicense)
@@ -38,7 +36,16 @@ namespace SFA.DAS.Notifications.MessageHandlers
                 .UseNewtonsoftJsonSerializer()
                 .UseNLogFactory()
                 .UseStructureMapBuilder(_container);
-                
+
+                if (_hostingEnvironment.IsDevelopment())
+                {
+                    endpointConfiguration.UseLearningTransport();
+                }
+                else
+                {
+                    endpointConfiguration.UseAzureServiceBusTransport(_config.ServiceBusConnectionString);
+                }
+
             _endpoint = await Endpoint.Start(endpointConfiguration).ConfigureAwait(false);
         }
 

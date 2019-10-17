@@ -82,6 +82,10 @@
       <Project>{b9eb9e19-b71c-47b8-9698-c131190186f1}</Project>
       <Name>SFA.DAS.Notifications.MessageHandlers</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.Notifications.Messages\SFA.DAS.Notifications.Messages.csproj">
+      <Project>{17ec2d3a-16c7-44da-9004-ee3fead4633b}</Project>
+      <Name>SFA.DAS.Notifications.Messages</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\NServiceBus.7.1.10\analyzers\dotnet\cs\NServiceBus.Core.Analyzer.dll" />

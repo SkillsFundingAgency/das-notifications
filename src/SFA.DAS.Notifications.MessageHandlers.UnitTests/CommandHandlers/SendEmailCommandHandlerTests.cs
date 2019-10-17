@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using MediatR;
 using Moq;
 using NServiceBus;
@@ -11,28 +13,39 @@ namespace SFA.DAS.Notifications.MessageHandlers.UnitTests.CommandHandlers
     [TestFixture]
     public class SendEmailCommandHandlerTests
     {
+        private Dictionary<string, string> dictionary;
         private SendEmailCommandHandler _handler;
         private Mock<IMediator> _mediator;
-        private SendEmailCommand _message;
+        private Messages.Commands.SendEmailCommand _message;
 
         [SetUp]
         public void Arrange()
         {
-            _mediator = new Mock<IMediator>();
+            dictionary = new Dictionary<string, string>();
+            dictionary.Add("key1", "value1");
+            dictionary.Add("key2", "value2");
 
-            _mediator.Setup(x => x.SendAsync(It.IsAny<SendEmailCommand>()));
+            _mediator = new Mock<IMediator>();
 
             _handler = new SendEmailCommandHandler(_mediator.Object);
 
-            _message = new SendEmailCommand();
+            _message = new Messages.Commands.SendEmailCommand("templateId", "to@test.com", "reply@test.com", new ReadOnlyDictionary<string, string>(dictionary));
         }
 
         [Test]
-        public async Task Handle_Should_Send_Email()
+        public async Task Handle_Should_Send_Email_With_Corrrect_Template_And_Email_Details()
         {
             await _handler.Handle(_message, Mock.Of<IMessageHandlerContext>());
 
-            _mediator.Verify(x => x.SendAsync(It.Is<SendEmailCommand>(c => c.TemplateId == _message.TemplateId && c.RecipientsAddress == _message.RecipientsAddress)));
+            _mediator.Verify(x => x.SendAsync(It.Is<SendEmailCommand>(c => c.TemplateId == _message.TemplateId && c.RecipientsAddress == _message.RecipientsAddress && c.ReplyToAddress == _message.ReplyToAddress)));
+        }
+
+        [Test]
+        public async Task Handle_Should_Send_Email_With_Corrrectly_Mapped_Tokens()
+        {
+            await _handler.Handle(_message, Mock.Of<IMessageHandlerContext>());
+
+            _mediator.Verify(x => x.SendAsync(It.Is<SendEmailCommand>(c => c.Tokens["key1"] == "value1" && c.Tokens["key2"] == "value2")));
         }
     }
 }
