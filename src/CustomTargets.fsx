@@ -16,4 +16,7 @@ Target "Dotnet Restore" (fun _ ->
     DotNetCli.Restore(fun p ->
         { p with
                 Project = ".\\SFA.DAS.Notifications.Messages" })
+    DotNetCli.Restore(fun p ->
+        { p with
+                Project = ".\\SFA.DAS.Notifications.MessageHandlers.TestHarness" })
 )
