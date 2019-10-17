@@ -256,3 +256,6 @@ paket-files/
 *.sln.iml
 src/Tools/**/*.*
 **/*.orig
+
+# NServiceBus 
+src/.learningtransport/**/*.*
