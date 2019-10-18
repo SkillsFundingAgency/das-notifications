@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
 using NServiceBus;
+using SFA.DAS.AutoConfiguration;
 using SFA.DAS.Notifications.Infrastructure.Configuration;
 using SFA.DAS.NServiceBus.Configuration;
 using SFA.DAS.NServiceBus.Configuration.AzureServiceBus;
@@ -15,14 +15,14 @@ namespace SFA.DAS.Notifications.MessageHandlers
     public class NServiceBusStartup : IStartup
     {
         private readonly IContainer _container;
-        private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly IEnvironmentService _environmentService;
         private readonly NServiceBusConfiguration _config;
         private IEndpointInstance _endpoint;
 
-        public NServiceBusStartup(IContainer container, IHostingEnvironment hostingEnvironment, NServiceBusConfiguration config)
+        public NServiceBusStartup(IContainer container, IEnvironmentService environmentService, NServiceBusConfiguration config)
         {
             _container = container;
-            _hostingEnvironment = hostingEnvironment;
+            _environmentService = environmentService;
             _config = config;
         }
 
@@ -37,7 +37,7 @@ namespace SFA.DAS.Notifications.MessageHandlers
                 .UseNLogFactory()
                 .UseStructureMapBuilder(_container);
 
-                if (_hostingEnvironment.IsDevelopment())
+                if (_environmentService.IsCurrent(DasEnv.LOCAL))
                 {
                     endpointConfiguration.UseLearningTransport();
                 }
