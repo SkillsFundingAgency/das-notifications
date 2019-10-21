@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using NServiceBus;
 using SFA.DAS.Notifications.Messages.Commands;
@@ -35,7 +37,13 @@ namespace SFA.DAS.Notifications.MessageHandlers.TestHarness
                     switch (key)
                     {
                         case ConsoleKey.A:
-                            await _publisher.Send(new SendEmailCommand("XXXX", "paul.graham@coprime.co.uk", "noreply@test", null));
+
+                            var dictionary = new Dictionary<string, string>();
+                            dictionary.Add("cohort_reference", "MYREF1");
+
+                            var readOnlyDictionary = new ReadOnlyDictionary<string, string>(dictionary);
+
+                            await _publisher.Send(new SendEmailCommand("ProviderCohortApproved", "paul.graham@coprime.co.uk", "noreply@sfa.gov.uk", readOnlyDictionary));
                             Console.WriteLine();
                             Console.WriteLine($"Sent SendEmailCommand");
                             break;

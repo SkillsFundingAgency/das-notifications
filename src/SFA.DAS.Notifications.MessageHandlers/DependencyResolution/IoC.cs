@@ -1,4 +1,5 @@
-﻿using StructureMap;
+﻿using SFA.DAS.Notifications.Infrastructure.DependencyResolution;
+using StructureMap;
 
 namespace SFA.DAS.Notifications.MessageHandlers.DependencyResolution
 {
@@ -8,6 +9,7 @@ namespace SFA.DAS.Notifications.MessageHandlers.DependencyResolution
         {
             return new Container(c =>
             {
+                c.Policies.Add(new MessagePolicy(NotificationConstants.ServiceName));
                 c.AddRegistry<ConfigurationRegistry>();
                 c.AddRegistry<StartupRegistry>();
                 c.AddRegistry<DefaultRegistry>();
