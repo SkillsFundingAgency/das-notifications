@@ -18,7 +18,6 @@ namespace SFA.DAS.Notifications.MessageHandlers.TestHarness
 
         public async Task Run()
         {
-
             ConsoleKey key = ConsoleKey.Escape;
 
             while (key != ConsoleKey.X)
@@ -31,19 +30,16 @@ namespace SFA.DAS.Notifications.MessageHandlers.TestHarness
                 Console.WriteLine("Press [Key] for Test Option");
                 key = Console.ReadKey().Key;
 
-
                 try
                 {
                     switch (key)
                     {
                         case ConsoleKey.A:
-
                             var dictionary = new Dictionary<string, string>();
                             dictionary.Add("cohort_reference", "MYREF1");
-
                             var readOnlyDictionary = new ReadOnlyDictionary<string, string>(dictionary);
 
-                            await _publisher.Send(new SendEmailCommand("ProviderCohortApproved", "paul.graham@coprime.co.uk", "noreply@sfa.gov.uk", readOnlyDictionary));
+                            await _publisher.Send(new SendEmailCommand("ProviderCohortApproved", "test@test.co.uk", "noreply@sfa.gov.uk", readOnlyDictionary));
                             Console.WriteLine();
                             Console.WriteLine($"Sent SendEmailCommand");
                             break;

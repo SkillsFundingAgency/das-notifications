@@ -30,6 +30,9 @@ namespace SFA.DAS.Notifications.MessageHandlers.DependencyResolution
             For<ILoggerFactory>().Use(() => new LoggerFactory().AddApplicationInsights(ConfigurationManager.AppSettings["APPINSIGHTS_INSTRUMENTATIONKEY"], null).AddNLog()).Singleton();
             For<ILogger>().Use(c => c.GetInstance<ILoggerFactory>().CreateLogger(c.ParentType));
 
+            // Legacy Logger required in application layers
+            For<ILog>().Use(x => new NLogLogger(x.ParentType, null, null)).AlwaysUnique();
+
             Scan(
                 scan =>
                 {
@@ -47,22 +50,12 @@ namespace SFA.DAS.Notifications.MessageHandlers.DependencyResolution
 
             For<IConfigurationService>().Use(GetConfigurationService(environment));
             For<IConfigurationRepository>().Use(GetConfigurationRepository());
-            For<ITemplateConfigurationService>().Use<TemplateConfigurationService>()
-                .Ctor<string>().Is(environment);
-
-            ConfigureLegacyLogging();
-        }
-
-        private void ConfigureLegacyLogging()
-        {
-            For<ILog>().Use(x => new NLogLogger(
-                x.ParentType, null, null)).AlwaysUnique();
+            For<ITemplateConfigurationService>().Use<TemplateConfigurationService>().Ctor<string>().Is(environment);
         }
 
         private NotificationServiceConfiguration GetConfiguration(string environment)
         {
             var configurationService = GetConfigurationService(environment);
-
             return configurationService.Get<NotificationServiceConfiguration>();
         }
 
@@ -76,12 +69,5 @@ namespace SFA.DAS.Notifications.MessageHandlers.DependencyResolution
             var configurationRepository = GetConfigurationRepository();
             return new ConfigurationService(configurationRepository, new ConfigurationOptions(NotificationConstants.ServiceName, environment, NotificationConstants.Version));
         }
-    }
-
-    public sealed class LegacyRequestContext : IRequestContext
-    {
-        public string IpAddress => "N/A";
-        public string Url => "N/A";
-
     }
 }
