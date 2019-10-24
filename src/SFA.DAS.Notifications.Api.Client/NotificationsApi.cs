@@ -2,8 +2,8 @@
 using Newtonsoft.Json;
 using SFA.DAS.Notifications.Api.Client.Configuration;
 using SFA.DAS.Notifications.Api.Types;
-using SFA.DAS.Http;
 using System.Net.Http;
+using SFA.DAS.Authentication.Extensions.Legacy;
 
 namespace SFA.DAS.Notifications.Api.Client
 {
