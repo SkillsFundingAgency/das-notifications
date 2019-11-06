@@ -86,6 +86,7 @@
     <Compile Include="CommandsTests\SendEmailTests\SendEmailCommandHandlerTests\WhenHandling.cs" />
     <Compile Include="CommandsTests\SendEmailTests\SendEmailCommandHandlerTests\WhenHandlingAndAnErrorIsThrown.cs" />
     <Compile Include="CommandsTests\SendSmsTests\SendSmsCommandHandlerTests\WhenHandling.cs" />
+    <Compile Include="CommandsTests\SendSmsTests\SendSmsCommandHandlerTests\WhenHandlingAndAnErrorIsThrown.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

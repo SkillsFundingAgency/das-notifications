@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Castle.Core.Internal;
 using FluentValidation;
 using Moq;
 using Newtonsoft.Json;
@@ -20,9 +20,15 @@ namespace SFA.DAS.Notifications.Application.UnitTests.CommandsTests.SendSmsTests
         private const string TemplateName = "MyTemplate";
         private const string TranslatedTemplateId = "c53d62b6-df51-489b-8736-ee94d6346a28";
 
+        private string _templateId;
+        private string _systemId;
+        private string _recipientsNumber;
+        private Dictionary<string, string> _tokens;
+
         private Mock<INotificationsRepository> _notificationsRepository;
         private Mock<IMessagePublisher> _messagePublisher;
         private Mock<ITemplateConfigurationService> _templateConfigurationService;
+        private Mock<ISmsService> _smsService;
         private SendSmsCommandHandler _handler;
         private SendSmsCommand _command;
 
@@ -44,22 +50,29 @@ namespace SFA.DAS.Notifications.Application.UnitTests.CommandsTests.SendSmsTests
                     }
                 });
 
+            _smsService = new Mock<ISmsService>();
+
             _handler = new SendSmsCommandHandler(
                 _notificationsRepository.Object,
                 _messagePublisher.Object,
                 _templateConfigurationService.Object,
                 Mock.Of<ILog>(),
-                Mock.Of<ISmsService>());
+                _smsService.Object);
+
+            _templateId = TranslatedTemplateId;
+            _systemId = "Test System";
+            _recipientsNumber = "07123456789";
+            _tokens = new Dictionary<string, string> {
+                {"Key1", "Value1"}
+            };
+
 
             _command = new SendSmsCommand
             {
-                SystemId = Guid.NewGuid().ToString(),
-                RecipientsNumber = "299792458",
+                SystemId = _systemId,
+                RecipientsNumber = _recipientsNumber,
                 TemplateId = TemplateName,
-                Tokens = new Dictionary<string, string>
-                {
-                    {"Key1", "Value1"}
-                }
+                Tokens = _tokens
             };
         }
 
@@ -77,7 +90,7 @@ namespace SFA.DAS.Notifications.Application.UnitTests.CommandsTests.SendSmsTests
             });
             _notificationsRepository.Verify(r => r.Create(
                 It.Is<Notification>(n => 
-                    n.Status == NotificationStatus.New
+                    n.Status == NotificationStatus.Sending
                     && n.Format == NotificationFormat.Sms
                     && n.TemplateId == _command.TemplateId
                     && n.Data == expectedData)),
@@ -105,6 +118,34 @@ namespace SFA.DAS.Notifications.Application.UnitTests.CommandsTests.SendSmsTests
 
             // Act + Assert
             Assert.ThrowsAsync<ValidationException>(async () => await _handler.Handle(_command));
+        }
+
+        [Test]
+        public async Task ThenItShouldSendTheSms()
+        {
+            // Act
+            await _handler.Handle(_command);
+
+            // Assert
+            _smsService.Verify(x => x.SendAsync(
+                It.Is<SmsMessage>(message =>
+                    message.TemplateId == _templateId
+                    && message.SystemId == _systemId
+                    && message.RecipientsNumber == _recipientsNumber
+                    && message.Tokens == _tokens
+                    & !message.Reference.IsNullOrEmpty())));
+        }
+
+        [Test]
+        public async Task ThenItShouldMarkTheSmsAsSent()
+        {
+            // Act
+            await _handler.Handle(_command);
+
+            // Assert
+            _notificationsRepository.Verify(r => r.Update(
+                    NotificationFormat.Sms, It.Is<string>(x => !x.IsNullOrEmpty()), NotificationStatus.Sent),
+                Times.Once);
         }
     }
 }
