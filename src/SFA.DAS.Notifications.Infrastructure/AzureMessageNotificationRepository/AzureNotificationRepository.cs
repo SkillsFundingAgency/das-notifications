@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Azure;
 using Microsoft.WindowsAzure.Storage;
@@ -49,7 +50,7 @@ namespace SFA.DAS.Notifications.Infrastructure.AzureMessageNotificationRepositor
             var tableClient = _storageAccount.CreateCloudTableClient();
             var table = tableClient.GetTableReference(_tableName);
 
-            var tableOperation = TableOperation.Retrieve<NotificationTableEntity>(format.ToString(), messageId);
+            var tableOperation = TableOperation.Retrieve<NotificationTableEntity>(format.ToString(), messageId, (List<string>)null);
             var result = await table.ExecuteAsync(tableOperation);
 
             var tableEntity = (NotificationTableEntity) result.Result;
@@ -64,7 +65,7 @@ namespace SFA.DAS.Notifications.Infrastructure.AzureMessageNotificationRepositor
             var tableClient = _storageAccount.CreateCloudTableClient();
             var table = tableClient.GetTableReference(_tableName);
 
-            var getOperationt= TableOperation.Retrieve<NotificationTableEntity>(format.ToString(), messageId);
+            var getOperationt= TableOperation.Retrieve<NotificationTableEntity>(format.ToString(), messageId, (List<string>)null);
             var result = await table.ExecuteAsync(getOperationt);
 
             var notificationTableEntity = (NotificationTableEntity)result.Result;

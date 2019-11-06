@@ -1,14 +1,19 @@
 ﻿using System;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using FluentValidation;
 using MediatR;
+using Microsoft.WindowsAzure.Storage.Table;
 using Newtonsoft.Json;
+using NLog;
 using SFA.DAS.Messaging;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.Notifications.Application.Interfaces;
 using SFA.DAS.Notifications.Application.Messages;
 using SFA.DAS.Notifications.Domain.Configuration;
 using SFA.DAS.Notifications.Domain.Entities;
+using SFA.DAS.Notifications.Domain.Http;
 using SFA.DAS.Notifications.Domain.Repositories;
 using SFA.DAS.TimeProvider;
 
@@ -22,6 +27,7 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
 #pragma warning restore IDE1006 // Naming Styles
 
         private readonly ILog _logger;
+        private readonly IEmailService _emailService;
         private readonly INotificationsRepository _notificationsRepository;
         private readonly IMessagePublisher _messagePublisher;
         private readonly ITemplateConfigurationService _templateConfigurationService;
@@ -30,12 +36,14 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
             INotificationsRepository notificationsRepository,
             IMessagePublisher messagePublisher,
             ITemplateConfigurationService templateConfigurationService,
-            ILog logger)
+            ILog logger,
+            IEmailService emailService)
         {
             _notificationsRepository = notificationsRepository;
             _messagePublisher = messagePublisher;
             _templateConfigurationService = templateConfigurationService;
             _logger = logger;
+            _emailService = emailService;
         }
 
         protected override async Task HandleCore(SendEmailCommand command)
@@ -73,12 +81,36 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
 
             await _notificationsRepository.Create(CreateMessageData(command, messageId));
 
-            _logger.Debug($"Stored email message '{messageId}' in data store");
+            try
+            {
 
-            await _messagePublisher.PublishAsync(new DispatchNotificationMessage {
-                MessageId = messageId,
-                Format = NotificationFormat.Email
-            });
+                await _emailService.SendAsync(new EmailMessage {
+                    TemplateId = command.TemplateId,
+                    SystemId = command.SystemId,
+                    Subject = command.Subject,
+                    RecipientsAddress = command.RecipientsAddress,
+                    ReplyToAddress = command.ReplyToAddress,
+                    Tokens = command.Tokens,
+                    Reference = messageId
+                });
+
+                //TableOperation.Retrieve<NotificationTableEntity>(NotificationFormat.Email.ToString(), messageId);
+
+                await _notificationsRepository.Update(NotificationFormat.Email, messageId, NotificationStatus.Sent);
+
+            }
+            catch (Exception ex)
+            {
+                await _notificationsRepository.Update(NotificationFormat.Email, messageId, NotificationStatus.Failed);
+
+                var httpException = ex as HttpException;
+
+                if (httpException != null && httpException.StatusCode.Equals(HttpStatusCode.BadRequest))
+                {
+                    _logger.Warn(ex, "Bad Request - Message will not be re-processed.");
+                    throw;
+                }
+            }
 
             _logger.Debug($"Published email message '{messageId}' to queue");
         }
@@ -89,7 +121,7 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
                 MessageId = messageId,
                 SystemId = message.SystemId,
                 Timestamp = DateTimeProvider.Current.UtcNow,
-                Status = NotificationStatus.New,
+                Status = NotificationStatus.Sending,
                 Format = NotificationFormat.Email,
                 TemplateId = message.TemplateId,
                 Data = JsonConvert.SerializeObject(new NotificationEmailContent {
@@ -115,5 +147,15 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
             Guid x;
             return Guid.TryParse(value, out x);
         }
+    }
+
+    public class NotificationTableEntity : TableEntity
+    {
+        public NotificationTableEntity(NotificationFormat notificationFormat, string messageId) : base(notificationFormat.ToString(), messageId) { }
+
+        // ReSharper disable once UnusedMember.Global
+        public NotificationTableEntity() { }
+
+        public string Data { get; set; }
     }
 }

@@ -7,10 +7,14 @@ using NLog.Extensions.Logging;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
+using SFA.DAS.Notifications.Application.Interfaces;
 using SFA.DAS.Notifications.Domain.Configuration;
 using SFA.DAS.Notifications.Domain.Repositories;
 using SFA.DAS.Notifications.Infrastructure.AzureMessageNotificationRepository;
 using SFA.DAS.Notifications.Infrastructure.Configuration;
+using SFA.DAS.Notifications.Infrastructure.LocalEmailService;
+using SFA.DAS.Notifications.Infrastructure.NotifyEmailService;
+using SFA.DAS.Notifications.Infrastructure.SendGridSmtpEmailService;
 using SFA.DAS.Notifications.MessageHandlers.Startup;
 using StructureMap;
 
@@ -51,6 +55,7 @@ namespace SFA.DAS.Notifications.MessageHandlers.DependencyResolution
             For<IConfigurationService>().Use(GetConfigurationService(environment));
             For<IConfigurationRepository>().Use(GetConfigurationRepository());
             For<ITemplateConfigurationService>().Use<TemplateConfigurationService>().Ctor<string>().Is(environment);
+            ConfigureEmailService();
         }
 
         private NotificationServiceConfiguration GetConfiguration(string environment)
@@ -68,6 +73,20 @@ namespace SFA.DAS.Notifications.MessageHandlers.DependencyResolution
         {
             var configurationRepository = GetConfigurationRepository();
             return new ConfigurationService(configurationRepository, new ConfigurationOptions(NotificationConstants.ServiceName, environment, NotificationConstants.Version));
+        }
+
+        private void ConfigureEmailService()
+        {
+            For<IEmailService>().AddInstances(x =>
+            {
+                x.Type<LocalEmailService>().Named("Local");
+                x.Type<SendGridSmtpEmailService>().Named("SendGridSmtp");
+                x.Type<NotifyEmailService>().Named("Notify");
+            });
+
+            //var emailServiceName = CloudConfigurationManager.GetSetting("EmailServiceName");
+
+            For<IEmailService>().Use("Local"); //todo don't hardcode this
         }
     }
 }
