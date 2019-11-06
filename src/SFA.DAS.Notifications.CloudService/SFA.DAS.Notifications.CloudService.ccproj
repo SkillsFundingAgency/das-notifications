@@ -50,14 +50,6 @@
       <RoleName>SFA.DAS.Notifications.Api</RoleName>
       <UpdateDiagnosticsConnectionStringOnPublish>True</UpdateDiagnosticsConnectionStringOnPublish>
     </ProjectReference>
-    <ProjectReference Include="..\SFA.DAS.Notifications.Worker\SFA.DAS.Notifications.Worker.csproj">
-      <Name>SFA.DAS.Notifications.Worker</Name>
-      <Project>{8ddea855-5b98-4d32-8a7c-c23c0814bdfc}</Project>
-      <Private>True</Private>
-      <RoleType>Worker</RoleType>
-      <RoleName>SFA.DAS.Notifications.Worker</RoleName>
-      <UpdateDiagnosticsConnectionStringOnPublish>True</UpdateDiagnosticsConnectionStringOnPublish>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="SFA.DAS.Notifications.ApiContent\" />
