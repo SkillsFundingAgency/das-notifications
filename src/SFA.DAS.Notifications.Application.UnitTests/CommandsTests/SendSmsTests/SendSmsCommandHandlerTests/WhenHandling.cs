@@ -8,6 +8,7 @@ using NUnit.Framework;
 using SFA.DAS.Messaging;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Notifications.Application.Commands.SendSms;
+using SFA.DAS.Notifications.Application.Interfaces;
 using SFA.DAS.Notifications.Domain.Configuration;
 using SFA.DAS.Notifications.Domain.Entities;
 using SFA.DAS.Notifications.Domain.Repositories;
@@ -47,7 +48,8 @@ namespace SFA.DAS.Notifications.Application.UnitTests.CommandsTests.SendSmsTests
                 _notificationsRepository.Object,
                 _messagePublisher.Object,
                 _templateConfigurationService.Object,
-                Mock.Of<ILog>());
+                Mock.Of<ILog>(),
+                Mock.Of<ISmsService>());
 
             _command = new SendSmsCommand
             {

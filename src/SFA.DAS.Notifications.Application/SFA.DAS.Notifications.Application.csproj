@@ -102,8 +102,6 @@
     <Compile Include="..\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Commands\DispatchNotification\DispatchNotificationCommand.cs" />
-    <Compile Include="Commands\DispatchNotification\DispatchNotificationCommandHandler.cs" />
     <Compile Include="Commands\SendSms\SendSmsCommand.cs" />
     <Compile Include="Commands\SendSms\SendSmsCommandHandler.cs" />
     <Compile Include="Commands\SendSms\SendsmsCommandValidator.cs" />
