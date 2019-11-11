@@ -57,7 +57,7 @@ namespace SFA.DAS.Notifications.MessageHandlers.UnitTests.CommandHandlers
         {
             _mediator.Setup(x => x.SendAsync(It.IsAny<SendEmailCommand>())).ThrowsAsync(new InvalidCastException());
 
-            Assert.ThrowsAsync<InvalidCastException>( () => _handler.Handle(_message, Mock.Of<IMessageHandlerContext>()));
+            Assert.ThrowsAsync<InvalidCastException>(() => _handler.Handle(_message, Mock.Of<IMessageHandlerContext>()));
         }
     }
 }
