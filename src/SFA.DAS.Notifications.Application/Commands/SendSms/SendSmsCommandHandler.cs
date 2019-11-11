@@ -10,7 +10,6 @@ using SFA.DAS.Notifications.Application.Interfaces;
 using SFA.DAS.Notifications.Application.Messages;
 using SFA.DAS.Notifications.Domain.Configuration;
 using SFA.DAS.Notifications.Domain.Entities;
-using SFA.DAS.Notifications.Domain.Repositories;
 using SFA.DAS.TimeProvider;
 
 namespace SFA.DAS.Notifications.Application.Commands.SendSms
@@ -23,16 +22,13 @@ namespace SFA.DAS.Notifications.Application.Commands.SendSms
 #pragma warning restore IDE1006 // Naming Styles
 
         private readonly ILog _logger;
-        private readonly INotificationsRepository _notificationsRepository;
         private readonly ITemplateConfigurationService _templateConfigurationService;
         private readonly ISmsService _smsService;
 
         public SendSmsCommandHandler(
-            INotificationsRepository notificationsRepository,
             ITemplateConfigurationService templateConfigurationService,
             ILog logger, ISmsService smsService)
         {
-            _notificationsRepository = notificationsRepository;
             _templateConfigurationService = templateConfigurationService;
             _logger = logger;
             _smsService = smsService;
@@ -60,45 +56,17 @@ namespace SFA.DAS.Notifications.Application.Commands.SendSms
             }
             command.TemplateId = template.ServiceId;
 
-            await _notificationsRepository.Create(CreateMessageData(command, messageId));
-
             _logger.Debug($"Stored SMS message '{messageId}' in data store");
 
-            try
-            {
-                await _smsService.SendAsync(new SmsMessage {
-                    TemplateId = command.TemplateId,
-                    SystemId = command.SystemId,
-                    RecipientsNumber = command.RecipientsNumber,
-                    Tokens = command.Tokens,
-                    Reference = messageId
-                });
-
-                await _notificationsRepository.Update(NotificationFormat.Sms, messageId, NotificationStatus.Sent);
-            }
-            catch (Exception)
-            {
-                await _notificationsRepository.Update(NotificationFormat.Sms, messageId, NotificationStatus.Failed);
-                throw;
-            }
+            await _smsService.SendAsync(new SmsMessage {
+                TemplateId = command.TemplateId,
+                SystemId = command.SystemId,
+                RecipientsNumber = command.RecipientsNumber,
+                Tokens = command.Tokens,
+                Reference = messageId
+            });
 
             _logger.Debug($"Published SMS message '{messageId}' to queue");
-        }
-
-        private static Notification CreateMessageData(SendSmsCommand message, string messageId)
-        {
-            return new Notification {
-                MessageId = messageId,
-                SystemId = message.SystemId,
-                Timestamp = DateTimeProvider.Current.UtcNow,
-                Status = NotificationStatus.Sending,
-                Format = NotificationFormat.Sms,
-                TemplateId = message.TemplateId,
-                Data = JsonConvert.SerializeObject(new NotificationSmsContent {
-                    RecipientsNumber = message.RecipientsNumber,
-                    Tokens = message.Tokens
-                })
-            };
         }
 
         private void Validate(SendSmsCommand command)

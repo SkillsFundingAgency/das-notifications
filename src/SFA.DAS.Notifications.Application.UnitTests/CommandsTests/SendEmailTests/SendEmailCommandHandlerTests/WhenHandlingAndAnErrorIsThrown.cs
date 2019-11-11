@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Castle.Core.Internal;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.Messaging;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Notifications.Application.Commands.SendEmail;
 using SFA.DAS.Notifications.Application.Interfaces;
 using SFA.DAS.Notifications.Domain.Configuration;
 using SFA.DAS.Notifications.Domain.Entities;
-using SFA.DAS.Notifications.Domain.Repositories;
 
 namespace SFA.DAS.Notifications.Application.UnitTests.CommandsTests.SendEmailTests.SendEmailCommandHandlerTests
 {
@@ -26,7 +23,6 @@ namespace SFA.DAS.Notifications.Application.UnitTests.CommandsTests.SendEmailTes
         private string _replyToAddress;
         private Dictionary<string, string> _tokens;
 
-        private Mock<INotificationsRepository> _notificationsRepository;
         private Mock<ITemplateConfigurationService> _templateConfigurationService;
         private Mock<IEmailService> _emailService;
         private SendEmailCommandHandler _handler;
@@ -35,8 +31,6 @@ namespace SFA.DAS.Notifications.Application.UnitTests.CommandsTests.SendEmailTes
         [SetUp]
         public void Arrange()
         {
-            _notificationsRepository = new Mock<INotificationsRepository>();
-
             _templateConfigurationService = new Mock<ITemplateConfigurationService>();
             _templateConfigurationService.Setup(s => s.GetAsync())
                 .ReturnsAsync(new TemplateConfiguration {
@@ -50,7 +44,6 @@ namespace SFA.DAS.Notifications.Application.UnitTests.CommandsTests.SendEmailTes
             _emailService = new Mock<IEmailService>();
 
             _handler = new SendEmailCommandHandler(
-                _notificationsRepository.Object,
                 _templateConfigurationService.Object,
                 Mock.Of<ILog>(),
                 _emailService.Object);
@@ -77,15 +70,18 @@ namespace SFA.DAS.Notifications.Application.UnitTests.CommandsTests.SendEmailTes
         }
 
         [Test]
-        public async Task ThenItShouldMarkTheEmailAsFailed()
+        public async Task ThenItShouldThrowAnError()
         {
-            // Act
-            await _handler.Handle(_command);
-
-            // Assert
-            _notificationsRepository.Verify(r => r.Update(
-                    NotificationFormat.Email, It.Is<string>(x => !x.IsNullOrEmpty()), NotificationStatus.Failed),
-                Times.Once);
+            Exception thrownException = null;
+            try
+            {
+                await _handler.Handle(_command);
+            }
+            catch (Exception exception)
+            {
+                thrownException = exception;
+            }
+            Assert.That(thrownException, Is.Not.Null);
         }
     }
 }

@@ -4,18 +4,11 @@ using System.Net;
 using System.Threading.Tasks;
 using FluentValidation;
 using MediatR;
-using Microsoft.WindowsAzure.Storage.Table;
-using Newtonsoft.Json;
-using NLog;
-using SFA.DAS.Messaging;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Notifications.Application.Interfaces;
-using SFA.DAS.Notifications.Application.Messages;
 using SFA.DAS.Notifications.Domain.Configuration;
 using SFA.DAS.Notifications.Domain.Entities;
 using SFA.DAS.Notifications.Domain.Http;
-using SFA.DAS.Notifications.Domain.Repositories;
-using SFA.DAS.TimeProvider;
 
 namespace SFA.DAS.Notifications.Application.Commands.SendEmail
 {
@@ -28,16 +21,13 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
 
         private readonly ILog _logger;
         private readonly IEmailService _emailService;
-        private readonly INotificationsRepository _notificationsRepository;
         private readonly ITemplateConfigurationService _templateConfigurationService;
 
         public SendEmailCommandHandler(
-            INotificationsRepository notificationsRepository,
             ITemplateConfigurationService templateConfigurationService,
             ILog logger,
             IEmailService emailService)
         {
-            _notificationsRepository = notificationsRepository;
             _templateConfigurationService = templateConfigurationService;
             _logger = logger;
             _emailService = emailService;
@@ -76,8 +66,6 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
                 _logger.Info($"Request to send template {command.TemplateId} received using email service id");
             }
 
-            await _notificationsRepository.Create(CreateMessageData(command, messageId));
-
             try
             {
 
@@ -90,44 +78,22 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
                     Tokens = command.Tokens,
                     Reference = messageId
                 });
-
-                //TableOperation.Retrieve<NotificationTableEntity>(NotificationFormat.Email.ToString(), messageId);
-
-                await _notificationsRepository.Update(NotificationFormat.Email, messageId, NotificationStatus.Sent);
-
             }
             catch (Exception ex)
             {
-                await _notificationsRepository.Update(NotificationFormat.Email, messageId, NotificationStatus.Failed);
-
                 var httpException = ex as HttpException;
 
                 if (httpException != null && httpException.StatusCode.Equals(HttpStatusCode.BadRequest))
                 {
                     _logger.Warn(ex, "Bad Request - Message will not be re-processed.");
+                }
+                else
+                {
                     throw;
                 }
             }
 
             _logger.Debug($"Published email message '{messageId}' to queue");
-        }
-
-        private static Notification CreateMessageData(SendEmailCommand message, string messageId)
-        {
-            return new Notification {
-                MessageId = messageId,
-                SystemId = message.SystemId,
-                Timestamp = DateTimeProvider.Current.UtcNow,
-                Status = NotificationStatus.Sending,
-                Format = NotificationFormat.Email,
-                TemplateId = message.TemplateId,
-                Data = JsonConvert.SerializeObject(new NotificationEmailContent {
-                    Subject = message.Subject,
-                    RecipientsAddress = message.RecipientsAddress,
-                    ReplyToAddress = message.ReplyToAddress,
-                    Tokens = message.Tokens
-                })
-            };
         }
 
         private void Validate(SendEmailCommand command)
@@ -144,15 +110,5 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
             Guid x;
             return Guid.TryParse(value, out x);
         }
-    }
-
-    public class NotificationTableEntity : TableEntity
-    {
-        public NotificationTableEntity(NotificationFormat notificationFormat, string messageId) : base(notificationFormat.ToString(), messageId) { }
-
-        // ReSharper disable once UnusedMember.Global
-        public NotificationTableEntity() { }
-
-        public string Data { get; set; }
     }
 }

@@ -130,7 +130,6 @@
     <Compile Include="..\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="AzureMessageNotificationRepository\AzureNotificationRepository.cs" />
     <Compile Include="Configuration\AzureServiceBusMessageServiceConfiguration.cs" />
     <Compile Include="Configuration\NotificationsStorageConfiguration.cs" />
     <Compile Include="Configuration\NotificationServiceConfiguration.cs" />
@@ -142,7 +141,6 @@
     <Compile Include="DependencyResolution\ExecutionPolicyPolicy.cs" />
     <Compile Include="DependencyResolution\LoggingPolicy.cs" />
     <Compile Include="DependencyResolution\MessagePolicy.cs" />
-    <Compile Include="AzureMessageNotificationRepository\NotificationTableEntity.cs" />
     <Compile Include="ExecutionPolicies\ExecutionPolicy.cs" />
     <Compile Include="ExecutionPolicies\NoopExecutionPolicy.cs" />
     <Compile Include="ExecutionPolicies\PolicyNameAttribute.cs" />

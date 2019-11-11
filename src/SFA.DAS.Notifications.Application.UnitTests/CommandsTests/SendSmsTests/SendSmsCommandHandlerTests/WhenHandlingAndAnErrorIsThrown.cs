@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Castle.Core.Internal;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.Messaging;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Notifications.Application.Commands.SendSms;
 using SFA.DAS.Notifications.Application.Interfaces;
 using SFA.DAS.Notifications.Domain.Configuration;
 using SFA.DAS.Notifications.Domain.Entities;
-using SFA.DAS.Notifications.Domain.Repositories;
 
 namespace SFA.DAS.Notifications.Application.UnitTests.CommandsTests.SendSmsTests.SendSmsCommandHandlerTests
 {
@@ -23,7 +20,6 @@ namespace SFA.DAS.Notifications.Application.UnitTests.CommandsTests.SendSmsTests
         private string _recipientsNumber;
         private Dictionary<string, string> _tokens;
 
-        private Mock<INotificationsRepository> _notificationsRepository;
         private Mock<ITemplateConfigurationService> _templateConfigurationService;
         private Mock<ISmsService> _smsService;
         private SendSmsCommandHandler _handler;
@@ -32,8 +28,6 @@ namespace SFA.DAS.Notifications.Application.UnitTests.CommandsTests.SendSmsTests
         [SetUp]
         public void Arrange()
         {
-            _notificationsRepository = new Mock<INotificationsRepository>();
-
             _templateConfigurationService = new Mock<ITemplateConfigurationService>();
             _templateConfigurationService.Setup(s => s.GetAsync())
                 .ReturnsAsync(new TemplateConfiguration {
@@ -49,7 +43,6 @@ namespace SFA.DAS.Notifications.Application.UnitTests.CommandsTests.SendSmsTests
             _smsService.Setup(x => x.SendAsync(It.IsAny<SmsMessage>())).Throws(new Exception());
 
             _handler = new SendSmsCommandHandler(
-                _notificationsRepository.Object,
                 _templateConfigurationService.Object,
                 Mock.Of<ILog>(),
                 _smsService.Object);
@@ -70,21 +63,18 @@ namespace SFA.DAS.Notifications.Application.UnitTests.CommandsTests.SendSmsTests
         }
 
         [Test]
-        public async Task ThenItShouldMarkTheSMSAsFailed()
+        public async Task ThenItShouldThrowAnError()
         {
-            // Act
+            Exception thrownException = null;
             try
             {
                 await _handler.Handle(_command);
             }
-            catch{}
-            finally
+            catch (Exception exception)
             {
-                // Assert
-                _notificationsRepository.Verify(r => r.Update(
-                        NotificationFormat.Sms, It.Is<string>(x => !x.IsNullOrEmpty()), NotificationStatus.Failed),
-                    Times.Once);
+                thrownException = exception;
             }
+            Assert.That(thrownException, Is.Not.Null);
         }
     }
 }
