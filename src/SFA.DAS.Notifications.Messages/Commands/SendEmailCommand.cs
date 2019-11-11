@@ -8,13 +8,15 @@ namespace SFA.DAS.Notifications.Messages.Commands
         public string RecipientsAddress { get; }
         public string ReplyToAddress { get; }
         public IReadOnlyDictionary<string, string> Tokens { get; }
+        public string Subject { get; set; }
 
-        public SendEmailCommand(string templateId, string recipientsAddress, string replyToAddress, IReadOnlyDictionary<string, string> tokens)
+        public SendEmailCommand(string templateId, string recipientsAddress, string replyToAddress, IReadOnlyDictionary<string, string> tokens, string subject)
         {
             TemplateId = templateId;
             RecipientsAddress = recipientsAddress;
             ReplyToAddress = replyToAddress;
             Tokens = tokens;
+            Subject = subject;
         }
     }
 }

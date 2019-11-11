@@ -473,6 +473,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommandHandlers\SendEmailCommandHandler.cs" />
+    <Compile Include="CommandHandlers\SendSmsCommandHandler.cs" />
     <Compile Include="DependencyResolution\CompositeDecorator.cs" />
     <Compile Include="DependencyResolution\NotificationConstants.cs" />
     <Compile Include="DependencyResolution\ConfigurationRegistry.cs" />
@@ -504,7 +505,7 @@
       <Name>SFA.DAS.Notifications.Infrastructure</Name>
     </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.Notifications.Messages\SFA.DAS.Notifications.Messages.csproj">
-      <Project>{17ec2d3a-16c7-44da-9004-ee3fead4633b}</Project>
+      <Project>{7496e16b-6d24-4ac3-bf8a-771de27c524c}</Project>
       <Name>SFA.DAS.Notifications.Messages</Name>
     </ProjectReference>
   </ItemGroup>

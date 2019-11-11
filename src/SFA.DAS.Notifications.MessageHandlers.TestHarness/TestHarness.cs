@@ -26,22 +26,30 @@ namespace SFA.DAS.Notifications.MessageHandlers.TestHarness
                 Console.WriteLine("Test Options");
                 Console.WriteLine("------------");
                 Console.WriteLine("A - SendEmailCommand");
+                Console.WriteLine("B - SendSmsCommand");
                 Console.WriteLine("X - Exit");
                 Console.WriteLine("Press [Key] for Test Option");
                 key = Console.ReadKey().Key;
 
                 try
                 {
+                    var dictionary = new Dictionary<string, string>();
+                    dictionary.Add("cohort_reference", "MYREF1");
+
                     switch (key)
                     {
                         case ConsoleKey.A:
-                            var dictionary = new Dictionary<string, string>();
-                            dictionary.Add("cohort_reference", "MYREF1");
                             var readOnlyDictionary = new ReadOnlyDictionary<string, string>(dictionary);
 
-                            await _publisher.Send(new SendEmailCommand("ProviderCohortApproved", "test@test.co.uk", "noreply@sfa.gov.uk", readOnlyDictionary));
+                            await _publisher.Send(new SendEmailCommand("ProviderCohortApproved", "test@test.co.uk", "noreply@sfa.gov.uk", readOnlyDictionary, "Test Subject"));
                             Console.WriteLine();
                             Console.WriteLine($"Sent SendEmailCommand");
+                            break;
+
+                        case ConsoleKey.B:
+                            await _publisher.Send(new SendSmsCommand("ProviderCohortApproved", "test@test.co.uk", "07123456789", dictionary));
+                            Console.WriteLine();
+                            Console.WriteLine($"Sent SendSmsCommand");
                             break;
                     }
                 }

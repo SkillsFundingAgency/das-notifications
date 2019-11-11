@@ -56,6 +56,7 @@ namespace SFA.DAS.Notifications.MessageHandlers.DependencyResolution
             For<IConfigurationRepository>().Use(GetConfigurationRepository());
             For<ITemplateConfigurationService>().Use<TemplateConfigurationService>().Ctor<string>().Is(environment);
             ConfigureEmailService();
+            For<ISmsService>().Use<NotifySmsService>();
         }
 
         private NotificationServiceConfiguration GetConfiguration(string environment)

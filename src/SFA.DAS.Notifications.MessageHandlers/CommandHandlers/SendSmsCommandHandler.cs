@@ -4,31 +4,29 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using NServiceBus;
-using SFA.DAS.Notifications.Application.Commands.SendEmail;
+using SFA.DAS.Notifications.Application.Commands.SendSms;
 
 namespace SFA.DAS.Notifications.MessageHandlers.CommandHandlers
 {
-    public class SendEmailCommandHandler : IHandleMessages<Messages.Commands.SendEmailCommand>
+    public class SendSmsCommandHandler : IHandleMessages<Messages.Commands.SendSmsCommand>
     {
         private readonly IMediator _mediator;
         private readonly ILogger _logger;
 
-        public SendEmailCommandHandler(IMediator mediator, ILogger logger)
+        public SendSmsCommandHandler(IMediator mediator, ILogger logger)
         {
             _mediator = mediator;
             _logger = logger;
         }
 
-        public async Task Handle(Messages.Commands.SendEmailCommand message, IMessageHandlerContext context)
+        public async Task Handle(Messages.Commands.SendSmsCommand message, IMessageHandlerContext context)
         {
             try
             {
-                var command = new SendEmailCommand {
+                var command = new SendSmsCommand {
                     SystemId = "X",
                     TemplateId = message.TemplateId,
-                    Subject = message.Subject,
-                    RecipientsAddress = message.RecipientsAddress,
-                    ReplyToAddress = message.ReplyToAddress,
+                    RecipientsNumber = message.RecipientsNumber,
                     Tokens = message.Tokens.ToDictionary(e => e.Key, e => e.Value)
                 };
 

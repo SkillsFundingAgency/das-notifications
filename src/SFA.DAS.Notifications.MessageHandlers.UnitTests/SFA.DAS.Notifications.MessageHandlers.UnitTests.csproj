@@ -9,9 +9,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SFA.DAS.Notifications.MessageHandlers.UnitTests</RootNamespace>
     <AssemblyName>SFA.DAS.Notifications.MessageHandlers.UnitTests</AssemblyName>
-    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -121,10 +122,6 @@
     <ProjectReference Include="..\SFA.DAS.Notifications.MessageHandlers\SFA.DAS.Notifications.MessageHandlers.csproj">
       <Project>{b9eb9e19-b71c-47b8-9698-c131190186f1}</Project>
       <Name>SFA.DAS.Notifications.MessageHandlers</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SFA.DAS.Notifications.Messages\SFA.DAS.Notifications.Messages.csproj">
-      <Project>{17ec2d3a-16c7-44da-9004-ee3fead4633b}</Project>
-      <Name>SFA.DAS.Notifications.Messages</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

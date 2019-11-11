@@ -1,43 +1,34 @@
-﻿using System;
-using System.Threading.Tasks;
-using MediatR;
+﻿using System.Threading.Tasks;
+using NServiceBus;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Notifications.Api.Core;
 using SFA.DAS.Notifications.Api.Types;
-using SFA.DAS.Notifications.Application.Commands.SendEmail;
-using SFA.DAS.Notifications.Application.Commands.SendSms;
+using SFA.DAS.Notifications.Messages.Commands;
 
 namespace SFA.DAS.Notifications.Api.Orchestrators
 {
     public class NotificationOrchestrator : OrchestratorBase, INotificationOrchestrator
     {
         private readonly ILog _logger;
-        private readonly IMediator _mediator;
+        private readonly IMessageSession _publisher;
 
-        public NotificationOrchestrator(IMediator mediator, ILog logger)
+        public NotificationOrchestrator(ILog logger, IMessageSession publisher)
         {
-            if (mediator == null)
-                throw new ArgumentNullException(nameof(mediator));
-            if (logger == null)
-                throw new ArgumentNullException(nameof(logger));
-
-            _mediator = mediator;
             _logger = logger;
+            _publisher = publisher;
         }
 
         public async Task<OrchestratorResponse> SendEmail(Email request)
         {
             _logger.Info($"Received request to send email to {request.RecipientsAddress}");
 
-            await _mediator.SendAsync(new SendEmailCommand
-            {
-                SystemId = request.SystemId,
-                TemplateId = request.TemplateId,
-                Subject = request.Subject,
-                RecipientsAddress = request.RecipientsAddress,
-                ReplyToAddress = request.ReplyToAddress,
-                Tokens = request.Tokens
-            });
+            await _publisher.Send(new SendEmailCommand(
+                request.TemplateId,
+                request.RecipientsAddress,
+                request.ReplyToAddress,
+                request.Tokens,
+                request.Subject
+            ));
 
             return GetOrchestratorResponse(NotificationOrchestratorCodes.Post.Success);
         }
@@ -46,15 +37,12 @@ namespace SFA.DAS.Notifications.Api.Orchestrators
         {
             _logger.Info($"Received request to send sms to {request.RecipientsNumber}");
 
-            var command = new SendSmsCommand
-            {
-                SystemId = request.SystemId,
-                TemplateId = request.TemplateId,
-                RecipientsNumber = request.RecipientsNumber,
-                Tokens = request.Tokens
-            };
-
-            await _mediator.SendAsync(command);
+            await _publisher.Send(new SendSmsCommand(
+                request.SystemId,
+                request.TemplateId,
+                request.RecipientsNumber,
+                request.Tokens
+            ));
 
             return GetOrchestratorResponse(NotificationOrchestratorCodes.Post.Success);
         }
