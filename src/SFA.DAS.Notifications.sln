@@ -21,8 +21,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{DC080B91-941B-4849-944E-4220115C3523}"
 EndProject
-Project("{CC5FD16D-436D-48AD-A40C-5A424C6E3E79}") = "SFA.DAS.Notifications.CloudService", "SFA.DAS.Notifications.CloudService\SFA.DAS.Notifications.CloudService.ccproj", "{2548094F-D85B-44FE-B2ED-809EF119A80F}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.Notifications.Api", "SFA.DAS.Notifications.Api\SFA.DAS.Notifications.Api.csproj", "{962B4E7C-D851-4BA2-94EE-BE6DC0E99656}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.Notifications.Infrastructure.UnitTests", "SFA.DAS.Notifications.Infrastructure.UnitTests\SFA.DAS.Notifications.Infrastructure.UnitTests.csproj", "{80E8AC76-A76B-4C87-A36F-301AD962DECC}"
@@ -70,12 +68,6 @@ Global
 		{23CF7C43-D9CA-4446-AA6F-E0E5D792A200}.Local|Any CPU.Build.0 = Release|Any CPU
 		{23CF7C43-D9CA-4446-AA6F-E0E5D792A200}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{23CF7C43-D9CA-4446-AA6F-E0E5D792A200}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2548094F-D85B-44FE-B2ED-809EF119A80F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2548094F-D85B-44FE-B2ED-809EF119A80F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2548094F-D85B-44FE-B2ED-809EF119A80F}.Local|Any CPU.ActiveCfg = Release|Any CPU
-		{2548094F-D85B-44FE-B2ED-809EF119A80F}.Local|Any CPU.Build.0 = Release|Any CPU
-		{2548094F-D85B-44FE-B2ED-809EF119A80F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2548094F-D85B-44FE-B2ED-809EF119A80F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{962B4E7C-D851-4BA2-94EE-BE6DC0E99656}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{962B4E7C-D851-4BA2-94EE-BE6DC0E99656}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{962B4E7C-D851-4BA2-94EE-BE6DC0E99656}.Local|Any CPU.ActiveCfg = Release|Any CPU
