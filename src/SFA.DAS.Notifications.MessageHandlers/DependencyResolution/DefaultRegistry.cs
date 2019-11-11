@@ -32,7 +32,7 @@ namespace SFA.DAS.Notifications.MessageHandlers.DependencyResolution
 
             For<IStartup>().Use<NServiceBusStartup>().Singleton();
             For<ILoggerFactory>().Use(() => new LoggerFactory().AddApplicationInsights(ConfigurationManager.AppSettings["APPINSIGHTS_INSTRUMENTATIONKEY"], null).AddNLog()).Singleton();
-            For<ILogger>().Use(c => c.GetInstance<ILoggerFactory>().CreateLogger(c.ParentType));
+            For<ILogger>().Use(c => c.GetInstance<ILoggerFactory>().CreateLogger(c.ParentType.ToString()));
 
             // Legacy Logger required in application layers
             For<ILog>().Use(x => new NLogLogger(x.ParentType, null, null)).AlwaysUnique();

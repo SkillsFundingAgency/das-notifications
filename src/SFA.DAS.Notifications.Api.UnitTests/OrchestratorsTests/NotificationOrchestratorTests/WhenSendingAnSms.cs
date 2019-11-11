@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
+using NServiceBus;
 using NUnit.Framework;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Notifications.Api.Orchestrators;
@@ -22,7 +23,7 @@ namespace SFA.DAS.Notifications.Api.UnitTests.OrchestratorsTests.NotificationOrc
         {
             _mediator = new Mock<IMediator>();
 
-            _orchestrator = new NotificationOrchestrator(_mediator.Object, Mock.Of<ILog>());
+            _orchestrator = new NotificationOrchestrator(Mock.Of<ILog>(), Mock.Of<IMessageSession>());
 
             _sms = new Sms {
                 SystemId = Guid.NewGuid().ToString(),

@@ -8,6 +8,7 @@ using NServiceBus;
 using NUnit.Framework;
 using SendEmailCommandHandler = SFA.DAS.Notifications.MessageHandlers.CommandHandlers.SendEmailCommandHandler;
 using Microsoft.Extensions.Logging;
+using SFA.DAS.Notifications.Application.Commands.SendEmail;
 
 namespace SFA.DAS.Notifications.MessageHandlers.UnitTests.CommandHandlers
 {
@@ -18,7 +19,7 @@ namespace SFA.DAS.Notifications.MessageHandlers.UnitTests.CommandHandlers
         private SendEmailCommandHandler _handler;
         private Mock<IMediator> _mediator;
         private Mock<ILogger> _logger;
-        private SFA.DAS.Notifications.Messages.Commands.SendEmailCommand _message;
+        private Messages.Commands.SendEmailCommand _message;
 
         [SetUp]
         public void Arrange()
@@ -32,7 +33,7 @@ namespace SFA.DAS.Notifications.MessageHandlers.UnitTests.CommandHandlers
 
             _handler = new SendEmailCommandHandler(_mediator.Object, _logger.Object);
 
-            _message = new SendEmailCommand("templateId", "to@test.com", "reply@test.com", new ReadOnlyDictionary<string, string>(dictionary), "subject");
+            _message = new Messages.Commands.SendEmailCommand("templateId", "to@test.com", "reply@test.com", new ReadOnlyDictionary<string, string>(dictionary), "subject");
         }
 
         [Test]
