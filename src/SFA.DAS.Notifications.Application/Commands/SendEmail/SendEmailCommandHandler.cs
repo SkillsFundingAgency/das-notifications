@@ -29,18 +29,15 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
         private readonly ILog _logger;
         private readonly IEmailService _emailService;
         private readonly INotificationsRepository _notificationsRepository;
-        private readonly IMessagePublisher _messagePublisher;
         private readonly ITemplateConfigurationService _templateConfigurationService;
 
         public SendEmailCommandHandler(
             INotificationsRepository notificationsRepository,
-            IMessagePublisher messagePublisher,
             ITemplateConfigurationService templateConfigurationService,
             ILog logger,
             IEmailService emailService)
         {
             _notificationsRepository = notificationsRepository;
-            _messagePublisher = messagePublisher;
             _templateConfigurationService = templateConfigurationService;
             _logger = logger;
             _emailService = emailService;

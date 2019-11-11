@@ -24,18 +24,15 @@ namespace SFA.DAS.Notifications.Application.Commands.SendSms
 
         private readonly ILog _logger;
         private readonly INotificationsRepository _notificationsRepository;
-        private readonly IMessagePublisher _messagePublisher;
         private readonly ITemplateConfigurationService _templateConfigurationService;
         private readonly ISmsService _smsService;
 
         public SendSmsCommandHandler(
             INotificationsRepository notificationsRepository,
-            IMessagePublisher messagePublisher,
             ITemplateConfigurationService templateConfigurationService,
             ILog logger, ISmsService smsService)
         {
             _notificationsRepository = notificationsRepository;
-            _messagePublisher = messagePublisher;
             _templateConfigurationService = templateConfigurationService;
             _logger = logger;
             _smsService = smsService;

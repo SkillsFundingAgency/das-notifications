@@ -24,7 +24,6 @@ namespace SFA.DAS.Notifications.Application.UnitTests.CommandsTests.SendSmsTests
         private Dictionary<string, string> _tokens;
 
         private Mock<INotificationsRepository> _notificationsRepository;
-        private Mock<IMessagePublisher> _messagePublisher;
         private Mock<ITemplateConfigurationService> _templateConfigurationService;
         private Mock<ISmsService> _smsService;
         private SendSmsCommandHandler _handler;
@@ -34,8 +33,6 @@ namespace SFA.DAS.Notifications.Application.UnitTests.CommandsTests.SendSmsTests
         public void Arrange()
         {
             _notificationsRepository = new Mock<INotificationsRepository>();
-
-            _messagePublisher = new Mock<IMessagePublisher>();
 
             _templateConfigurationService = new Mock<ITemplateConfigurationService>();
             _templateConfigurationService.Setup(s => s.GetAsync())
@@ -53,7 +50,6 @@ namespace SFA.DAS.Notifications.Application.UnitTests.CommandsTests.SendSmsTests
 
             _handler = new SendSmsCommandHandler(
                 _notificationsRepository.Object,
-                _messagePublisher.Object,
                 _templateConfigurationService.Object,
                 Mock.Of<ILog>(),
                 _smsService.Object);

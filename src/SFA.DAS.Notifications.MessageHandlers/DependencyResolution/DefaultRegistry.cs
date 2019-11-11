@@ -87,7 +87,7 @@ namespace SFA.DAS.Notifications.MessageHandlers.DependencyResolution
 
             var emailServiceName = CloudConfigurationManager.GetSetting("EmailServiceName");
 
-            For<IEmailService>().Use(emailServiceName);
+            For<IEmailService>().Use("Local");
         }
     }
 }

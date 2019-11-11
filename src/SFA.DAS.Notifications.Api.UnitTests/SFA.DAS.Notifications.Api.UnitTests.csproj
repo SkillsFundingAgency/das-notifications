@@ -107,6 +107,10 @@
       <Project>{A7D9A608-913C-496D-ACED-4A6D7F2C2758}</Project>
       <Name>SFA.DAS.Notifications.Application</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.Notifications.Messages\SFA.DAS.Notifications.Messages.csproj">
+      <Project>{7496e16b-6d24-4ac3-bf8a-771de27c524c}</Project>
+      <Name>SFA.DAS.Notifications.Messages</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
