@@ -17,16 +17,4 @@
       <Certificate name="WebSslCert" thumbprint="87A28DF77BBA73983918DF4288A132588AE820F4" thumbprintAlgorithm="sha1" />
     </Certificates>
   </Role>
-  <Role name="SFA.DAS.Notifications.Worker">
-    <Instances count="1" />
-    <ConfigurationSettings>
-      <Setting name="EnvironmentName" value="LOCAL" />
-      <Setting name="StorageConnectionString" value="UseDevelopmentStorage=true" />
-      <Setting name="ConfigurationStorageConnectionString" value="UseDevelopmentStorage=true" />
-      <Setting name="EmailServiceName" value="Local" />
-      <Setting name="LoggingRedisConnectionString" value="" />
-      <Setting name="LoggingRedisKey" value="" />
-      <Setting name="InstrumentationKey" value="" />
-    </ConfigurationSettings>
-  </Role>
 </ServiceConfiguration>

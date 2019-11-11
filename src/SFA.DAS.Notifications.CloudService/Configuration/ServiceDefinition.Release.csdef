@@ -26,7 +26,7 @@
       <Certificate name="WebSslCert" storeLocation="LocalMachine" storeName="My" />
     </Certificates>
   </WebRole>
-  <WorkerRole name="SFA.DAS.Notifications.Worker" vmsize="Standard_D1_v2">
+  <WorkerRole name="SFA.DAS.Notifications.MessageHandlers" vmsize="Standard_D1_v2">
     <ConfigurationSettings>
       <Setting name="EnvironmentName" />
       <Setting name="StorageConnectionString" />
