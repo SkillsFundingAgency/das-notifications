@@ -86,8 +86,6 @@
     <Compile Include="ControllerTests\GivenEmailController\WhenAValidRequestIsReceived.cs" />
     <Compile Include="ControllerTests\GivenSmsController\WhenAnInvalidRequestIsReceived.cs" />
     <Compile Include="ControllerTests\GivenSmsController\WhenAValidRequestIsReceived.cs" />
-    <Compile Include="OrchestratorsTests\NotificationOrchestratorTests\WhenSendingAnEmail.cs" />
-    <Compile Include="OrchestratorsTests\NotificationOrchestratorTests\WhenSendingAnSms.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
