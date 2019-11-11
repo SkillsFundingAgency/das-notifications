@@ -1,14 +1,8 @@
-﻿using SFA.DAS.Http;
-using System;
+﻿using SFA.DAS.Http.Configuration;
 
 namespace SFA.DAS.Notifications.Api.Client.Configuration
 {
-    public interface INotificationsApiClientConfiguration : IJwtClientConfiguration, IAzureADClientConfiguration
+    public interface INotificationsApiClientConfiguration : IJwtClientConfiguration, IAzureActiveDirectoryClientConfiguration
     {
-        /// <summary>
-        /// The base url (schema, server, port and application path as appropriate)
-        /// </summary>
-        /// <example>https://some-server/</example>
-        string ApiBaseUrl { get; }
     }
 }
