@@ -24,28 +24,27 @@ namespace SFA.DAS.Notifications.Infrastructure.LocalEmailService
 
         public async Task SendAsync(EmailMessage message)
         {
-            //var config = await _configurationService.GetAsync<NotificationServiceConfiguration>();
+            var config = await _configurationService.GetAsync<NotificationServiceConfiguration>();
 
-            //using (var client = new SmtpClient())
-            //{
-            //    client.Port = GetPortNumber(config.SmtpConfiguration.Port);
-            //    client.DeliveryMethod = SmtpDeliveryMethod.Network;
-            //    client.UseDefaultCredentials = false;
-            //    client.Host = config.SmtpConfiguration.ServerName;
+            using (var client = new SmtpClient())
+            {
+                client.Port = GetPortNumber(config.SmtpConfiguration.Port);
+                client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                client.UseDefaultCredentials = false;
+                client.Host = config.SmtpConfiguration.ServerName;
 
-            //    if (!string.IsNullOrEmpty(config.SmtpConfiguration.UserName) && !string.IsNullOrEmpty(config.SmtpConfiguration.Password))
-            //    {
-            //        client.Credentials = new System.Net.NetworkCredential(config.SmtpConfiguration.UserName, config.SmtpConfiguration.Password);
-            //    }
+                if (!string.IsNullOrEmpty(config.SmtpConfiguration.UserName) && !string.IsNullOrEmpty(config.SmtpConfiguration.Password))
+                {
+                    client.Credentials = new System.Net.NetworkCredential(config.SmtpConfiguration.UserName, config.SmtpConfiguration.Password);
+                }
 
-            //    var mail = new MailMessage(message.ReplyToAddress, message.RecipientsAddress)
-            //    {
-            //        Subject = message.Subject,
-            //        Body = JsonConvert.SerializeObject(message)
-            //    };
+                var mail = new MailMessage(message.ReplyToAddress, message.RecipientsAddress) {
+                    Subject = message.Subject,
+                    Body = JsonConvert.SerializeObject(message)
+                };
 
-            //    await client.SendMailAsync(mail);
-            //}
+                await client.SendMailAsync(mail);
+            }
         }
 
         private int GetPortNumber(string candidate)
