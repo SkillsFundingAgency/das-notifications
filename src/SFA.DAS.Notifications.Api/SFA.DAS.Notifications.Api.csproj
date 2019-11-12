@@ -347,7 +347,7 @@
       <Name>SFA.DAS.Notifications.Infrastructure</Name>
     </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.Notifications.Messages\SFA.DAS.Notifications.Messages.csproj">
-      <Project>{7496e16b-6d24-4ac3-bf8a-771de27c524c}</Project>
+      <Project>{c7f1f885-7c92-4b2f-b771-1777101fcd05}</Project>
       <Name>SFA.DAS.Notifications.Messages</Name>
     </ProjectReference>
   </ItemGroup>
