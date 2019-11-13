@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
@@ -33,7 +32,7 @@ namespace SFA.DAS.Notifications.MessageHandlers.UnitTests.CommandHandlers
 
             _handler = new SendEmailCommandHandler(_mediator.Object, _logger.Object);
 
-            _message = new Messages.Commands.SendEmailCommand("templateId", "to@test.com", "reply@test.com", new ReadOnlyDictionary<string, string>(dictionary), "subject");
+            _message = new Messages.Commands.SendEmailCommand("templateId", "to@test.com", "reply@test.com", new Dictionary<string, string>(dictionary));
         }
 
         [Test]

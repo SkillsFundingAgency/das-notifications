@@ -26,8 +26,7 @@ namespace SFA.DAS.Notifications.Api.Orchestrators
                 request.TemplateId,
                 request.RecipientsAddress,
                 request.ReplyToAddress,
-                request.Tokens,
-                request.Subject
+                request.Tokens
             ));
 
             return GetOrchestratorResponse(NotificationOrchestratorCodes.Post.Success);

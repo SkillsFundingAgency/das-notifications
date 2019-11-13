@@ -26,7 +26,7 @@ namespace SFA.DAS.Notifications.MessageHandlers.CommandHandlers
                 var command = new SendEmailCommand {
                     SystemId = "X",
                     TemplateId = message.TemplateId,
-                    Subject = message.Subject,
+                    Subject = "n/a",
                     RecipientsAddress = message.RecipientsAddress,
                     ReplyToAddress = message.ReplyToAddress,
                     Tokens = message.Tokens.ToDictionary(e => e.Key, e => e.Value)
