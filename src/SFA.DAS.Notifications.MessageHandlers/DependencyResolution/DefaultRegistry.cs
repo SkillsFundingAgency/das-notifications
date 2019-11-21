@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Configuration;
 using MediatR;
-using Microsoft.Azure;
 using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
 using SFA.DAS.NLog.Logger;
@@ -25,7 +24,7 @@ namespace SFA.DAS.Notifications.MessageHandlers.DependencyResolution
             var environment = Environment.GetEnvironmentVariable("DASENV");
             if (string.IsNullOrEmpty(environment))
             {
-                environment = CloudConfigurationManager.GetSetting("EnvironmentName");
+                environment = ConfigurationManager.AppSettings["EnvironmentName"];
             }
 
             For<IStartup>().Use<NServiceBusStartup>().Singleton();
@@ -61,7 +60,7 @@ namespace SFA.DAS.Notifications.MessageHandlers.DependencyResolution
 
         private static IConfigurationRepository GetConfigurationRepository()
         {
-            return new AzureTableStorageConfigurationRepository(CloudConfigurationManager.GetSetting("ConfigurationStorageConnectionString"));
+            return new AzureTableStorageConfigurationRepository(ConfigurationManager.AppSettings["ConfigurationStorageConnectionString"]);
         }
 
         private static IConfigurationService GetConfigurationService(string environment)
@@ -79,9 +78,7 @@ namespace SFA.DAS.Notifications.MessageHandlers.DependencyResolution
                 x.Type<NotifyEmailService>().Named("Notify");
             });
 
-            var emailServiceName = CloudConfigurationManager.GetSetting("EmailServiceName");
-
-            For<IEmailService>().Use(emailServiceName);
+            For<IEmailService>().Use(x => x.GetInstance<IEmailService>(x.GetInstance<IConfigurationService>().Get<NotificationServiceConfiguration>().EmailService));
         }
     }
 }

@@ -16,10 +16,10 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
+using System.Configuration;
 using System.Web;
 using FluentValidation;
 using MediatR;
-using Microsoft.Azure;
 using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.NLog.Logger;
@@ -39,7 +39,7 @@ namespace SFA.DAS.Notifications.Api.DependencyResolution
             var environment = Environment.GetEnvironmentVariable("DASENV");
             if (string.IsNullOrEmpty(environment))
             {
-                environment = CloudConfigurationManager.GetSetting("EnvironmentName");
+                environment = ConfigurationManager.AppSettings["EnvironmentName"];
             }
 
             Scan(
@@ -82,7 +82,7 @@ namespace SFA.DAS.Notifications.Api.DependencyResolution
 
         private static IConfigurationRepository GetConfigurationRepository()
         {
-            return new AzureTableStorageConfigurationRepository(CloudConfigurationManager.GetSetting("ConfigurationStorageConnectionString"));
+            return new AzureTableStorageConfigurationRepository(ConfigurationManager.AppSettings["ConfigurationStorageConnectionString"]);
         }
 
         private static IConfigurationService GetConfigurationService(string environment)

@@ -1,7 +1,6 @@
-﻿using System.Web.Http;
+﻿using System.Configuration;
+using System.Web.Http;
 using System.Web.Http.ExceptionHandling;
-
-using Microsoft.Azure;
 using SFA.DAS.ApiTokens.Client;
 
 namespace SFA.DAS.Notifications.Api
@@ -10,9 +9,9 @@ namespace SFA.DAS.Notifications.Api
     {
         public static void Register(HttpConfiguration config)
         {
-            var apiKeySecret = CloudConfigurationManager.GetSetting("ApiTokenSecret");
-            var apiIssuer = CloudConfigurationManager.GetSetting("ApiIssuer");
-            var apiAudiences = CloudConfigurationManager.GetSetting("ApiAudiences").Split(' ');
+            var apiKeySecret = ConfigurationManager.AppSettings["ApiTokenSecret"];
+            var apiIssuer = ConfigurationManager.AppSettings["ApiIssuer"];
+            var apiAudiences = ConfigurationManager.AppSettings["ApiAudiences"].Split(' ');
 
             config.MessageHandlers.Add(new ApiKeyHandler("Authorization", apiKeySecret, apiIssuer, apiAudiences));
 
