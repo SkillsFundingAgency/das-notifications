@@ -12,7 +12,7 @@
     <PackageReference Include="Microsoft.Extensions.Options" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="2.2.0" />
     <PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="3.0.1" />
-    <PackageReference Include="SFA.DAS.NServiceBus" Version="15.0.8" />
+    <PackageReference Include="SFA.DAS.NServiceBus" Version="16.0.2" />
   </ItemGroup>
 
   <ItemGroup>
