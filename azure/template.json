@@ -235,6 +235,9 @@
                     "appServicePlanResourceGroup": {
                         "value": "[resourceGroup()]"
                     },
+                    "deployStagingSlot": {
+                        "value": false
+                    },
                     "appServiceAppSettings": {
                         "value": [
                             {
@@ -268,6 +271,34 @@
                         ]
                     }
                 }
+            }
+        },
+        {
+            "apiVersion": "2017-05-10",
+            "name": "[concat('worker-role-assignments-', copyIndex())]",
+            "type": "Microsoft.Resources/deployments",
+            "resourceGroup": "[parameters('sharedResourceGroup')]",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(variables('deploymentUrlBase'),'role-assignment.json')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "principalId": {
+                        "value": "[createArray(reference('worker-app-service').outputs.managedServiceIdentityId.value, reference('worker-app-service').outputs.stagingManagedServiceIdentityId.value)[copyIndex()]]"
+                    },
+                    "assignmentType": {
+                        "value": "ServiceBusOwner"
+                    },
+                    "resourceName": {
+                        "value": "[parameters('sharedServiceBusName')]"
+                    }
+                }
+            },
+            "copy": {
+                "name": "worker-role-assignments",
+                "count": 2
             }
         },
         {
