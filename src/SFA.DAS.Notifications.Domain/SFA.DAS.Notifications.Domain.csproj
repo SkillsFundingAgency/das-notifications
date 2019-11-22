@@ -35,9 +35,6 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\SharedAssemblyInfo.cs">
-      <Link>Properties\SharedAssemblyInfo.cs</Link>
-    </Compile>
     <Compile Include="Configuration\ITemplateConfigurationService.cs" />
     <Compile Include="Configuration\SmsTemplate.cs" />
     <Compile Include="Configuration\Template.cs" />
