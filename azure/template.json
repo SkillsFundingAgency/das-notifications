@@ -33,22 +33,20 @@
         "keyVaultResourceGroup": {
             "type": "string"
         },
-        "loggingRedisConnectionString": {
-            "type": "securestring"
-        },
         "environmentName": {
             "type": "string"
         },
         "configurationStorageConnectionString": {
             "type": "securestring"
         },
-        "configNames": {
-            "type": "string",
-            "defaultValue": "SFA.DAS.Notifications"
+        "apiIssuer": {
+            "type": "string"
         },
-        "version": {
-            "type": "string",
-            "defaultValue": "1.0"
+        "apiAudiences": {
+            "type": "string"
+        },
+        "apiTokenSecret": {
+            "type": "string"
         }
     },
     "variables": {
@@ -126,7 +124,7 @@
                     "appServiceAppSettings": {
                         "value": [
                             {
-                                "name": "Environment",
+                                "name": "EnvironmentName",
                                 "value": "[parameters('environmentName')]"
                             },
                             {
@@ -134,24 +132,24 @@
                                 "value": "[parameters('configurationStorageConnectionString')]"
                             },
                             {
-                                "name": "ConfigNames",
-                                "value": "[parameters('configNames')]"
+                                "name": "StorageConnectionString",
+                                "value": "[reference('storage-account').outputs.storageConnectionString.value]"
                             },
                             {
-                                "name": "Version",
-                                "value": "[parameters('version')]"
-                            },
-                            {
-                                "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+                                "name": "InstrumentationKey",
                                 "value": "[reference('application-insights').outputs.InstrumentationKey.value]"
                             },
                             {
-                                "name": "ASPNETCORE_ENVIRONMENT",
-                                "value": "[toUpper(parameters('environmentName'))]"
+                                "name": "ApiIssuer",
+                                "value": "[parameters('apiIssuer')]"
                             },
                             {
-                                "name": "LoggingRedisConnectionString",
-                                "value": "[parameters('loggingRedisConnectionString')]"
+                                "name": "ApiAudiences",
+                                "value": "[parameters('apiAudiences')]"
+                            },
+                            {
+                                "name": "ApiTokenSecret",
+                                "value": "[parameters('apiTokenSecret')]"
                             }
                         ]
                     },
@@ -213,7 +211,7 @@
                     "appServiceAppSettings": {
                         "value": [
                             {
-                                "name": "Environment",
+                                "name": "EnvironmentName",
                                 "value": "[parameters('environmentName')]"
                             },
                             {
@@ -221,24 +219,12 @@
                                 "value": "[parameters('configurationStorageConnectionString')]"
                             },
                             {
-                                "name": "ConfigNames",
-                                "value": "[parameters('configNames')]"
-                            },
-                            {
-                                "name": "Version",
-                                "value": "[parameters('version')]"
+                                "name": "StorageConnectionString",
+                                "value": "[reference('storage-account').outputs.storageConnectionString.value]"
                             },
                             {
                                 "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
                                 "value": "[reference('worker-application-insights').outputs.InstrumentationKey.value]"
-                            },
-                            {
-                                "name": "ASPNETCORE_ENVIRONMENT",
-                                "value": "[toUpper(parameters('environmentName'))]"
-                            },
-                            {
-                                "name": "LoggingRedisConnectionString",
-                                "value": "[parameters('loggingRedisConnectionString')]"
                             }
                         ]
                     }
