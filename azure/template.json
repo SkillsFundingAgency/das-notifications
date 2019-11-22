@@ -169,34 +169,6 @@
         },
         {
             "apiVersion": "2017-05-10",
-            "name": "[concat('role-assignments-', copyIndex())]",
-            "type": "Microsoft.Resources/deployments",
-            "resourceGroup": "[parameters('sharedResourceGroup')]",
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[concat(variables('deploymentUrlBase'),'role-assignment.json')]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "principalId": {
-                        "value": "[createArray(reference('app-service').outputs.managedServiceIdentityId.value, reference('app-service').outputs.stagingManagedServiceIdentityId.value)[copyIndex()]]"
-                    },
-                    "assignmentType": {
-                        "value": "ServiceBusOwner"
-                    },
-                    "resourceName": {
-                        "value": "[parameters('sharedServiceBusName')]"
-                    }
-                }
-            },
-            "copy": {
-                "name": "role-assignments",
-                "count": 2
-            }
-        },
-        {
-            "apiVersion": "2017-05-10",
             "name": "worker-application-insights",
             "type": "Microsoft.Resources/deployments",
             "properties": {
@@ -275,7 +247,7 @@
         },
         {
             "apiVersion": "2017-05-10",
-            "name": "[concat('worker-role-assignments-', copyIndex())]",
+            "name": "[concat('role-assignments-', copyIndex())]",
             "type": "Microsoft.Resources/deployments",
             "resourceGroup": "[parameters('sharedResourceGroup')]",
             "properties": {
@@ -286,7 +258,7 @@
                 },
                 "parameters": {
                     "principalId": {
-                        "value": "[createArray(reference('worker-app-service').outputs.managedServiceIdentityId.value, reference('worker-app-service').outputs.stagingManagedServiceIdentityId.value)[copyIndex()]]"
+                        "value": "[createArray(reference('app-service').outputs.managedServiceIdentityId.value, reference('app-service').outputs.stagingManagedServiceIdentityId.value, reference('worker-app-service').outputs.managedServiceIdentityId.value)[copyIndex()]]"
                     },
                     "assignmentType": {
                         "value": "ServiceBusOwner"
@@ -297,8 +269,8 @@
                 }
             },
             "copy": {
-                "name": "worker-role-assignments",
-                "count": 2
+                "name": "role-assignments",
+                "count": 3
             }
         },
         {
