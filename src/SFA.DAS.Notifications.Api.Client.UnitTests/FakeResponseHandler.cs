@@ -5,7 +5,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SFA.DAS.Notifications.Api.Client.UnitTests
+namespace SFA.DAS.Notifications.Api.Client.UnitTests2
 {
     public class FakeResponseHandler : DelegatingHandler
     {

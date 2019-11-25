@@ -1,14 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using SFA.DAS.Notifications.Api.Client.Configuration;
 using SFA.DAS.Notifications.Api.Types;
-using System.Net.Http;
-using System;
-using System.Net;
 
-namespace SFA.DAS.Notifications.Api.Client.UnitTests.NotificationApiClientTests
+namespace SFA.DAS.Notifications.Api.Client.UnitTests2.NotificationApiClientTests
 {
     public class WhenISendAnEmail
     {
