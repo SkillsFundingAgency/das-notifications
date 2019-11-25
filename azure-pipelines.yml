@@ -6,51 +6,56 @@ trigger:
 
 pr: none
 
+variables:
+  buildConfiguration: 'release'
+  buildPlatform: 'anycpu'
+
+pool:
+  name: 'DAS - Continuous Integration'
+
 workspace:
     clean: all
 
-variables:
-  buildConfiguration: 'release'
-  buildPlatform: 'any cpu'
-
-pool:
-  name: 'Continuous Integration 02 - SSD - 160ACU'
-  demands: 
-  - msbuild
-  - visualstudio
-
 steps:
-- task: gittools.gitversion.gitversion-task.GitVersion@5
+- task: gittools.gitversion-preview.gitversion-task.GitVersion@5
   displayName: GitVersion
   inputs:
     updateAssemblyInfo: true
 
-- task: NuGetToolInstaller@0
-  displayName: 'Use NuGet 4.3.0'
+- task: DotNetCoreCLI@2
+  displayName: Restore
   inputs:
-    versionSpec: 4.x
+    command: restore
+    projects: 'src/**/*.csproj'
 
-- task: NuGetCommand@2
-  displayName: 'NuGet restore'
+- task: DotNetCoreCLI@2
+  displayName: Build
   inputs:
-    restoreSolution: 'src/SFA.DAS.Notifications.sln'
+    projects: 'src/**/*.csproj'
+    arguments: '--configuration $(buildConfiguration) --no-restore'
+    
+- task: DotNetCoreCLI@2
+  displayName: Test
+  inputs:
+    command: test
+    projects: '**/*Tests.csproj'
+    arguments: '--configuration $(buildConfiguration) --no-build'
 
-- task: VSBuild@1
-  displayName: 'Build solution src/SFA.DAS.Notifications.sln'
+- task: DotNetCoreCLI@2
+  displayName: 'Publish API'
   inputs:
-    solution: 'src/SFA.DAS.Notifications.sln'
-    vsVersion: 15.0
-    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)/publish"'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
-    clean: true
+    command: publish
+    publishWebProjects: false
+    projects: 'src/SFA.DAS.Notifications.Api/SFA.DAS.Notifications.Api.csproj'
+    arguments: '--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory)/publish --no-restore --no-build'
 
-- task: VSTest@2
-  displayName: 'VsTest - testAssemblies'
+- task: DotNetCoreCLI@2
+  displayName: 'Publish Web Job'
   inputs:
-    testAssemblyVer2: '**/bin/**/*UnitTests.dll'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+    command: publish
+    publishWebProjects: false
+    projects: 'src/SFA.DAS.Notifications.MessageHandlers/SFA.DAS.Notifications.MessageHandlers.csproj'
+    arguments: '--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory)/publish --no-restore --no-build'
 
 - task: DotNetCoreCLI@2
   displayName: 'dotnet pack'
@@ -60,18 +65,18 @@ steps:
       src/SFA.DAS.Notifications.Api.Types/SFA.DAS.Notifications.Api.Types.csproj;
       src/SFA.DAS.Notifications.Api.Client/SFA.DAS.Notifications.Api.Client.csproj;
       src/SFA.DAS.Notifications.Messages/SFA.DAS.Notifications.Messages.csproj
-    packDirectory: 'src/nuget-publish'
+    packDirectory: '$(build.artifactstagingdirectory)/publish'
     versioningScheme: byBuildNumber
-    
+    buildProperties: 'Version="$(Build.BuildNumber)"'
+
 - task: CopyFiles@2
   displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
   inputs:
-    Contents: |
-     azure/**
-     src/**/obj/Release/Package/**/*.*
-    TargetFolder: '$(build.artifactstagingdirectory)/publish'
+    contents: |
+      azure/**
+    targetFolder: '$(build.artifactstagingdirectory)/publish'
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact'
   inputs:
-    PathtoPublish: '$(build.artifactstagingdirectory)/publish'
+    pathtoPublish: '$(build.artifactstagingdirectory)/publish'
