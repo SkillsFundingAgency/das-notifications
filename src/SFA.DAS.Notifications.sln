@@ -27,8 +27,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.Notifications.Infra
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.Notifications.Application.UnitTests", "SFA.DAS.Notifications.Application.UnitTests\SFA.DAS.Notifications.Application.UnitTests.csproj", "{D9575102-4B84-4AB6-80AD-C8B6C3301ACC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.Notifications.Api.UnitTests", "SFA.DAS.Notifications.Api.UnitTests\SFA.DAS.Notifications.Api.UnitTests.csproj", "{878167D5-0E8C-48C3-B46D-07705D488A4D}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.Notifications.Api.Client", "SFA.DAS.Notifications.Api.Client\SFA.DAS.Notifications.Api.Client.csproj", "{BB8D986E-3551-467B-B07A-1A3B0DB16DDA}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.Notifications.Api.Types", "SFA.DAS.Notifications.Api.Types\SFA.DAS.Notifications.Api.Types.csproj", "{5E500F50-5F57-482C-A5D0-4F12DD1C3A46}"
@@ -41,7 +39,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.Notifications.Messa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.Notifications.MessageHandlers.UnitTests", "SFA.DAS.Notifications.MessageHandlers.UnitTests\SFA.DAS.Notifications.MessageHandlers.UnitTests.csproj", "{3BA30EFF-23B6-417C-B01F-9B396E067E67}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.Notifications.Messages", "SFA.DAS.Notifications.Messages\SFA.DAS.Notifications.Messages.csproj", "{C7F1F885-7C92-4B2F-B771-1777101FCD05}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.Notifications.Messages", "SFA.DAS.Notifications.Messages\SFA.DAS.Notifications.Messages.csproj", "{C7F1F885-7C92-4B2F-B771-1777101FCD05}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.Notifications.Api.UnitTests", "SFA.DAS.Notifications.Api.UnitTests\SFA.DAS.Notifications.Api.UnitTests.csproj", "{F310DD04-3247-4285-9B5C-672945527547}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -86,12 +86,6 @@ Global
 		{D9575102-4B84-4AB6-80AD-C8B6C3301ACC}.Local|Any CPU.Build.0 = Release|Any CPU
 		{D9575102-4B84-4AB6-80AD-C8B6C3301ACC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D9575102-4B84-4AB6-80AD-C8B6C3301ACC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{878167D5-0E8C-48C3-B46D-07705D488A4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{878167D5-0E8C-48C3-B46D-07705D488A4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{878167D5-0E8C-48C3-B46D-07705D488A4D}.Local|Any CPU.ActiveCfg = Release|Any CPU
-		{878167D5-0E8C-48C3-B46D-07705D488A4D}.Local|Any CPU.Build.0 = Release|Any CPU
-		{878167D5-0E8C-48C3-B46D-07705D488A4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{878167D5-0E8C-48C3-B46D-07705D488A4D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BB8D986E-3551-467B-B07A-1A3B0DB16DDA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BB8D986E-3551-467B-B07A-1A3B0DB16DDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BB8D986E-3551-467B-B07A-1A3B0DB16DDA}.Local|Any CPU.ActiveCfg = Release|Any CPU
@@ -134,6 +128,12 @@ Global
 		{C7F1F885-7C92-4B2F-B771-1777101FCD05}.Local|Any CPU.Build.0 = Debug|Any CPU
 		{C7F1F885-7C92-4B2F-B771-1777101FCD05}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C7F1F885-7C92-4B2F-B771-1777101FCD05}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F310DD04-3247-4285-9B5C-672945527547}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F310DD04-3247-4285-9B5C-672945527547}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F310DD04-3247-4285-9B5C-672945527547}.Local|Any CPU.ActiveCfg = Release|Any CPU
+		{F310DD04-3247-4285-9B5C-672945527547}.Local|Any CPU.Build.0 = Release|Any CPU
+		{F310DD04-3247-4285-9B5C-672945527547}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F310DD04-3247-4285-9B5C-672945527547}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -141,7 +141,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{80E8AC76-A76B-4C87-A36F-301AD962DECC} = {DC080B91-941B-4849-944E-4220115C3523}
 		{D9575102-4B84-4AB6-80AD-C8B6C3301ACC} = {DC080B91-941B-4849-944E-4220115C3523}
-		{878167D5-0E8C-48C3-B46D-07705D488A4D} = {DC080B91-941B-4849-944E-4220115C3523}
 		{8CDBE4ED-3F95-4E5B-A15D-4E99D36B1C06} = {DC080B91-941B-4849-944E-4220115C3523}
 		{B1CBF750-5552-457F-B719-05D092651F46} = {DC080B91-941B-4849-944E-4220115C3523}
 		{3BA30EFF-23B6-417C-B01F-9B396E067E67} = {DC080B91-941B-4849-944E-4220115C3523}
