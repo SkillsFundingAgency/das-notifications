@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28917.181
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.Notifications.Application", "SFA.DAS.Notifications.Application\SFA.DAS.Notifications.Application.csproj", "{A7D9A608-913C-496D-ACED-4A6D7F2C2758}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.Notifications.Domain", "SFA.DAS.Notifications.Domain\SFA.DAS.Notifications.Domain.csproj", "{AC81FD52-7485-4BBF-9C0C-D6EED90F84A1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.Notifications.Infrastructure", "SFA.DAS.Notifications.Infrastructure\SFA.DAS.Notifications.Infrastructure.csproj", "{23CF7C43-D9CA-4446-AA6F-E0E5D792A200}"
@@ -43,13 +41,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.Notifications.Messa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.Notifications.Api.UnitTests", "SFA.DAS.Notifications.Api.UnitTests\SFA.DAS.Notifications.Api.UnitTests.csproj", "{F310DD04-3247-4285-9B5C-672945527547}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.Notifications.Application2", "SFA.DAS.Notifications.Application2\SFA.DAS.Notifications.Application2.csproj", "{C1D28614-546D-4A4A-843A-7D97EE91CA09}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.Notifications.Domain2", "SFA.DAS.Notification.Domain2\SFA.DAS.Notifications.Domain2.csproj", "{FB785CAE-D640-44E6-B351-5FB42B3AC076}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.Notifications.Infrastructure2", "SFA.DAS.Notifications.Infrastructure2\SFA.DAS.Notifications.Infrastructure2.csproj", "{4646B05A-2EBE-4771-9D7F-1EEA02600DB7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.Notifications.Messages2", "SFA.DAS.Notifications.Messages2\SFA.DAS.Notifications.Messages2.csproj", "{F56BF614-394F-46F7-9A29-66D4DCFC30C0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.Notifications.Application", "SFA.DAS.Notifications.Application\SFA.DAS.Notifications.Application.csproj", "{9328871E-E1AE-4AFD-BAA4-3032E988E440}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -58,12 +56,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{A7D9A608-913C-496D-ACED-4A6D7F2C2758}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A7D9A608-913C-496D-ACED-4A6D7F2C2758}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A7D9A608-913C-496D-ACED-4A6D7F2C2758}.Local|Any CPU.ActiveCfg = Release|Any CPU
-		{A7D9A608-913C-496D-ACED-4A6D7F2C2758}.Local|Any CPU.Build.0 = Release|Any CPU
-		{A7D9A608-913C-496D-ACED-4A6D7F2C2758}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A7D9A608-913C-496D-ACED-4A6D7F2C2758}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AC81FD52-7485-4BBF-9C0C-D6EED90F84A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AC81FD52-7485-4BBF-9C0C-D6EED90F84A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AC81FD52-7485-4BBF-9C0C-D6EED90F84A1}.Local|Any CPU.ActiveCfg = Release|Any CPU
@@ -142,12 +134,6 @@ Global
 		{F310DD04-3247-4285-9B5C-672945527547}.Local|Any CPU.Build.0 = Release|Any CPU
 		{F310DD04-3247-4285-9B5C-672945527547}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F310DD04-3247-4285-9B5C-672945527547}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C1D28614-546D-4A4A-843A-7D97EE91CA09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C1D28614-546D-4A4A-843A-7D97EE91CA09}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C1D28614-546D-4A4A-843A-7D97EE91CA09}.Local|Any CPU.ActiveCfg = Debug|Any CPU
-		{C1D28614-546D-4A4A-843A-7D97EE91CA09}.Local|Any CPU.Build.0 = Debug|Any CPU
-		{C1D28614-546D-4A4A-843A-7D97EE91CA09}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C1D28614-546D-4A4A-843A-7D97EE91CA09}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FB785CAE-D640-44E6-B351-5FB42B3AC076}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FB785CAE-D640-44E6-B351-5FB42B3AC076}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FB785CAE-D640-44E6-B351-5FB42B3AC076}.Local|Any CPU.ActiveCfg = Debug|Any CPU
@@ -166,6 +152,12 @@ Global
 		{F56BF614-394F-46F7-9A29-66D4DCFC30C0}.Local|Any CPU.Build.0 = Debug|Any CPU
 		{F56BF614-394F-46F7-9A29-66D4DCFC30C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F56BF614-394F-46F7-9A29-66D4DCFC30C0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9328871E-E1AE-4AFD-BAA4-3032E988E440}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9328871E-E1AE-4AFD-BAA4-3032E988E440}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9328871E-E1AE-4AFD-BAA4-3032E988E440}.Local|Any CPU.ActiveCfg = Debug|Any CPU
+		{9328871E-E1AE-4AFD-BAA4-3032E988E440}.Local|Any CPU.Build.0 = Debug|Any CPU
+		{9328871E-E1AE-4AFD-BAA4-3032E988E440}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9328871E-E1AE-4AFD-BAA4-3032E988E440}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

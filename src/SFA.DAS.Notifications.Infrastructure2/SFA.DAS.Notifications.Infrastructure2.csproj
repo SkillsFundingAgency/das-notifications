@@ -18,7 +18,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.Notification.Domain2\SFA.DAS.Notifications.Domain2.csproj" />
-    <ProjectReference Include="..\SFA.DAS.Notifications.Application2\SFA.DAS.Notifications.Application2.csproj" />
   </ItemGroup>
 
   <ItemGroup>

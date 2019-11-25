@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using SFA.DAS.Notifications.Domain.Entities;
+using SFA.DAS.Notifications.Domain2.Entities;
 
 namespace SFA.DAS.Notifications.Application.Interfaces
 {

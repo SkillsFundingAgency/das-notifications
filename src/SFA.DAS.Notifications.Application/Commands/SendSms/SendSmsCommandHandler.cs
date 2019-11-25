@@ -3,14 +3,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using FluentValidation;
 using MediatR;
-using Newtonsoft.Json;
-using SFA.DAS.Messaging;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Notifications.Application.Interfaces;
-using SFA.DAS.Notifications.Application.Messages;
-using SFA.DAS.Notifications.Domain.Configuration;
-using SFA.DAS.Notifications.Domain.Entities;
-using SFA.DAS.TimeProvider;
+using SFA.DAS.Notifications.Domain2.Configuration;
+using SFA.DAS.Notifications.Domain2.Entities;
 
 namespace SFA.DAS.Notifications.Application.Commands.SendSms
 {

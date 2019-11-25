@@ -84,10 +84,6 @@
     <None Include="ApplicationInsights.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SFA.DAS.Notifications.Application\SFA.DAS.Notifications.Application.csproj">
-      <Project>{a7d9a608-913c-496d-aced-4a6d7f2c2758}</Project>
-      <Name>SFA.DAS.Notifications.Application</Name>
-    </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.Notifications.Domain\SFA.DAS.Notifications.Domain.csproj">
       <Project>{AC81FD52-7485-4BBF-9C0C-D6EED90F84A1}</Project>
       <Name>SFA.DAS.Notifications.Domain</Name>
