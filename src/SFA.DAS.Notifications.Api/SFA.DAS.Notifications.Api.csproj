@@ -331,10 +331,6 @@
       <Project>{5e500f50-5f57-482c-a5d0-4f12dd1c3a46}</Project>
       <Name>SFA.DAS.Notifications.Api.Types</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SFA.DAS.Notifications.Messages\SFA.DAS.Notifications.Messages.csproj">
-      <Project>{c7f1f885-7c92-4b2f-b771-1777101fcd05}</Project>
-      <Name>SFA.DAS.Notifications.Messages</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\NServiceBus.7.1.10\analyzers\dotnet\cs\NServiceBus.Core.Analyzer.dll" />

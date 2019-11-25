@@ -115,10 +115,6 @@
       <Project>{b9eb9e19-b71c-47b8-9698-c131190186f1}</Project>
       <Name>SFA.DAS.Notifications.MessageHandlers</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SFA.DAS.Notifications.Messages\SFA.DAS.Notifications.Messages.csproj">
-      <Project>{c7f1f885-7c92-4b2f-b771-1777101fcd05}</Project>
-      <Name>SFA.DAS.Notifications.Messages</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

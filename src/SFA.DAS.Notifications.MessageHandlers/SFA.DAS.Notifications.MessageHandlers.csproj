@@ -84,12 +84,6 @@
     <None Include="ApplicationInsights.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SFA.DAS.Notifications.Messages\SFA.DAS.Notifications.Messages.csproj">
-      <Project>{c7f1f885-7c92-4b2f-b771-1777101fcd05}</Project>
-      <Name>SFA.DAS.Notifications.Messages</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
