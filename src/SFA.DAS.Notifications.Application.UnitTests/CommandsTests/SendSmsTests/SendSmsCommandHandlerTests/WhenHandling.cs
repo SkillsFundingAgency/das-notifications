@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Castle.Core.Internal;
 using FluentValidation;
 using Moq;
 using NUnit.Framework;
@@ -88,7 +87,7 @@ namespace SFA.DAS.Notifications.Application.UnitTests.CommandsTests.SendSmsTests
                     && message.SystemId == _systemId
                     && message.RecipientsNumber == _recipientsNumber
                     && message.Tokens == _tokens
-                    & !message.Reference.IsNullOrEmpty())));
+                    &! string.IsNullOrEmpty(message.Reference))));
         }
     }
 }
