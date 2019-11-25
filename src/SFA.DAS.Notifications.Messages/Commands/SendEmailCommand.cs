@@ -19,4 +19,8 @@ namespace SFA.DAS.Notifications.Messages.Commands
             Subject = subject;
         }
     }
+    public class ImportMe
+    {
+
+    }
 }

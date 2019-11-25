@@ -138,9 +138,6 @@
     <PackageReference Include="SFA.DAS.Configuration.AzureTableStorage">
       <Version>1.1.161</Version>
     </PackageReference>
-    <PackageReference Include="SFA.DAS.NLog.Logger">
-      <Version>1.0.0.39208</Version>
-    </PackageReference>
     <PackageReference Include="SFA.DAS.NServiceBus">
       <Version>16.0.2</Version>
     </PackageReference>
@@ -162,6 +159,12 @@
     <PackageReference Include="WindowsAzure.Storage">
       <Version>9.3.3</Version>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SFA.DAS.Notifications.Infrastructure\SFA.DAS.Notifications.Infrastructure.csproj">
+      <Project>{6679DB15-4709-4900-8212-1D1489555074}</Project>
+      <Name>SFA.DAS.Notifications.Infrastructure</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
