@@ -156,12 +156,6 @@
     <Compile Include="SendGridSmtpEmailService\SendGridSmtpEmailService.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SFA.DAS.Notifications.Domain\SFA.DAS.Notifications.Domain.csproj">
-      <Project>{ac81fd52-7485-4bbf-9c0c-d6eed90f84a1}</Project>
-      <Name>SFA.DAS.Notifications.Domain</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>

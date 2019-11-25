@@ -75,10 +75,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SFA.DAS.Notifications.Domain\SFA.DAS.Notifications.Domain.csproj">
-      <Project>{AC81FD52-7485-4BBF-9C0C-D6EED90F84A1}</Project>
-      <Name>SFA.DAS.Notifications.Domain</Name>
-    </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.Notifications.Infrastructure\SFA.DAS.Notifications.Infrastructure.csproj">
       <Project>{23CF7C43-D9CA-4446-AA6F-E0E5D792A200}</Project>
       <Name>SFA.DAS.Notifications.Infrastructure</Name>

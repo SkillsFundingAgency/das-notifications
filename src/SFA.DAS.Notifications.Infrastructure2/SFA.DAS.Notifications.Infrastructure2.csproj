@@ -17,10 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SFA.DAS.Notification.Domain2\SFA.DAS.Notifications.Domain2.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Reference Include="NLog">
       <HintPath>..\..\..\..\..\Users\Tom\.nuget\packages\nlog\4.5.3\lib\netstandard2.0\NLog.dll</HintPath>
     </Reference>

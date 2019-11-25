@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.Notifications.Domain.Entities
+﻿namespace SFA.DAS.Notifications.Domain2.Entities
 {
     public enum NotificationFormat
     {

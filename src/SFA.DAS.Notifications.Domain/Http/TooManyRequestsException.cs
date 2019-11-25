@@ -1,4 +1,4 @@
-namespace SFA.DAS.Notifications.Domain.Http
+namespace SFA.DAS.Notifications.Domain2.Http
 {
     public class TooManyRequestsException : HttpException
     {
