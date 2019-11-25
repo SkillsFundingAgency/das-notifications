@@ -10,4 +10,8 @@
     <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.0.0.39208" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SFA.DAS.Notifications.Domain\SFA.DAS.Notifications.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

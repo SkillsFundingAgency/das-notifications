@@ -5,8 +5,8 @@ using FluentValidation;
 using MediatR;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Notifications.Application.Interfaces;
-using SFA.DAS.Notifications.Domain2.Configuration;
-using SFA.DAS.Notifications.Domain2.Entities;
+using SFA.DAS.Notifications.Domain.Configuration;
+using SFA.DAS.Notifications.Domain.Entities;
 
 namespace SFA.DAS.Notifications.Application.Commands.SendSms
 {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SFA.DAS.Notifications.Domain2.Entities
+namespace SFA.DAS.Notifications.Domain.Entities
 {
     public class Notification
     {

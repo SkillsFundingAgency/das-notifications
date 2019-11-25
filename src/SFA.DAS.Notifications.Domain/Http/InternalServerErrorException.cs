@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.Notifications.Domain2.Http
+﻿namespace SFA.DAS.Notifications.Domain.Http
 {
     public class InternalServerErrorException : HttpException
     {

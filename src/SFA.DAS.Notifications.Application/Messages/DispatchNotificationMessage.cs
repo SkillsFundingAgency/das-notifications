@@ -1,4 +1,4 @@
-﻿using SFA.DAS.Notifications.Domain2.Entities;
+﻿using SFA.DAS.Notifications.Domain.Entities;
 
 namespace SFA.DAS.Notifications.Application.Messages
 {

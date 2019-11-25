@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Configuration;
 using System.IO;
 using System.Linq;
+using Microsoft.Azure;
 using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.Configuration.FileStorage;
@@ -32,7 +32,7 @@ namespace SFA.DAS.Notifications.Infrastructure.DependencyResolution
             var environment = Environment.GetEnvironmentVariable("DASENV");
             if (string.IsNullOrEmpty(environment))
             {
-                environment = ConfigurationManager.AppSettings["EnvironmentName"];
+                environment = CloudConfigurationManager.GetSetting("EnvironmentName");
             }
 
             if (messagePublisher != null)
@@ -64,13 +64,13 @@ namespace SFA.DAS.Notifications.Infrastructure.DependencyResolution
         private static IConfigurationRepository GetConfigurationRepository()
         {
             IConfigurationRepository configurationRepository;
-            if (bool.Parse(ConfigurationManager.AppSettings["LocalConfig"]))
+            if (bool.Parse(CloudConfigurationManager.GetSetting("LocalConfig")))
             {
                 configurationRepository = new FileStorageConfigurationRepository();
             }
             else
             {
-                configurationRepository = new AzureTableStorageConfigurationRepository(ConfigurationManager.AppSettings["ConfigurationStorageConnectionString"]);
+                configurationRepository = new AzureTableStorageConfigurationRepository(CloudConfigurationManager.GetSetting("ConfigurationStorageConnectionString"));
             }
             return configurationRepository;
         }

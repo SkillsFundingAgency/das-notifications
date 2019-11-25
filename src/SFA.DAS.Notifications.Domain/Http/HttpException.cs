@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SFA.DAS.Notifications.Domain2.Http
+namespace SFA.DAS.Notifications.Domain.Http
 {
     public class HttpException : Exception
     {

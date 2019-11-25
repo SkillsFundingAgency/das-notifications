@@ -1,4 +1,4 @@
-﻿using System.Configuration;
+﻿using System;
 
 namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
 {
@@ -22,7 +22,7 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
         {
             if (fromApiKey.Length < 74)
             {
-                throw new ConfigurationErrorsException("The API Key provided is invalid. Please ensure you are using a v2 API Key that is not empty or null");
+                throw new Exception("The API Key provided is invalid. Please ensure you are using a v2 API Key that is not empty or null");
             }
 
             var serviceId = fromApiKey.Substring(fromApiKey.Length - ServiceIdStartPosition, GuidLength);

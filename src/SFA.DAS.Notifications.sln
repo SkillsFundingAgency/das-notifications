@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28917.181
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.Notifications.Infrastructure", "SFA.DAS.Notifications.Infrastructure\SFA.DAS.Notifications.Infrastructure.csproj", "{23CF7C43-D9CA-4446-AA6F-E0E5D792A200}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{CB97712B-FA0E-450D-AA94-07D986D172AE}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
@@ -39,13 +37,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.Notifications.Messa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.Notifications.Api.UnitTests", "SFA.DAS.Notifications.Api.UnitTests\SFA.DAS.Notifications.Api.UnitTests.csproj", "{F310DD04-3247-4285-9B5C-672945527547}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.Notifications.Infrastructure2", "SFA.DAS.Notifications.Infrastructure2\SFA.DAS.Notifications.Infrastructure2.csproj", "{4646B05A-2EBE-4771-9D7F-1EEA02600DB7}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.Notifications.Messages2", "SFA.DAS.Notifications.Messages2\SFA.DAS.Notifications.Messages2.csproj", "{F56BF614-394F-46F7-9A29-66D4DCFC30C0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.Notifications.Application", "SFA.DAS.Notifications.Application\SFA.DAS.Notifications.Application.csproj", "{9328871E-E1AE-4AFD-BAA4-3032E988E440}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.Notifications.Domain", "SFA.DAS.Notifications.Domain\SFA.DAS.Notifications.Domain.csproj", "{72084998-4C83-4048-920E-88BB174297FD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.Notifications.Infrastructure", "SFA.DAS.Notifications.Infrastructure\SFA.DAS.Notifications.Infrastructure.csproj", "{6679DB15-4709-4900-8212-1D1489555074}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -54,12 +52,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{23CF7C43-D9CA-4446-AA6F-E0E5D792A200}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{23CF7C43-D9CA-4446-AA6F-E0E5D792A200}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{23CF7C43-D9CA-4446-AA6F-E0E5D792A200}.Local|Any CPU.ActiveCfg = Release|Any CPU
-		{23CF7C43-D9CA-4446-AA6F-E0E5D792A200}.Local|Any CPU.Build.0 = Release|Any CPU
-		{23CF7C43-D9CA-4446-AA6F-E0E5D792A200}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{23CF7C43-D9CA-4446-AA6F-E0E5D792A200}.Release|Any CPU.Build.0 = Release|Any CPU
 		{962B4E7C-D851-4BA2-94EE-BE6DC0E99656}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{962B4E7C-D851-4BA2-94EE-BE6DC0E99656}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{962B4E7C-D851-4BA2-94EE-BE6DC0E99656}.Local|Any CPU.ActiveCfg = Release|Any CPU
@@ -126,12 +118,6 @@ Global
 		{F310DD04-3247-4285-9B5C-672945527547}.Local|Any CPU.Build.0 = Release|Any CPU
 		{F310DD04-3247-4285-9B5C-672945527547}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F310DD04-3247-4285-9B5C-672945527547}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4646B05A-2EBE-4771-9D7F-1EEA02600DB7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4646B05A-2EBE-4771-9D7F-1EEA02600DB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4646B05A-2EBE-4771-9D7F-1EEA02600DB7}.Local|Any CPU.ActiveCfg = Debug|Any CPU
-		{4646B05A-2EBE-4771-9D7F-1EEA02600DB7}.Local|Any CPU.Build.0 = Debug|Any CPU
-		{4646B05A-2EBE-4771-9D7F-1EEA02600DB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4646B05A-2EBE-4771-9D7F-1EEA02600DB7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F56BF614-394F-46F7-9A29-66D4DCFC30C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F56BF614-394F-46F7-9A29-66D4DCFC30C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F56BF614-394F-46F7-9A29-66D4DCFC30C0}.Local|Any CPU.ActiveCfg = Debug|Any CPU
@@ -150,6 +136,12 @@ Global
 		{72084998-4C83-4048-920E-88BB174297FD}.Local|Any CPU.Build.0 = Debug|Any CPU
 		{72084998-4C83-4048-920E-88BB174297FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{72084998-4C83-4048-920E-88BB174297FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6679DB15-4709-4900-8212-1D1489555074}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6679DB15-4709-4900-8212-1D1489555074}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6679DB15-4709-4900-8212-1D1489555074}.Local|Any CPU.ActiveCfg = Debug|Any CPU
+		{6679DB15-4709-4900-8212-1D1489555074}.Local|Any CPU.Build.0 = Debug|Any CPU
+		{6679DB15-4709-4900-8212-1D1489555074}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6679DB15-4709-4900-8212-1D1489555074}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
