@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="JWT" Version="1.3.4" />
+    <PackageReference Include="Microsoft.WindowsAzure.ConfigurationManager" Version="3.2.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="Polly" Version="5.0.6" />
+    <PackageReference Include="SFA.DAS.Configuration" Version="1.0.0.6634" />
+    <PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="1.0.0.6634" />
+    <PackageReference Include="SFA.DAS.Configuration.FileStorage" Version="1.0.0.6634" />
+    <PackageReference Include="SFA.DAS.Messaging" Version="3.0.0.8308" />
+    <PackageReference Include="SFA.DAS.Messaging.AzureServiceBus" Version="3.0.0.8308" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SFA.DAS.Notification.Domain2\SFA.DAS.Notifications.Domain2.csproj" />
+    <ProjectReference Include="..\SFA.DAS.Notifications.Application2\SFA.DAS.Notifications.Application2.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="NLog">
+      <HintPath>..\..\..\..\..\Users\Tom\.nuget\packages\nlog\4.5.3\lib\netstandard2.0\NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="StructureMap">
+      <HintPath>..\..\..\..\..\Users\Tom\.nuget\packages\structuremap\4.6.1\lib\netstandard2.0\StructureMap.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

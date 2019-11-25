@@ -5,8 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="6.2.1" />
     <PackageReference Include="MediatR" Version="2.1.0" />
     <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.0.0.39208" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SFA.DAS.Notification.Domain2\SFA.DAS.Notifications.Domain2.csproj" />
   </ItemGroup>
 
 </Project>

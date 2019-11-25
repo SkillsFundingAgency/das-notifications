@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.Notifications.Domain.Configuration
+﻿namespace SFA.DAS.Notifications.Domain2.Configuration
 {
     public class SmsTemplate
     {
