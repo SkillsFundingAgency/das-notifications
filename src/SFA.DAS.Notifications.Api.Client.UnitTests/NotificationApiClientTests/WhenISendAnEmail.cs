@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using SFA.DAS.Notifications.Api.Client.Configuration;
-using SFA.DAS.Notifications.Api.Client.UnitTests2;
 using SFA.DAS.Notifications.Api.Types;
 
 namespace SFA.DAS.Notifications.Api.Client.UnitTests.NotificationApiClientTests
