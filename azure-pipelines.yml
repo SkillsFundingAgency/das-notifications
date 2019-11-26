@@ -17,7 +17,7 @@ workspace:
     clean: all
 
 steps:
-- task: gittools.gitversion-preview.gitversion-task.GitVersion@5
+- task: gittools.gitversion.gitversion-task.GitVersion@5
   displayName: GitVersion
   inputs:
     updateAssemblyInfo: true
