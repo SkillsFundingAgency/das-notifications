@@ -1,15 +1,11 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using Microsoft.Azure;
-using SFA.DAS.Configuration;
-using SFA.DAS.Configuration.AzureTableStorage;
-using SFA.DAS.Configuration.FileStorage;
+using Microsoft.Extensions.Configuration;
 using SFA.DAS.Messaging;
 using SFA.DAS.Messaging.AzureServiceBus;
 using SFA.DAS.Messaging.FileSystem;
 using SFA.DAS.Notifications.Application.Commands;
-using SFA.DAS.Notifications.Infrastructure.Configuration;
 using StructureMap;
 using StructureMap.Pipeline;
 
@@ -18,10 +14,12 @@ namespace SFA.DAS.Notifications.Infrastructure.DependencyResolution
     public class MessagePolicy : ConfiguredInstancePolicy
     {
         private readonly string _serviceName;
+        private readonly IConfiguration _configuration;
 
-        public MessagePolicy(string serviceName)
+        public MessagePolicy(string serviceName, IConfiguration configuration)
         {
             _serviceName = serviceName;
+            _configuration = configuration;
         }
 
         protected override void apply(Type pluginType, IConfiguredInstance instance)
@@ -32,7 +30,7 @@ namespace SFA.DAS.Notifications.Infrastructure.DependencyResolution
             var environment = Environment.GetEnvironmentVariable("DASENV");
             if (string.IsNullOrEmpty(environment))
             {
-                environment = CloudConfigurationManager.GetSetting("EnvironmentName");
+                environment = _configuration["EnvironmentName"];
             }
 
             if (messagePublisher != null)
@@ -45,34 +43,20 @@ namespace SFA.DAS.Notifications.Infrastructure.DependencyResolution
 
                 if (queueName != null)
                 {
-                    var configurationService = new ConfigurationService(GetConfigurationRepository(), new ConfigurationOptions(_serviceName, environment, "1.0"));
+                    //var configurationService = new ConfigurationService(GetConfigurationRepository(), new ConfigurationOptions(_serviceName, environment, "1.0"));
 
-                    var config = configurationService.Get<NotificationServiceConfiguration>().AzureServiceBusMessageServiceConfiguration;
-                    if (string.IsNullOrEmpty(config.ConnectionString))
+                    //var config = configurationService.Get<NotificationServiceConfiguration>().AzureServiceBusMessageServiceConfiguration;
+                    if (string.IsNullOrEmpty(_configuration.GetSection("NServiceBusConfiguration")["ServiceBusConnectionString"])) //todo lose these magic strings
                     {
                         var queueFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
                         instance.Dependencies.AddForConstructorParameter(messagePublisher, new FileSystemMessageService(Path.Combine(queueFolder, queueName.Name)));
                     }
                     else
                     {
-                        instance.Dependencies.AddForConstructorParameter(messagePublisher, new AzureServiceBusMessageService(config.ConnectionString, queueName.Name));
+                        instance.Dependencies.AddForConstructorParameter(messagePublisher, new AzureServiceBusMessageService(_configuration.GetSection("NServiceBusConfiguration")["ServiceBusConnectionString"], queueName.Name));
                     }
                 }
             }
-        }
-
-        private static IConfigurationRepository GetConfigurationRepository()
-        {
-            IConfigurationRepository configurationRepository;
-            if (bool.Parse(CloudConfigurationManager.GetSetting("LocalConfig")))
-            {
-                configurationRepository = new FileStorageConfigurationRepository();
-            }
-            else
-            {
-                configurationRepository = new AzureTableStorageConfigurationRepository(CloudConfigurationManager.GetSetting("ConfigurationStorageConnectionString"));
-            }
-            return configurationRepository;
         }
     }
 }
