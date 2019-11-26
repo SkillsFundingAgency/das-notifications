@@ -1,5 +1,6 @@
 ﻿using System;
 using JWT;
+using JWT.Algorithms;
 using Newtonsoft.Json;
 
 namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
@@ -8,15 +9,14 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
     {
         public static string CreateToken(string serviceId, string apiKey)
         {
-            JsonWebToken.JsonSerializer = new NewtonsoftJsonSerializer();
-
             var payLoad = new GovNotifyPayload
             {
                 Iss = serviceId,
                 Iat = DateTime.UtcNow.ToUnixTime()
             };
 
-            var token = JsonWebToken.Encode(payLoad, apiKey, JwtHashAlgorithm.HS256);
+            IJwtEncoder encoder = new JwtEncoder(new HMACSHA256Algorithm(), new NewtonsoftJsonSerializer(), new JwtBase64UrlEncoder());
+            var token = encoder.Encode(payLoad, apiKey);
 
             return token;
         }
