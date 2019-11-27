@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Mail;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
-using SFA.DAS.Configuration;
 using SFA.DAS.Notifications.Application.Interfaces;
 using SFA.DAS.Notifications.Domain.Entities;
 using SFA.DAS.Notifications.Infrastructure.Configuration;
@@ -13,18 +13,17 @@ namespace SFA.DAS.Notifications.Infrastructure.LocalEmailService
 {
     public class LocalEmailService : IEmailService
     {
-        private readonly IConfigurationService _configurationService;
+        private readonly IConfiguration _configuration;
 
-        public LocalEmailService(IConfigurationService configurationService)
+        //todo left off here thinking maybe inject NotificationServiceConfiguration and assign from _configuration object once in DI (because line 27 is aweful)
+        public LocalEmailService(IConfiguration configuration)
         {
-            if (configurationService == null)
-                throw new ArgumentNullException(nameof(configurationService));
-            _configurationService = configurationService;
+            _configuration = configuration;
         }
 
         public async Task SendAsync(EmailMessage message)
         {
-            var config = await _configurationService.GetAsync<NotificationServiceConfiguration>();
+            var config = JsonConvert.DeserializeObject<NotificationServiceConfiguration>(_configuration["SFA.DAS.Notifications_1.0"]);
 
             using (var client = new SmtpClient())
             {

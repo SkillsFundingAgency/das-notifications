@@ -4,9 +4,9 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using NLog;
-using SFA.DAS.Configuration;
 using SFA.DAS.Notifications.Domain.Http;
 using SFA.DAS.Notifications.Infrastructure.Configuration;
 
@@ -20,15 +20,13 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
 
     public class NotifyHttpClientWrapper : INotifyHttpClientWrapper
     {
-        private readonly IConfigurationService _configurationService;
+        private readonly IConfiguration _configuration;
         private readonly IDictionary<string, GovNotifyServiceCredentials> _consumerConfigurationLookup;
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
 
-        public NotifyHttpClientWrapper(IConfigurationService configurationService)
+        public NotifyHttpClientWrapper(IConfiguration configuration)
         {
-            if (configurationService == null)
-                throw new ArgumentNullException(nameof(configurationService));
-            _configurationService = configurationService;
+            _configuration = configuration;
             _consumerConfigurationLookup = GetConsumerConfiguration();
         }
 
@@ -49,7 +47,7 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
             if (notificationsEndPoint.StartsWith("/"))
                 throw new ArgumentException("Cannot start with a /", nameof(notificationsEndPoint));
 
-            var configuration = await _configurationService.GetAsync<NotificationServiceConfiguration>();
+            var configuration = JsonConvert.DeserializeObject<NotificationServiceConfiguration>(_configuration["SFA.DAS.Notifications_1.0"]);
             content.Template = content.Template;
 
             using (var httpClient = CreateHttpClient(configuration.NotifyServiceConfiguration.ApiBaseUrl))
@@ -94,8 +92,7 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
         {
             var lookup = new Dictionary<string, GovNotifyServiceCredentials>();
 
-            var consumerConfiguration = _configurationService
-                .Get<NotificationServiceConfiguration>()
+            var consumerConfiguration = JsonConvert.DeserializeObject<NotificationServiceConfiguration>(_configuration["SFA.DAS.Notifications_1.0"])
                 .NotifyServiceConfiguration
                 .ConsumerConfiguration;
 

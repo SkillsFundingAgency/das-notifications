@@ -1,6 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
-using SFA.DAS.Configuration;
 using SFA.DAS.Notifications.Domain.Configuration;
 
 namespace SFA.DAS.Notifications.Infrastructure.Configuration
@@ -10,24 +11,26 @@ namespace SFA.DAS.Notifications.Infrastructure.Configuration
         protected const string ServiceName = "SFA.DAS.Notifications-Templates";
         private const string Version = "1.0";
 
-        private readonly IConfigurationRepository _configurationRepository;
-        private readonly string _environmentName;
+        private readonly string _environmentName; // todo what about environment name
+        private readonly IConfiguration _configuration;
 
-        public TemplateConfigurationService(IConfigurationRepository configurationRepository, string environmentName)
+        public TemplateConfigurationService(string environmentName, IConfiguration configuration)
         {
-            _configurationRepository = configurationRepository;
             _environmentName = environmentName;
+            _configuration = configuration;
         }
 
+        //todo config usage updated here
         public TemplateConfiguration Get()
         {
-            var json = _configurationRepository.Get(ServiceName, _environmentName, Version);
+            var json = _configuration[$"{ServiceName}_{Version}"];
             return JsonConvert.DeserializeObject<TemplateConfiguration>(json);
         }
 
+        [Obsolete("use non async")] //todo remove this
         public async Task<TemplateConfiguration> GetAsync()
         {
-            var json = await _configurationRepository.GetAsync(ServiceName, _environmentName, Version);
+            var json = _configuration[$"{ServiceName}_{Version}"];
             return JsonConvert.DeserializeObject<TemplateConfiguration>(json);
         }
     }

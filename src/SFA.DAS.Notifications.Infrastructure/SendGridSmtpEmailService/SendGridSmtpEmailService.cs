@@ -1,6 +1,7 @@
 using System;
 using System.Net.Mail;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using SFA.DAS.Configuration;
 using SFA.DAS.Notifications.Application.Interfaces;
@@ -11,18 +12,16 @@ namespace SFA.DAS.Notifications.Infrastructure.SendGridSmtpEmailService
 {
     public class SendGridSmtpEmailService : IEmailService
     {
-        private readonly IConfigurationService _configurationService;
+        private readonly IConfiguration _configuration;
 
-        public SendGridSmtpEmailService(IConfigurationService configurationService)
+        public SendGridSmtpEmailService(IConfiguration configuration)
         {
-            if (configurationService == null)
-                throw new ArgumentNullException(nameof(configurationService));
-            _configurationService = configurationService;
+            _configuration = configuration;
         }
 
         public async Task SendAsync(EmailMessage message)
         {
-            var config = _configurationService.Get<NotificationServiceConfiguration>();
+            var config = JsonConvert.DeserializeObject<NotificationServiceConfiguration>(_configuration["SFA.DAS.Notifications_1.0"]);
 
             using (var client = new SmtpClient())
             {
