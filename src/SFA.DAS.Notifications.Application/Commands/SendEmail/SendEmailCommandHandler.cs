@@ -4,7 +4,7 @@ using System.Net;
 using System.Threading.Tasks;
 using FluentValidation;
 using MediatR;
-using SFA.DAS.NLog.Logger;
+using Microsoft.Extensions.Logging;
 using SFA.DAS.Notifications.Application.Interfaces;
 using SFA.DAS.Notifications.Domain.Configuration;
 using SFA.DAS.Notifications.Domain.Entities;
@@ -19,13 +19,13 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
         public string send_notifications { get; set; }
 #pragma warning restore IDE1006 // Naming Styles
 
-        private readonly ILog _logger;
+        private readonly ILogger _logger;
         private readonly IEmailService _emailService;
         private readonly ITemplateConfigurationService _templateConfigurationService;
 
         public SendEmailCommandHandler(
             ITemplateConfigurationService templateConfigurationService,
-            ILog logger,
+            ILogger logger,
             IEmailService emailService)
         {
             _templateConfigurationService = templateConfigurationService;
@@ -37,7 +37,7 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
         {
             var messageId = Guid.NewGuid().ToString();
 
-            _logger.Info($"Received command to send email to {command.RecipientsAddress} (message id: {messageId})");
+            _logger.Log(LogLevel.Information,$"Received command to send email to {command.RecipientsAddress} (message id: {messageId})");
 
             Validate(command);
 
@@ -63,7 +63,7 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
             else
             {
                 // Keep eye on this to make sure consumers migrate
-                _logger.Info($"Request to send template {command.TemplateId} received using email service id");
+                _logger.Log(LogLevel.Information, $"Request to send template {command.TemplateId} received using email service id");
             }
 
             try
@@ -85,7 +85,7 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
 
                 if (httpException != null && httpException.StatusCode.Equals(HttpStatusCode.BadRequest))
                 {
-                    _logger.Warn(ex, "Bad Request - Message will not be re-processed.");
+                    _logger.Log(LogLevel.Warning, ex, "Bad Request - Message will not be re-processed.");
                 }
                 else
                 {
@@ -93,7 +93,7 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
                 }
             }
 
-            _logger.Debug($"Published email message '{messageId}' to queue");
+            _logger.Log(LogLevel.Debug, $"Published email message '{messageId}' to queue");
         }
 
         private void Validate(SendEmailCommand command)

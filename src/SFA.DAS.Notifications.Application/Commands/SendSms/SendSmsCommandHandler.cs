@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using FluentValidation;
 using MediatR;
-using SFA.DAS.NLog.Logger;
+using Microsoft.Extensions.Logging;
 using SFA.DAS.Notifications.Application.Interfaces;
 using SFA.DAS.Notifications.Domain.Configuration;
 using SFA.DAS.Notifications.Domain.Entities;
@@ -17,13 +17,13 @@ namespace SFA.DAS.Notifications.Application.Commands.SendSms
         public string send_notifications { get; set; }
 #pragma warning restore IDE1006 // Naming Styles
 
-        private readonly ILog _logger;
+        private readonly ILogger _logger;
         private readonly ITemplateConfigurationService _templateConfigurationService;
         private readonly ISmsService _smsService;
 
         public SendSmsCommandHandler(
             ITemplateConfigurationService templateConfigurationService,
-            ILog logger, ISmsService smsService)
+            ILogger logger, ISmsService smsService)
         {
             _templateConfigurationService = templateConfigurationService;
             _logger = logger;
@@ -34,7 +34,7 @@ namespace SFA.DAS.Notifications.Application.Commands.SendSms
         {
             var messageId = Guid.NewGuid().ToString();
 
-            _logger.Info($"Received command to send SMS to {command.RecipientsNumber} (message id: {messageId})");
+            _logger.Log(LogLevel.Information, $"Received command to send SMS to {command.RecipientsNumber} (message id: {messageId})");
 
             Validate(command);
 
@@ -52,7 +52,7 @@ namespace SFA.DAS.Notifications.Application.Commands.SendSms
             }
             command.TemplateId = template.ServiceId;
 
-            _logger.Debug($"Stored SMS message '{messageId}' in data store");
+            _logger.Log(LogLevel.Debug, $"Stored SMS message '{messageId}' in data store");
 
             await _smsService.SendAsync(new SmsMessage {
                 TemplateId = command.TemplateId,
@@ -62,7 +62,7 @@ namespace SFA.DAS.Notifications.Application.Commands.SendSms
                 Reference = messageId
             });
 
-            _logger.Debug($"Published SMS message '{messageId}' to queue");
+            _logger.Log(LogLevel.Debug, $"Published SMS message '{messageId}' to queue");
         }
 
         private void Validate(SendSmsCommand command)

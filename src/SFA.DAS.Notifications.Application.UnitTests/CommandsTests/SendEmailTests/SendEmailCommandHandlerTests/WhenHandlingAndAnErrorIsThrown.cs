@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.NLog.Logger;
 using SFA.DAS.Notifications.Application.Commands.SendEmail;
 using SFA.DAS.Notifications.Application.Interfaces;
 using SFA.DAS.Notifications.Domain.Configuration;
@@ -45,7 +44,7 @@ namespace SFA.DAS.Notifications.Application.UnitTests.CommandsTests.SendEmailTes
 
             _handler = new SendEmailCommandHandler(
                 _templateConfigurationService.Object,
-                Mock.Of<ILog>(),
+                Mock.Of<Microsoft.Extensions.Logging.ILogger>(),
                 _emailService.Object);
 
             _templateId = Guid.NewGuid().ToString();

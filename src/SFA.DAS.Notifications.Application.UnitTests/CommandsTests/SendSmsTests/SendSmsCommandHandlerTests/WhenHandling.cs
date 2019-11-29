@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using FluentValidation;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.NLog.Logger;
 using SFA.DAS.Notifications.Application.Commands.SendSms;
 using SFA.DAS.Notifications.Application.Interfaces;
 using SFA.DAS.Notifications.Domain.Configuration;
@@ -44,7 +44,7 @@ namespace SFA.DAS.Notifications.Application.UnitTests.CommandsTests.SendSmsTests
 
             _handler = new SendSmsCommandHandler(
                 _templateConfigurationService.Object,
-                Mock.Of<ILog>(),
+                Mock.Of<ILogger>(),
                 _smsService.Object);
 
             _templateId = TranslatedTemplateId;
