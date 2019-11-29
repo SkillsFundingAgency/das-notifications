@@ -1,9 +1,14 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-//using SFA.DAS.Configuration.AzureTableStorage;
+using SFA.DAS.Configuration.AzureTableStorage;
 
 namespace SFA.DAS.Notifications.MessageHandlers3.Startup
 {
+    public static class ConfigurationKeys
+    {
+        public const string Notifications = "SFA.DAS.Notifications";
+    }
+
     public static class ConfigurationStartup
     {
         public static IHostBuilder ConfigureDasAppConfiguration(this IHostBuilder builder, string[] args)
@@ -14,12 +19,10 @@ namespace SFA.DAS.Notifications.MessageHandlers3.Startup
                 .AddEnvironmentVariables()
                 .AddAzureTableStorage(o =>
                 {
-                    o.EnvironmentNameEnvironmentVariableName = EnvironmentVariableName.EnvironmentName;
+                    o.EnvironmentNameEnvironmentVariableName = "ASPNETCORE_ENVIRONMENT";
                     o.ConfigurationKeys = new[]
                     {
-                        ConfigurationKeys.EmployerApprenticeshipsServicePortal,
-                        ConfigurationKeys.CommitmentsApi,
-                        ConfigurationKeys.ApprenticeshipInfoServiceApi
+                        ConfigurationKeys.Notifications
                     };
                 })
                 .AddCommandLine(args));
