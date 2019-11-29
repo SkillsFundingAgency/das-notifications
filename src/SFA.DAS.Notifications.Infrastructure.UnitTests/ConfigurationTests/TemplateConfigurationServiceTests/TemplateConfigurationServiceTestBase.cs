@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Microsoft.Extensions.Configuration;
 using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;
@@ -20,7 +21,7 @@ namespace SFA.DAS.Notifications.Infrastructure.UnitTests.ConfigurationTests.Temp
         protected const string Template2EmailServiceId = "6aaa019f-00fc-447f-a933-0313a787e96d";
 
         protected string RepositoryResult;
-        protected Mock<IConfigurationRepository> ConfigurationRepository;
+        protected Mock<IConfiguration> Configuration;
         protected TemplateConfigurationService Service;
 
         protected virtual void Arrange()
@@ -42,13 +43,10 @@ namespace SFA.DAS.Notifications.Infrastructure.UnitTests.ConfigurationTests.Temp
                 }
             });
 
-            ConfigurationRepository = new Mock<IConfigurationRepository>();
-            ConfigurationRepository.Setup(r => r.Get(ServiceName, EnvironmentName, Version))
-                .Returns(RepositoryResult);
-            ConfigurationRepository.Setup(r => r.GetAsync(ServiceName, EnvironmentName, Version))
-                .ReturnsAsync(RepositoryResult);
+            Configuration = new Mock<IConfiguration>();
+            Configuration.Setup(c => c[$"{ServiceName}_{Version}"]).Returns(RepositoryResult);
 
-            Service = new TemplateConfigurationService(ConfigurationRepository.Object, EnvironmentName);
+            Service = new TemplateConfigurationService(EnvironmentName, Configuration.Object);
         }
 
         public abstract void ThenItShouldReturnAnInstanceOfTemplateConfiguration();

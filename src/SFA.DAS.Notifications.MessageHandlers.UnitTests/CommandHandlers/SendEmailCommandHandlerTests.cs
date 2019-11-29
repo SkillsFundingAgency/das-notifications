@@ -8,7 +8,7 @@ using NServiceBus;
 using NUnit.Framework;
 using SendEmailCommandHandler = SFA.DAS.Notifications.MessageHandlers.CommandHandlers.SendEmailCommandHandler;
 using Microsoft.Extensions.Logging;
-using SFA.DAS.Notifications.Application.Commands.SendEmail;
+using SendEmailCommand = SFA.DAS.Notifications.Application.Commands.SendEmail.SendEmailCommand;
 
 namespace SFA.DAS.Notifications.MessageHandlers.UnitTests.CommandHandlers
 {

@@ -15,4 +15,8 @@
     <PackageReference Include="SFA.DAS.NServiceBus" Version="16.0.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SFA.DAS.Notifications.Messages\SFA.DAS.Notifications.Messages.csproj" />
+  </ItemGroup>
+
 </Project>
