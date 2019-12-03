@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "SFA.DAS.EAS.Portal.Worker": {
+    "SFA.DAS.Notifications.MessageHandlers3": {
       "commandName": "Project",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",

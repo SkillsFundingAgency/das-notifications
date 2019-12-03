@@ -13,19 +13,21 @@ namespace SFA.DAS.Notifications.MessageHandlers3.Startup
     {
         public static IHostBuilder ConfigureDasAppConfiguration(this IHostBuilder builder, string[] args)
         {
-            return builder.ConfigureAppConfiguration((c, b) => b
-                .AddJsonFile("appsettings.json", true, true)
-                .AddJsonFile($"appsettings.{c.HostingEnvironment.EnvironmentName}.json", true, true)
-                .AddEnvironmentVariables()
-                .AddAzureTableStorage(o =>
+            return builder.ConfigureAppConfiguration((c, b) =>
+            {
+                var buildProgress = b;
+                buildProgress = buildProgress.AddJsonFile("appsettings.json", true, true);
+                buildProgress = buildProgress.AddJsonFile($"appsettings.{c.HostingEnvironment.EnvironmentName}.json", true, true);
+                buildProgress = buildProgress.AddEnvironmentVariables();
+                buildProgress = buildProgress.AddAzureTableStorage(o =>
                 {
-                    o.EnvironmentNameEnvironmentVariableName = "ASPNETCORE_ENVIRONMENT";
-                    o.ConfigurationKeys = new[]
-                    {
+                    o.EnvironmentNameEnvironmentVariableName = "LOCAL";//"ASPNETCORE_ENVIRONMENT";
+                    o.ConfigurationKeys = new[] {
                         ConfigurationKeys.Notifications
                     };
-                })
-                .AddCommandLine(args));
+                });
+                buildProgress = buildProgress.AddCommandLine(args);
+            });
         }
     }
 }

@@ -22,17 +22,17 @@ namespace SFA.DAS.Notifications.MessageHandlers3.Startup
                     var configuration = s.GetService<IConfiguration>();
                     var hostingEnvironment = s.GetService<IHostingEnvironment>();
                     var serviceBusConfiguration = configuration.GetNotificationSection<NServiceBusConfiguration>("NServiceBusConfiguration");
-                    var isDevelopment = hostingEnvironment.IsDevelopment();
+                    var isDevelopment = true;// hostingEnvironment.IsDevelopment(); todo fix development env variable / app setting
                     var endpointConfiguration = new EndpointConfiguration("SFA.DAS.Notifications.MessageHandlers")
                         .UseAzureServiceBusTransport(isDevelopment, serviceBusConfiguration.ServiceBusConnectionString)
                         .UseErrorQueue("errors")
                         .UseInstallers()
                         .UseLicense(serviceBusConfiguration.NServiceBusLicense)
-                        .UsePortalMessageConventions()
+                        .UseNotificationsMessageConventions()
                         .UseNewtonsoftJsonSerializer()
                         .UseNLogFactory()
                         .UseServiceCollection(services)
-                    ;
+                        ;
 
                     return Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
                 })
