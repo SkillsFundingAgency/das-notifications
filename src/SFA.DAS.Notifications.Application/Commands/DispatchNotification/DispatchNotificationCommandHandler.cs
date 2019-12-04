@@ -65,6 +65,7 @@ namespace SFA.DAS.Notifications.Application.Commands.DispatchNotification
                     catch (Exception ex)
                     {
                         await _notificationsRepository.Update(command.Format, command.MessageId, NotificationStatus.Failed);
+                        Logger.Warn(ex, $"Error sending email. MessageId: {command.MessageId}");
 
                         var httpException = ex as HttpException;
 
