@@ -34,6 +34,11 @@
     <ProjectReference Include="..\SFA.DAS.Notifications.Messages\SFA.DAS.Notifications.Messages.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="NLog.Extensions.Logging">
+      <HintPath>..\..\..\..\..\Users\Tom\.nuget\packages\nlog.extensions.logging\1.6.0\lib\net461\NLog.Extensions.Logging.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
     <None Update="appsettings.Development.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

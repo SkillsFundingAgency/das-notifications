@@ -19,13 +19,13 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
         public string send_notifications { get; set; }
 #pragma warning restore IDE1006 // Naming Styles
 
-        private readonly ILogger _logger;
+        private readonly ILogger<SendEmailCommandHandler> _logger;
         private readonly IEmailService _emailService;
         private readonly ITemplateConfigurationService _templateConfigurationService;
 
         public SendEmailCommandHandler(
             ITemplateConfigurationService templateConfigurationService,
-            ILogger logger,
+            ILogger<SendEmailCommandHandler> logger,
             IEmailService emailService)
         {
             _templateConfigurationService = templateConfigurationService;

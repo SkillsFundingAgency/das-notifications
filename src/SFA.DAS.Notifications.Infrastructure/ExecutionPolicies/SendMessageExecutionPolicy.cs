@@ -1,5 +1,5 @@
 using System;
-using NLog;
+using Microsoft.Extensions.Logging;
 using Polly;
 using SFA.DAS.Notifications.Domain.Http;
 
@@ -10,12 +10,12 @@ namespace SFA.DAS.Notifications.Infrastructure.ExecutionPolicies
     {
         public const string Name = "Send message policy";
 
-        private readonly ILogger _logger;
+        private readonly ILogger<SendMessageExecutionPolicy> _logger;
         private readonly Policy TooManyRequestsPolicy;
         private readonly Policy ServiceUnavailablePolicy;
         private readonly Policy InternalServerErrorPolicy;
 
-        public SendMessageExecutionPolicy(ILogger logger)
+        public SendMessageExecutionPolicy(ILogger<SendMessageExecutionPolicy> logger)
         {
             _logger = logger;
 
@@ -27,13 +27,13 @@ namespace SFA.DAS.Notifications.Infrastructure.ExecutionPolicies
 
         protected override T OnException<T>(Exception ex)
         {
-            _logger.Error(ex, $"Exceeded retry limit - {ex.Message}");
+            _logger.LogError(ex, $"Exceeded retry limit - {ex.Message}");
             return default(T);
         }
 
         private void OnRetryableFailure(Exception ex)
         {
-            _logger.Info(ex, $"Error sending email - {ex.Message} - Will retry");
+            _logger.LogInformation(ex, $"Error sending email - {ex.Message} - Will retry");
         }
     }
 }

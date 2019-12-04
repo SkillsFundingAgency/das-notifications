@@ -10,13 +10,12 @@ namespace SFA.DAS.Notifications.Infrastructure.Configuration
     {
         protected const string ServiceName = "SFA.DAS.Notifications-Templates";
         private const string Version = "1.0";
+        //todo environment name was here...
 
-        private readonly string _environmentName; // todo what about environment name
         private readonly IConfiguration _configuration;
 
-        public TemplateConfigurationService(string environmentName, IConfiguration configuration)
+        public TemplateConfigurationService(IConfiguration configuration)
         {
-            _environmentName = environmentName;
             _configuration = configuration;
         }
 

@@ -47,7 +47,8 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
             if (notificationsEndPoint.StartsWith("/"))
                 throw new ArgumentException("Cannot start with a /", nameof(notificationsEndPoint));
 
-            var configuration = JsonConvert.DeserializeObject<NotificationServiceConfiguration>(_configuration["SFA.DAS.Notifications_1.0"]);
+            var configuration = _configuration.GetNotificationSection<NotificationServiceConfiguration>();
+            //var configuration = JsonConvert.DeserializeObject<NotificationServiceConfiguration>(_configuration["SFA.DAS.Notifications_1.0"]);
             content.Template = content.Template;
 
             using (var httpClient = CreateHttpClient(configuration.NotifyServiceConfiguration.ApiBaseUrl))
@@ -92,7 +93,8 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
         {
             var lookup = new Dictionary<string, GovNotifyServiceCredentials>();
 
-            var consumerConfiguration = JsonConvert.DeserializeObject<NotificationServiceConfiguration>(_configuration["SFA.DAS.Notifications_1.0"])
+            //var consumerConfiguration = JsonConvert.DeserializeObject<NotificationServiceConfiguration>(_configuration.GetSection("SFA.DAS.Notifications").) //todo no 1.0 here propagate
+            var consumerConfiguration = _configuration.GetNotificationSection<NotificationServiceConfiguration>()
                 .NotifyServiceConfiguration
                 .ConsumerConfiguration;
 

@@ -12,9 +12,9 @@ namespace SFA.DAS.Notifications.MessageHandlers3.CommandHandlers
     public class SendEmailCommandHandler : IHandleMessages<Messages.Commands.SendEmailCommand>
     {
         private readonly IMediator _mediator;
-        private readonly ILogger _logger;
+        private readonly ILogger<SendEmailCommandHandler> _logger;
 
-        public SendEmailCommandHandler(IMediator mediator, ILogger logger)
+        public SendEmailCommandHandler(IMediator mediator, ILogger<SendEmailCommandHandler> logger)
         {
             _mediator = mediator;
             _logger = logger;

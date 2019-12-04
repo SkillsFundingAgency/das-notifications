@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using Microsoft.Extensions.Configuration;
 
-namespace SFA.DAS.Notifications.MessageHandlers3
+namespace SFA.DAS.Notifications.Infrastructure.Configuration
 {
     public static class ConfigurationExtensions
     {

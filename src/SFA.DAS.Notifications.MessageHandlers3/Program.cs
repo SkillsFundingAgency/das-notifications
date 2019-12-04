@@ -2,6 +2,8 @@
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using NLog.Extensions.Logging;
+using SFA.DAS.Notifications.MessageHandlers3.DependencyResolution;
 using SFA.DAS.Notifications.MessageHandlers3.Startup;
 //using SFA.DAS.Notifications.MessageHandlers3.StartupJobs;
 
@@ -22,7 +24,7 @@ namespace SFA.DAS.Notifications.MessageHandlers3
             new HostBuilder()
                 .ConfigureDasWebJobs()
                 .ConfigureDasAppConfiguration(args)
-                //.ConfigureDasLogging()
+                .ConfigureLogging(b => b.AddNLog())
                 //.UseApplicationInsights()
                 //.UseDasEnvironment()
                 .UseConsoleLifetime()
@@ -30,6 +32,7 @@ namespace SFA.DAS.Notifications.MessageHandlers3
                 //.ConfigureServices((c, s) => s.AddHashingServices(c))
                 //.ConfigureServices((c, s) => s.AddCommitmentsApi(c))
                 //.ConfigureServices((c, s) => s.AddProviderServices(c))
+                .ConfigureServices((c, s) => s.AddDefaultServices(c))
                 .ConfigureServices((c, s) => s.AddDasNServiceBus());
     }
 }
