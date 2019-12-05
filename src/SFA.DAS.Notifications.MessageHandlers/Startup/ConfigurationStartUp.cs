@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Hosting;
 using SFA.DAS.Configuration.AzureTableStorage;
 
-namespace SFA.DAS.Notifications.MessageHandlers3.Startup
+namespace SFA.DAS.Notifications.MessageHandlers.Startup
 {
     public static class ConfigurationKeys
     {

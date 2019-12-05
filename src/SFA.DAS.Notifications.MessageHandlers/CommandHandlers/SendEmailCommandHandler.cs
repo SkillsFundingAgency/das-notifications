@@ -7,7 +7,7 @@ using NServiceBus;
 using SendEmailCommand = SFA.DAS.Notifications.Application.Commands.SendEmail.SendEmailCommand;
 
 
-namespace SFA.DAS.Notifications.MessageHandlers3.CommandHandlers
+namespace SFA.DAS.Notifications.MessageHandlers.CommandHandlers
 {
     public class SendEmailCommandHandler : IHandleMessages<Messages.Commands.SendEmailCommand>
     {

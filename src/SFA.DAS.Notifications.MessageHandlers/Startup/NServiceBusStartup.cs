@@ -3,14 +3,14 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NServiceBus;
 using SFA.DAS.Notifications.Infrastructure.Configuration;
-using SFA.DAS.Notifications.MessageHandlers3.NServiceBus;
+using SFA.DAS.Notifications.MessageHandlers.NServiceBus;
 using SFA.DAS.NServiceBus.Configuration;
 using SFA.DAS.NServiceBus.Configuration.AzureServiceBus;
 using SFA.DAS.NServiceBus.Configuration.NewtonsoftJsonSerializer;
 using SFA.DAS.NServiceBus.Configuration.NLog;
 using SFA.DAS.NServiceBus.Hosting;
 
-namespace SFA.DAS.Notifications.MessageHandlers3.Startup
+namespace SFA.DAS.Notifications.MessageHandlers.Startup
 {
     public static class NServiceBusStartup
     {

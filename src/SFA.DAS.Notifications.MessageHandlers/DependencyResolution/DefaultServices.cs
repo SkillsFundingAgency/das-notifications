@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using MediatR;
+﻿using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using SFA.DAS.Notifications.Application.Commands.SendEmail;
 using SFA.DAS.Notifications.Application.Interfaces;
 using SFA.DAS.Notifications.Domain.Configuration;
@@ -12,7 +8,7 @@ using SFA.DAS.Notifications.Infrastructure.Configuration;
 using SFA.DAS.Notifications.Infrastructure.ExecutionPolicies;
 using SFA.DAS.Notifications.Infrastructure.NotifyEmailService;
 
-namespace SFA.DAS.Notifications.MessageHandlers3.DependencyResolution
+namespace SFA.DAS.Notifications.MessageHandlers.DependencyResolution
 {
     public static class DefaultServices
     {

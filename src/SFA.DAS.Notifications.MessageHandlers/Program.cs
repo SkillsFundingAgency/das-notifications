@@ -1,13 +1,12 @@
 ﻿using System.Threading.Tasks;
-using Microsoft.Azure.WebJobs;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NLog.Extensions.Logging;
-using SFA.DAS.Notifications.MessageHandlers3.DependencyResolution;
-using SFA.DAS.Notifications.MessageHandlers3.Startup;
+using SFA.DAS.Notifications.MessageHandlers.DependencyResolution;
+using SFA.DAS.Notifications.MessageHandlers.Startup;
+
 //using SFA.DAS.Notifications.MessageHandlers3.StartupJobs;
 
-namespace SFA.DAS.Notifications.MessageHandlers3
+namespace SFA.DAS.Notifications.MessageHandlers
 {
     class Program
     {

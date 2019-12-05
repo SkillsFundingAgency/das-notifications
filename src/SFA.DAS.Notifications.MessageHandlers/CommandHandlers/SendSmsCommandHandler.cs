@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 using NServiceBus;
 using SendSmsCommand = SFA.DAS.Notifications.Application.Commands.SendSms.SendSmsCommand;
 
-namespace SFA.DAS.Notifications.MessageHandlers3.CommandHandlers
+namespace SFA.DAS.Notifications.MessageHandlers.CommandHandlers
 {
     public class SendSmsCommandHandler : IHandleMessages<Messages.Commands.SendSmsCommand>
     {

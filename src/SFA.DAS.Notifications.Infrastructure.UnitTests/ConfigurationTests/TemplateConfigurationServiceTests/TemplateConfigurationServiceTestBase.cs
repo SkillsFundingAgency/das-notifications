@@ -12,7 +12,6 @@ namespace SFA.DAS.Notifications.Infrastructure.UnitTests.ConfigurationTests.Temp
     public abstract class TemplateConfigurationServiceTestBase
     {
         protected const string ServiceName = "SFA.DAS.Notifications-Templates";
-        protected const string EnvironmentName = "UNITTEST";
         protected const string Version = "1.0";
 
         protected const string Template1Id = "Template1";
@@ -46,7 +45,7 @@ namespace SFA.DAS.Notifications.Infrastructure.UnitTests.ConfigurationTests.Temp
             Configuration = new Mock<IConfiguration>();
             Configuration.Setup(c => c[$"{ServiceName}_{Version}"]).Returns(RepositoryResult);
 
-            Service = new TemplateConfigurationService(EnvironmentName, Configuration.Object);
+            Service = new TemplateConfigurationService(Configuration.Object);
         }
 
         public abstract void ThenItShouldReturnAnInstanceOfTemplateConfiguration();

@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using NServiceBus;
 
-namespace SFA.DAS.Notifications.MessageHandlers3.NServiceBus
+namespace SFA.DAS.Notifications.MessageHandlers.NServiceBus
 {
     public static class EndpointConfigurationExtensions
     {

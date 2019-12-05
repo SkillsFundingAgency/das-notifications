@@ -47,7 +47,7 @@ namespace SFA.DAS.Notifications.Application.UnitTests.CommandsTests.SendEmailTes
 
             _handler = new SendEmailCommandHandler(
                 _templateConfigurationService.Object,
-                Mock.Of<ILogger>(),
+                Mock.Of<ILogger<SendEmailCommandHandler>>(),
                 _emailService.Object);
 
             _templateId = Guid.NewGuid().ToString();
