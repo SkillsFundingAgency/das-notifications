@@ -115,10 +115,6 @@
       <Project>{9328871E-E1AE-4AFD-BAA4-3032E988E440}</Project>
       <Name>SFA.DAS.Notifications.Application</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SFA.DAS.Notifications.MessageHandlers\SFA.DAS.Notifications.MessageHandlers.csproj">
-      <Project>{b9eb9e19-b71c-47b8-9698-c131190186f1}</Project>
-      <Name>SFA.DAS.Notifications.MessageHandlers</Name>
-    </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.Notifications.Messages\SFA.DAS.Notifications.Messages.csproj">
       <Project>{BC8EA283-0E1A-49A8-96DD-6A45B8232A78}</Project>
       <Name>SFA.DAS.Notifications.Messages</Name>
