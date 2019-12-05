@@ -1,16 +1,16 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NServiceBus;
 using NUnit.Framework;
 using SendEmailCommandHandler = SFA.DAS.Notifications.MessageHandlers.CommandHandlers.SendEmailCommandHandler;
-using Microsoft.Extensions.Logging;
 using SendEmailCommand = SFA.DAS.Notifications.Application.Commands.SendEmail.SendEmailCommand;
 
-namespace SFA.DAS.Notifications.MessageHandlers.UnitTests.CommandHandlers
+namespace SFA.DAS.Notifications.MessageHandlers.UnitTests
 {
     [TestFixture]
     public class SendEmailCommandHandlerTests
@@ -18,7 +18,7 @@ namespace SFA.DAS.Notifications.MessageHandlers.UnitTests.CommandHandlers
         private Dictionary<string, string> dictionary;
         private SendEmailCommandHandler _handler;
         private Mock<IMediator> _mediator;
-        private Mock<ILogger> _logger;
+        private Mock<ILogger<SendEmailCommandHandler>> _logger;
         private Messages.Commands.SendEmailCommand _message;
 
         [SetUp]
@@ -29,7 +29,7 @@ namespace SFA.DAS.Notifications.MessageHandlers.UnitTests.CommandHandlers
             dictionary.Add("key2", "value2");
 
             _mediator = new Mock<IMediator>();
-            _logger = new Mock<ILogger>();
+            _logger = new Mock<ILogger<SendEmailCommandHandler>>();
 
             _handler = new SendEmailCommandHandler(_mediator.Object, _logger.Object);
 
