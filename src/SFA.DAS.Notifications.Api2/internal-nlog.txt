@@ -1647,3 +1647,159 @@ Parameter name: configuration
    at SFA.DAS.NLog.Targets.Redis.DotNetCore.RedisConnectionManager..ctor(String connectionString)
    at SFA.DAS.NLog.Targets.Redis.DotNetCore.RedisTarget.InitializeTarget()
    at NLog.Targets.Target.Initialize(LoggingConfiguration configuration)
+2019-12-09 10:38:21.1384 Info Message Template Auto Format enabled
+2019-12-09 10:38:21.1621 Info Loading assembly: SFA.DAS.NLog.Targets.Redis
+2019-12-09 10:38:21.2431 Info Adding target RedisTarget(Name=redis)
+2019-12-09 10:38:21.2994 Info Found 10 configuration items
+2019-12-09 10:38:21.6867 Error Redis Target[redis]: Error initializing target Exception: System.ArgumentNullException: Value cannot be null.
+Parameter name: configuration
+   at StackExchange.Redis.ConfigurationOptions.DoParse(String configuration, Boolean ignoreUnknown) in c:\code\StackExchange.Redis\StackExchange.Redis\StackExchange\Redis\ConfigurationOptions.cs:line 559
+   at StackExchange.Redis.ConfigurationOptions.Parse(String configuration) in c:\code\StackExchange.Redis\StackExchange.Redis\StackExchange\Redis\ConfigurationOptions.cs:line 334
+   at SFA.DAS.NLog.Targets.Redis.DotNetCore.RedisConnectionManager.InitializeConnection(String connectionString)
+   at SFA.DAS.NLog.Targets.Redis.DotNetCore.RedisConnectionManager..ctor(String connectionString)
+   at SFA.DAS.NLog.Targets.Redis.DotNetCore.RedisTarget.InitializeTarget()
+   at NLog.Targets.Target.Initialize(LoggingConfiguration configuration)
+2019-12-09 10:39:46.4824 Info Message Template Auto Format enabled
+2019-12-09 10:39:46.5006 Info Loading assembly: SFA.DAS.NLog.Targets.Redis
+2019-12-09 10:39:46.5934 Info Adding target RedisTarget(Name=redis)
+2019-12-09 10:39:46.6500 Info Found 10 configuration items
+2019-12-09 10:39:47.0230 Error Redis Target[redis]: Error initializing target Exception: System.ArgumentNullException: Value cannot be null.
+Parameter name: configuration
+   at StackExchange.Redis.ConfigurationOptions.DoParse(String configuration, Boolean ignoreUnknown) in c:\code\StackExchange.Redis\StackExchange.Redis\StackExchange\Redis\ConfigurationOptions.cs:line 559
+   at StackExchange.Redis.ConfigurationOptions.Parse(String configuration) in c:\code\StackExchange.Redis\StackExchange.Redis\StackExchange\Redis\ConfigurationOptions.cs:line 334
+   at SFA.DAS.NLog.Targets.Redis.DotNetCore.RedisConnectionManager.InitializeConnection(String connectionString)
+   at SFA.DAS.NLog.Targets.Redis.DotNetCore.RedisConnectionManager..ctor(String connectionString)
+   at SFA.DAS.NLog.Targets.Redis.DotNetCore.RedisTarget.InitializeTarget()
+   at NLog.Targets.Target.Initialize(LoggingConfiguration configuration)
+2019-12-09 10:44:51.6176 Info Message Template Auto Format enabled
+2019-12-09 10:44:51.6358 Info Loading assembly: SFA.DAS.NLog.Targets.Redis
+2019-12-09 10:44:51.7131 Info Adding target RedisTarget(Name=redis)
+2019-12-09 10:44:51.7682 Info Found 10 configuration items
+2019-12-09 10:44:52.1547 Error Redis Target[redis]: Error initializing target Exception: System.ArgumentNullException: Value cannot be null.
+Parameter name: configuration
+   at StackExchange.Redis.ConfigurationOptions.DoParse(String configuration, Boolean ignoreUnknown) in c:\code\StackExchange.Redis\StackExchange.Redis\StackExchange\Redis\ConfigurationOptions.cs:line 559
+   at StackExchange.Redis.ConfigurationOptions.Parse(String configuration) in c:\code\StackExchange.Redis\StackExchange.Redis\StackExchange\Redis\ConfigurationOptions.cs:line 334
+   at SFA.DAS.NLog.Targets.Redis.DotNetCore.RedisConnectionManager.InitializeConnection(String connectionString)
+   at SFA.DAS.NLog.Targets.Redis.DotNetCore.RedisConnectionManager..ctor(String connectionString)
+   at SFA.DAS.NLog.Targets.Redis.DotNetCore.RedisTarget.InitializeTarget()
+   at NLog.Targets.Target.Initialize(LoggingConfiguration configuration)
+2019-12-09 11:46:13.4416 Info Message Template Auto Format enabled
+2019-12-09 11:46:13.4597 Info Loading assembly: SFA.DAS.NLog.Targets.Redis
+2019-12-09 11:46:13.5495 Info Adding target RedisTarget(Name=redis)
+2019-12-09 11:46:13.6040 Info Found 10 configuration items
+2019-12-09 11:46:14.0094 Error Redis Target[redis]: Error initializing target Exception: System.ArgumentNullException: Value cannot be null.
+Parameter name: configuration
+   at StackExchange.Redis.ConfigurationOptions.DoParse(String configuration, Boolean ignoreUnknown) in c:\code\StackExchange.Redis\StackExchange.Redis\StackExchange\Redis\ConfigurationOptions.cs:line 559
+   at StackExchange.Redis.ConfigurationOptions.Parse(String configuration) in c:\code\StackExchange.Redis\StackExchange.Redis\StackExchange\Redis\ConfigurationOptions.cs:line 334
+   at SFA.DAS.NLog.Targets.Redis.DotNetCore.RedisConnectionManager.InitializeConnection(String connectionString)
+   at SFA.DAS.NLog.Targets.Redis.DotNetCore.RedisConnectionManager..ctor(String connectionString)
+   at SFA.DAS.NLog.Targets.Redis.DotNetCore.RedisTarget.InitializeTarget()
+   at NLog.Targets.Target.Initialize(LoggingConfiguration configuration)
+2019-12-09 11:52:46.1436 Info Message Template Auto Format enabled
+2019-12-09 11:52:46.1638 Info Loading assembly: SFA.DAS.NLog.Targets.Redis
+2019-12-09 11:52:46.2441 Info Adding target RedisTarget(Name=redis)
+2019-12-09 11:52:46.2975 Info Found 10 configuration items
+2019-12-09 11:52:46.6998 Error Redis Target[redis]: Error initializing target Exception: System.ArgumentNullException: Value cannot be null.
+Parameter name: configuration
+   at StackExchange.Redis.ConfigurationOptions.DoParse(String configuration, Boolean ignoreUnknown) in c:\code\StackExchange.Redis\StackExchange.Redis\StackExchange\Redis\ConfigurationOptions.cs:line 559
+   at StackExchange.Redis.ConfigurationOptions.Parse(String configuration) in c:\code\StackExchange.Redis\StackExchange.Redis\StackExchange\Redis\ConfigurationOptions.cs:line 334
+   at SFA.DAS.NLog.Targets.Redis.DotNetCore.RedisConnectionManager.InitializeConnection(String connectionString)
+   at SFA.DAS.NLog.Targets.Redis.DotNetCore.RedisConnectionManager..ctor(String connectionString)
+   at SFA.DAS.NLog.Targets.Redis.DotNetCore.RedisTarget.InitializeTarget()
+   at NLog.Targets.Target.Initialize(LoggingConfiguration configuration)
+2019-12-09 11:59:13.8822 Info Message Template Auto Format enabled
+2019-12-09 11:59:13.9011 Info Loading assembly: SFA.DAS.NLog.Targets.Redis
+2019-12-09 11:59:13.9769 Info Adding target RedisTarget(Name=redis)
+2019-12-09 11:59:14.0307 Info Found 10 configuration items
+2019-12-09 11:59:14.4202 Error Redis Target[redis]: Error initializing target Exception: System.ArgumentNullException: Value cannot be null.
+Parameter name: configuration
+   at StackExchange.Redis.ConfigurationOptions.DoParse(String configuration, Boolean ignoreUnknown) in c:\code\StackExchange.Redis\StackExchange.Redis\StackExchange\Redis\ConfigurationOptions.cs:line 559
+   at StackExchange.Redis.ConfigurationOptions.Parse(String configuration) in c:\code\StackExchange.Redis\StackExchange.Redis\StackExchange\Redis\ConfigurationOptions.cs:line 334
+   at SFA.DAS.NLog.Targets.Redis.DotNetCore.RedisConnectionManager.InitializeConnection(String connectionString)
+   at SFA.DAS.NLog.Targets.Redis.DotNetCore.RedisConnectionManager..ctor(String connectionString)
+   at SFA.DAS.NLog.Targets.Redis.DotNetCore.RedisTarget.InitializeTarget()
+   at NLog.Targets.Target.Initialize(LoggingConfiguration configuration)
+2019-12-09 12:03:32.2958 Info Message Template Auto Format enabled
+2019-12-09 12:03:32.3225 Info Loading assembly: SFA.DAS.NLog.Targets.Redis
+2019-12-09 12:03:32.3977 Info Adding target RedisTarget(Name=redis)
+2019-12-09 12:03:32.4623 Info Found 10 configuration items
+2019-12-09 12:03:32.7357 Error Redis Target[redis]: Error initializing target Exception: System.ArgumentNullException: Value cannot be null.
+Parameter name: configuration
+   at StackExchange.Redis.ConfigurationOptions.DoParse(String configuration, Boolean ignoreUnknown) in c:\code\StackExchange.Redis\StackExchange.Redis\StackExchange\Redis\ConfigurationOptions.cs:line 559
+   at StackExchange.Redis.ConfigurationOptions.Parse(String configuration) in c:\code\StackExchange.Redis\StackExchange.Redis\StackExchange\Redis\ConfigurationOptions.cs:line 334
+   at SFA.DAS.NLog.Targets.Redis.DotNetCore.RedisConnectionManager.InitializeConnection(String connectionString)
+   at SFA.DAS.NLog.Targets.Redis.DotNetCore.RedisConnectionManager..ctor(String connectionString)
+   at SFA.DAS.NLog.Targets.Redis.DotNetCore.RedisTarget.InitializeTarget()
+   at NLog.Targets.Target.Initialize(LoggingConfiguration configuration)
+2019-12-09 12:09:10.6690 Info Message Template Auto Format enabled
+2019-12-09 12:09:10.6895 Info Loading assembly: SFA.DAS.NLog.Targets.Redis
+2019-12-09 12:09:10.7689 Info Adding target RedisTarget(Name=redis)
+2019-12-09 12:09:10.8249 Info Found 10 configuration items
+2019-12-09 12:09:11.2206 Error Redis Target[redis]: Error initializing target Exception: System.ArgumentNullException: Value cannot be null.
+Parameter name: configuration
+   at StackExchange.Redis.ConfigurationOptions.DoParse(String configuration, Boolean ignoreUnknown) in c:\code\StackExchange.Redis\StackExchange.Redis\StackExchange\Redis\ConfigurationOptions.cs:line 559
+   at StackExchange.Redis.ConfigurationOptions.Parse(String configuration) in c:\code\StackExchange.Redis\StackExchange.Redis\StackExchange\Redis\ConfigurationOptions.cs:line 334
+   at SFA.DAS.NLog.Targets.Redis.DotNetCore.RedisConnectionManager.InitializeConnection(String connectionString)
+   at SFA.DAS.NLog.Targets.Redis.DotNetCore.RedisConnectionManager..ctor(String connectionString)
+   at SFA.DAS.NLog.Targets.Redis.DotNetCore.RedisTarget.InitializeTarget()
+   at NLog.Targets.Target.Initialize(LoggingConfiguration configuration)
+2019-12-09 12:11:14.0181 Info Message Template Auto Format enabled
+2019-12-09 12:11:14.0505 Info Loading assembly: SFA.DAS.NLog.Targets.Redis
+2019-12-09 12:11:14.1712 Info Adding target RedisTarget(Name=redis)
+2019-12-09 12:11:14.2294 Info Found 10 configuration items
+2019-12-09 12:11:14.8081 Error Redis Target[redis]: Error initializing target Exception: System.ArgumentNullException: Value cannot be null.
+Parameter name: configuration
+   at StackExchange.Redis.ConfigurationOptions.DoParse(String configuration, Boolean ignoreUnknown) in c:\code\StackExchange.Redis\StackExchange.Redis\StackExchange\Redis\ConfigurationOptions.cs:line 559
+   at StackExchange.Redis.ConfigurationOptions.Parse(String configuration) in c:\code\StackExchange.Redis\StackExchange.Redis\StackExchange\Redis\ConfigurationOptions.cs:line 334
+   at SFA.DAS.NLog.Targets.Redis.DotNetCore.RedisConnectionManager.InitializeConnection(String connectionString)
+   at SFA.DAS.NLog.Targets.Redis.DotNetCore.RedisConnectionManager..ctor(String connectionString)
+   at SFA.DAS.NLog.Targets.Redis.DotNetCore.RedisTarget.InitializeTarget()
+   at NLog.Targets.Target.Initialize(LoggingConfiguration configuration)
+2019-12-09 13:02:24.5191 Info Message Template Auto Format enabled
+2019-12-09 13:02:24.5391 Info Loading assembly: SFA.DAS.NLog.Targets.Redis
+2019-12-09 13:02:24.6310 Info Adding target RedisTarget(Name=redis)
+2019-12-09 13:02:24.6828 Info Found 10 configuration items
+2019-12-09 13:02:25.0694 Error Redis Target[redis]: Error initializing target Exception: System.ArgumentNullException: Value cannot be null.
+Parameter name: configuration
+   at StackExchange.Redis.ConfigurationOptions.DoParse(String configuration, Boolean ignoreUnknown) in c:\code\StackExchange.Redis\StackExchange.Redis\StackExchange\Redis\ConfigurationOptions.cs:line 559
+   at StackExchange.Redis.ConfigurationOptions.Parse(String configuration) in c:\code\StackExchange.Redis\StackExchange.Redis\StackExchange\Redis\ConfigurationOptions.cs:line 334
+   at SFA.DAS.NLog.Targets.Redis.DotNetCore.RedisConnectionManager.InitializeConnection(String connectionString)
+   at SFA.DAS.NLog.Targets.Redis.DotNetCore.RedisConnectionManager..ctor(String connectionString)
+   at SFA.DAS.NLog.Targets.Redis.DotNetCore.RedisTarget.InitializeTarget()
+   at NLog.Targets.Target.Initialize(LoggingConfiguration configuration)
+2019-12-09 14:42:41.7713 Info Message Template Auto Format enabled
+2019-12-09 14:42:41.7928 Info Loading assembly: SFA.DAS.NLog.Targets.Redis
+2019-12-09 14:42:41.9145 Info Adding target RedisTarget(Name=redis)
+2019-12-09 14:42:41.9948 Info Found 10 configuration items
+2019-12-09 14:42:42.5804 Error Redis Target[redis]: Error initializing target Exception: System.ArgumentNullException: Value cannot be null.
+Parameter name: configuration
+   at StackExchange.Redis.ConfigurationOptions.DoParse(String configuration, Boolean ignoreUnknown) in c:\code\StackExchange.Redis\StackExchange.Redis\StackExchange\Redis\ConfigurationOptions.cs:line 559
+   at StackExchange.Redis.ConfigurationOptions.Parse(String configuration) in c:\code\StackExchange.Redis\StackExchange.Redis\StackExchange\Redis\ConfigurationOptions.cs:line 334
+   at SFA.DAS.NLog.Targets.Redis.DotNetCore.RedisConnectionManager.InitializeConnection(String connectionString)
+   at SFA.DAS.NLog.Targets.Redis.DotNetCore.RedisConnectionManager..ctor(String connectionString)
+   at SFA.DAS.NLog.Targets.Redis.DotNetCore.RedisTarget.InitializeTarget()
+   at NLog.Targets.Target.Initialize(LoggingConfiguration configuration)
+2019-12-09 14:45:04.0343 Info Message Template Auto Format enabled
+2019-12-09 14:45:04.0536 Info Loading assembly: SFA.DAS.NLog.Targets.Redis
+2019-12-09 14:45:04.1640 Info Adding target RedisTarget(Name=redis)
+2019-12-09 14:45:04.2303 Info Found 10 configuration items
+2019-12-09 14:45:04.7592 Error Redis Target[redis]: Error initializing target Exception: System.ArgumentNullException: Value cannot be null.
+Parameter name: configuration
+   at StackExchange.Redis.ConfigurationOptions.DoParse(String configuration, Boolean ignoreUnknown) in c:\code\StackExchange.Redis\StackExchange.Redis\StackExchange\Redis\ConfigurationOptions.cs:line 559
+   at StackExchange.Redis.ConfigurationOptions.Parse(String configuration) in c:\code\StackExchange.Redis\StackExchange.Redis\StackExchange\Redis\ConfigurationOptions.cs:line 334
+   at SFA.DAS.NLog.Targets.Redis.DotNetCore.RedisConnectionManager.InitializeConnection(String connectionString)
+   at SFA.DAS.NLog.Targets.Redis.DotNetCore.RedisConnectionManager..ctor(String connectionString)
+   at SFA.DAS.NLog.Targets.Redis.DotNetCore.RedisTarget.InitializeTarget()
+   at NLog.Targets.Target.Initialize(LoggingConfiguration configuration)
+2019-12-09 14:46:03.2939 Info Message Template Auto Format enabled
+2019-12-09 14:46:03.3167 Info Loading assembly: SFA.DAS.NLog.Targets.Redis
+2019-12-09 14:46:03.4503 Info Adding target RedisTarget(Name=redis)
+2019-12-09 14:46:03.5149 Info Found 10 configuration items
+2019-12-09 14:46:03.9606 Error Redis Target[redis]: Error initializing target Exception: System.ArgumentNullException: Value cannot be null.
+Parameter name: configuration
+   at StackExchange.Redis.ConfigurationOptions.DoParse(String configuration, Boolean ignoreUnknown) in c:\code\StackExchange.Redis\StackExchange.Redis\StackExchange\Redis\ConfigurationOptions.cs:line 559
+   at StackExchange.Redis.ConfigurationOptions.Parse(String configuration) in c:\code\StackExchange.Redis\StackExchange.Redis\StackExchange\Redis\ConfigurationOptions.cs:line 334
+   at SFA.DAS.NLog.Targets.Redis.DotNetCore.RedisConnectionManager.InitializeConnection(String connectionString)
+   at SFA.DAS.NLog.Targets.Redis.DotNetCore.RedisConnectionManager..ctor(String connectionString)
+   at SFA.DAS.NLog.Targets.Redis.DotNetCore.RedisTarget.InitializeTarget()
+   at NLog.Targets.Target.Initialize(LoggingConfiguration configuration)

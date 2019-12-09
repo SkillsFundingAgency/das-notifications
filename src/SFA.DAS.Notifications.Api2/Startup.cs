@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -34,7 +36,7 @@ namespace SFA.DAS.Notifications.Api2
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddADAuthentication(Configuration);
+            //services.AddADAuthentication(Configuration); replaced with below
             services.AddMvc(options => {
                 if (!Environment.IsDevelopment())
                 {
@@ -58,15 +60,20 @@ namespace SFA.DAS.Notifications.Api2
                 c.IncludeXmlComments(xmlPath);
             });
 
+            var debugTenant = Configuration.GetSection("auth")["idaTenant"];
+            var debugAudience = Configuration.GetSection("auth")["idaAudience"];
+
             services.AddDefaultServices();
-            services.AddAuthentication().AddJwtBearer(o =>
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(o =>
             {
                 o.TokenValidationParameters = new TokenValidationParameters {
-                    ValidAudience = Configuration["idaAudience"],
-                    RoleClaimType = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+                    ValidAudience = Configuration.GetSection("auth")["idaAudience"],
+                    RoleClaimType = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role",
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes("THIS IS THE SIGNING SECRET")) //todo dev hardcoded
                 };
-                o.Authority = Configuration["idaTenant"];
-                o.Audience = Configuration["idaAudience"];
+                o.Authority = Configuration.GetSection("auth")["idaTenant"];
+                o.Audience = Configuration.GetSection("auth")["idaAudience"];
+                if (Environment.IsDevelopment()) { o.RequireHttpsMetadata = false; }
             });
 
             services.AddNServiceBus(BuildNServiceBusConfiguration());

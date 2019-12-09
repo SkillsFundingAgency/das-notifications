@@ -2,6 +2,7 @@
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.Notifications.Api.Types;
 using SFA.DAS.Notifications.Api2.Orchestrators;
@@ -24,7 +25,8 @@ namespace SFA.DAS.Notifications.Api2.Controllers
 
         [HttpPost]
         [Route("")]
-        //[Authorize(Roles = "SendEmail")] TODO role based auth?!
+        //[Authorize(Roles = "SendEmail")] todo roles
+        [Authorize]
         public async Task<HttpResponseMessage> Post(Email notification)
         {
             if (string.IsNullOrEmpty(notification.SystemId)
