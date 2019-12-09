@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
-using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -10,10 +9,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using SFA.DAS.Notifications.Api2.DependencyResolution;
-using SFA.DAS.Notifications.Api2.Orchestrators;
 using SFA.DAS.Notifications.Api2.Security;
 using Swashbuckle.AspNetCore.Swagger;
 using NServiceBus;
+using SFA.DAS.Configuration;
+using SFA.DAS.NServiceBus.Configuration;
+using SFA.DAS.NServiceBus.Configuration.AzureServiceBus;
+using SFA.DAS.NServiceBus.Configuration.NewtonsoftJsonSerializer;
 
 
 namespace SFA.DAS.Notifications.Api2
@@ -66,7 +68,8 @@ namespace SFA.DAS.Notifications.Api2
                 o.Authority = Configuration["idaTenant"];
                 o.Audience = Configuration["idaAudience"];
             });
-            services.AddNServiceBus();
+
+            services.AddNServiceBus(BuildNServiceBusConfiguration());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -92,6 +95,28 @@ namespace SFA.DAS.Notifications.Api2
                 c.SwaggerEndpoint("/swagger/v0.1/swagger.json", "Notifications Api V0.1");
                 c.RoutePrefix = string.Empty;
             });
+        }
+
+        private EndpointConfiguration BuildNServiceBusConfiguration()
+        {
+            var isDevelopment = System.Environment.GetEnvironmentVariable(EnvironmentVariableNames.EnvironmentName) == "LOCAL";
+
+            var endpointConfiguration = new EndpointConfiguration("SFA.DAS.Notifications.MessageHandlers.TestHarness")
+                .UseErrorQueue()
+                .UseInstallers()
+                .UseMessageConventions()
+                .UseNewtonsoftJsonSerializer();
+
+            if (isDevelopment)
+            {
+                endpointConfiguration.UseLearningTransport(s => s.AddRouting());
+            }
+            else
+            {
+                endpointConfiguration.UseAzureServiceBusTransport(Configuration.GetSection("NServiceBusConfiguration")["ServiceBusConnectionString"], s => s.AddRouting());
+            }
+
+            return endpointConfiguration;
         }
     }
 }
