@@ -13,6 +13,8 @@ using SFA.DAS.Notifications.Api2.DependencyResolution;
 using SFA.DAS.Notifications.Api2.Orchestrators;
 using SFA.DAS.Notifications.Api2.Security;
 using Swashbuckle.AspNetCore.Swagger;
+using NServiceBus;
+
 
 namespace SFA.DAS.Notifications.Api2
 {
@@ -64,6 +66,7 @@ namespace SFA.DAS.Notifications.Api2
                 o.Authority = Configuration["idaTenant"];
                 o.Audience = Configuration["idaAudience"];
             });
+            services.AddNServiceBus();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
