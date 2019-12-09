@@ -8,6 +8,7 @@ namespace SFA.DAS.Notifications.Api2.Security
 {
     public static class SecurityServicesCollectionExtensions
     {
+        //todo why are we still calling this?
         public static void AddADAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
 

@@ -99,7 +99,7 @@ namespace SFA.DAS.Notifications.Api2
 
         private EndpointConfiguration BuildNServiceBusConfiguration()
         {
-            var isDevelopment = System.Environment.GetEnvironmentVariable(EnvironmentVariableNames.EnvironmentName) == "LOCAL";
+            var isDevelopment = System.Environment.GetEnvironmentVariable(EnvironmentVariableNames.EnvironmentName).IsDevelopment();
 
             var endpointConfiguration = new EndpointConfiguration("SFA.DAS.Notifications.MessageHandlers.TestHarness")
                 .UseErrorQueue()
