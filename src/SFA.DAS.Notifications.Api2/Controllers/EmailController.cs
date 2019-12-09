@@ -3,8 +3,8 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using SFA.DAS.Notifications.Api.Orchestrators;
 using SFA.DAS.Notifications.Api.Types;
+using SFA.DAS.Notifications.Api2.Orchestrators;
 
 namespace SFA.DAS.Notifications.Api2.Controllers
 {
@@ -22,6 +22,7 @@ namespace SFA.DAS.Notifications.Api2.Controllers
             _orchestrator = orchestrator;
         }
 
+        [HttpPost]
         [Route("")]
         //[Authorize(Roles = "SendEmail")] TODO role based auth?!
         public async Task<HttpResponseMessage> Post(Email notification)

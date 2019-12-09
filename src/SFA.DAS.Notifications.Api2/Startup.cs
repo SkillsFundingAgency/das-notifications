@@ -8,9 +8,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using SFA.DAS.Notifications.Api2.Application.Queries;
-using SFA.DAS.Notifications.Api2.Configuration;
-using SFA.DAS.Notifications.Api2.Data;
+using Microsoft.IdentityModel.Tokens;
+using SFA.DAS.Notifications.Api2.DependencyResolution;
+using SFA.DAS.Notifications.Api2.Orchestrators;
 using SFA.DAS.Notifications.Api2.Security;
 using Swashbuckle.AspNetCore.Swagger;
 
@@ -54,10 +54,16 @@ namespace SFA.DAS.Notifications.Api2
                 c.IncludeXmlComments(xmlPath);
             });
 
-            //todo specific to replace
-            services.AddMediatR(typeof(GetOrganisationsByPayeRef).Assembly);
-            services.AddTransient<IOrganisationRepository, SqlOrganisationRepository>();
-            services.Configure<ConnectionStrings>(Configuration.GetSection("ConnectionStrings"));
+            services.AddDefaultServices();
+            services.AddAuthentication().AddJwtBearer(o =>
+            {
+                o.TokenValidationParameters = new TokenValidationParameters {
+                    ValidAudience = Configuration["idaAudience"],
+                    RoleClaimType = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+                };
+                o.Authority = Configuration["idaTenant"];
+                o.Audience = Configuration["idaAudience"];
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -74,7 +80,7 @@ namespace SFA.DAS.Notifications.Api2
             }
 
             app.UseHttpsRedirection();
-            app.UseAuthentication();
+            //app.UseAuthentication();
             app.UseMvc();
             app.UseSwagger();
 

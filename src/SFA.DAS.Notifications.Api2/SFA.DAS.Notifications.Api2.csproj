@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>bin\PensionsRegulatorApi.xml</DocumentationFile>
+    <DocumentationFile>bin\SFA.DAS.Notifications.Api2.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -28,6 +28,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.Notifications.Api.Types\SFA.DAS.Notifications.Api.Types.csproj" />
+    <ProjectReference Include="..\SFA.DAS.Notifications.Messages\SFA.DAS.Notifications.Messages.csproj" />
   </ItemGroup>
 
 </Project>

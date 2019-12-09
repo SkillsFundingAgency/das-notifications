@@ -38,7 +38,7 @@ namespace SFA.DAS.Notifications.Api2
                     config.SetBasePath(Directory.GetCurrentDirectory());
                     config.AddJsonFile("appSettings.json", optional: false, reloadOnChange: false);
                     config.AddAzureTableStorage(options => {
-                        options.ConfigurationKeys = new[] { "SFA.DAS.Notifications.Api2" };
+                        options.ConfigurationKeys = new[] { "SFA.DAS.Notifications" };
                         options.EnvironmentNameEnvironmentVariableName = "APPSETTING_EnvironmentName";
                         options.StorageConnectionStringEnvironmentVariableName = "APPSETTING_ConfigurationStorageConnectionString";
                         options.PreFixConfigurationKeys = false;

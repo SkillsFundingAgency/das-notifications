@@ -1,6 +1,6 @@
-﻿using FluentValidation.Results;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace SFA.DAS.Notifications.Api.Core
+namespace SFA.DAS.Notifications.Api2.Core
 {
     public class OrchestratorResponse
     {
