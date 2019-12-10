@@ -1,6 +1,8 @@
 ﻿using System;
+using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Reflection;
+using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -77,8 +79,8 @@ namespace SFA.DAS.Notifications.Api2
             //});
 
             services.Configure<TokenManagement>(Configuration.GetSection("tokenManagement"));
-            var token = Configuration.GetSection("tokenManagement").Get<TokenManagement>();
-            var secret = Encoding.ASCII.GetBytes(token.Secret);
+            var tokenManagement = Configuration.GetSection("tokenManagement").Get<TokenManagement>();
+            var secret = Encoding.ASCII.GetBytes(tokenManagement.Secret);
 
             services.AddAuthentication(x =>
             {
@@ -90,15 +92,39 @@ namespace SFA.DAS.Notifications.Api2
                 x.SaveToken = true;
                 x.TokenValidationParameters = new TokenValidationParameters {
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(token.Secret)),
-                    ValidIssuer = token.Issuer,
-                    ValidAudience = token.Audience,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(tokenManagement.Secret)),
+                    ValidIssuer = tokenManagement.Issuer,
+                    ValidAudience = tokenManagement.Audience,
                     ValidateIssuer = false,
                     ValidateAudience = false
                 };
             });
 
+            var ourTestJwt = GenToken(tokenManagement);
+
             services.AddNServiceBus(BuildNServiceBusConfiguration());
+        }
+
+        private string GenToken(TokenManagement tokenManagement)
+        {
+            var token = string.Empty;
+
+            var claim = new[]
+            {
+                new Claim(ClaimTypes.Name, "test user")
+            };
+            var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(tokenManagement.Secret));
+            var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            var jwtToken = new JwtSecurityToken(
+                tokenManagement.Issuer,
+                tokenManagement.Audience,
+                claim,
+                expires: DateTime.Now.AddMinutes(tokenManagement.AccessExpiration),
+                signingCredentials: credentials
+            );
+            token = new JwtSecurityTokenHandler().WriteToken(jwtToken);
+            return token;
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
