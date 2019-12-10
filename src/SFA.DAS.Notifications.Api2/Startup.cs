@@ -20,7 +20,8 @@ using SFA.DAS.Configuration;
 using SFA.DAS.NServiceBus.Configuration;
 using SFA.DAS.NServiceBus.Configuration.AzureServiceBus;
 using SFA.DAS.NServiceBus.Configuration.NewtonsoftJsonSerializer;
-
+using System.Collections;
+using System.Collections.Generic;
 
 namespace SFA.DAS.Notifications.Api2
 {
@@ -39,7 +40,8 @@ namespace SFA.DAS.Notifications.Api2
         public void ConfigureServices(IServiceCollection services)
         {
             //services.AddADAuthentication(Configuration); replaced with below
-            services.AddMvc(options => {
+            services.AddMvc(options =>
+            {
                 if (!Environment.IsDevelopment())
                 {
                     options.Filters.Add(new AuthorizeFilter("default"));
@@ -49,12 +51,14 @@ namespace SFA.DAS.Notifications.Api2
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v0.1", new Info { Title = "Notifications-Api", Version = "v0.1" });
-                c.AddSecurityDefinition("Bearer", new ApiKeyScheme
-                {
-                    Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+                c.AddSecurityDefinition("Bearer", new ApiKeyScheme {
+                    Description = "JWT Authorization header using the Bearer scheme. Please Enter \"Bearer {token}\" into the value box.",
                     Name = "Authorization",
                     In = "header",
                     Type = "apiKey"
+                });
+                c.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>> {
+                    {"Bearer",new string[]{ } }
                 });
                 // Set the comments path for the Swagger JSON and UI.
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
