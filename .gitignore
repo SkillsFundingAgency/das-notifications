@@ -259,3 +259,5 @@ src/Tools/**/*.*
 
 # NServiceBus 
 src/.learningtransport/**/*.*
+
+**/internal-nlog.txt
