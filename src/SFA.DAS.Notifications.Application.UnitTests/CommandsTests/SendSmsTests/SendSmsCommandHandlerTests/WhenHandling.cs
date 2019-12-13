@@ -30,8 +30,8 @@ namespace SFA.DAS.Notifications.Application.UnitTests.CommandsTests.SendSmsTests
         public void Arrange()
         {
             _templateConfigurationService = new Mock<ITemplateConfigurationService>();
-            _templateConfigurationService.Setup(s => s.GetAsync())
-                .ReturnsAsync(new TemplateConfiguration
+            _templateConfigurationService.Setup(s => s.Get())
+                .Returns(new TemplateConfiguration
                 {
                     SmsServiceTemplates = new List<SmsTemplate>
                     {

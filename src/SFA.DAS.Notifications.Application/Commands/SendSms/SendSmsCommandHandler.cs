@@ -38,7 +38,7 @@ namespace SFA.DAS.Notifications.Application.Commands.SendSms
 
             Validate(command);
 
-            var templateConfiguration = await _templateConfigurationService.GetAsync();
+            var templateConfiguration = _templateConfigurationService.Get();
             SmsTemplate template = templateConfiguration.SmsServiceTemplates
                 .SingleOrDefault(x => string.Equals(command.TemplateId, x.Id, StringComparison.InvariantCultureIgnoreCase));
 

@@ -14,7 +14,7 @@ namespace SFA.DAS.Notifications.Infrastructure.UnitTests.ConfigurationTests.Temp
         public override void ThenItShouldReturnAnInstanceOfTemplateConfiguration()
         {
             // Act
-            var actual = Service.GetAsync().Result;
+            var actual = Service.Get();
 
             // Assert
             AssertItHasReturnedAnInstanceOfTemplateConfiguration(actual);
@@ -24,7 +24,7 @@ namespace SFA.DAS.Notifications.Infrastructure.UnitTests.ConfigurationTests.Temp
         public override void ThenItShouldReturnCorrectlyDeserializeValues()
         {
             // Act
-            var actual = Service.GetAsync().Result;
+            var actual = Service.Get();
 
             // Assert
             AssertItHasReturnedCorrectlyDeserializeValues(actual);

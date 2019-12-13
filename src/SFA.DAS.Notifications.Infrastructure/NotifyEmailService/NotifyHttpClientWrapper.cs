@@ -93,7 +93,6 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
         {
             var lookup = new Dictionary<string, GovNotifyServiceCredentials>();
 
-            //var consumerConfiguration = JsonConvert.DeserializeObject<NotificationServiceConfiguration>(_configuration.GetSection("SFA.DAS.Notifications").) //todo no 1.0 here propagate
             var consumerConfiguration = _configuration.GetNotificationSection<NotificationServiceConfiguration>()
                 .NotifyServiceConfiguration
                 .ConsumerConfiguration;

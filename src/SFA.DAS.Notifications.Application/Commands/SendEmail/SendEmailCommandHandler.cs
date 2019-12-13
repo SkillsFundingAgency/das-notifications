@@ -9,6 +9,7 @@ using SFA.DAS.Notifications.Application.Interfaces;
 using SFA.DAS.Notifications.Domain.Configuration;
 using SFA.DAS.Notifications.Domain.Entities;
 using SFA.DAS.Notifications.Domain.Http;
+using SFA.DAS.Notifications.Infrastructure;
 
 namespace SFA.DAS.Notifications.Application.Commands.SendEmail
 {
@@ -44,7 +45,7 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
 
             if (!IsGuid(command.TemplateId))
             {
-                TemplateConfiguration templateConfiguration = await _templateConfigurationService.GetAsync();
+                TemplateConfiguration templateConfiguration = _templateConfigurationService.Get();
                 Template emailServiceTemplate = templateConfiguration.EmailServiceTemplates
                     .SingleOrDefault(
                         t => t.Id.Equals(command.TemplateId, StringComparison.InvariantCultureIgnoreCase)

@@ -15,7 +15,6 @@ namespace SFA.DAS.Notifications.Infrastructure.LocalEmailService
     {
         private readonly IConfiguration _configuration;
 
-        //todo left off here thinking maybe inject NotificationServiceConfiguration and assign from _configuration object once in DI (because line 27 is aweful)
         public LocalEmailService(IConfiguration configuration)
         {
             _configuration = configuration;

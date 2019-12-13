@@ -68,21 +68,7 @@ namespace SFA.DAS.Notifications.Api2
                 c.IncludeXmlComments(xmlPath);
             });
 
-            //var debugTenant = Configuration.GetSection("auth")["idaTenant"];
-            //var debugAudience = Configuration.GetSection("auth")["idaAudience"];
-
             services.AddDefaultServices();
-            //services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(o =>
-            //{
-            //    o.TokenValidationParameters = new TokenValidationParameters {
-            //        ValidAudience = Configuration.GetSection("auth")["idaAudience"],
-            //        RoleClaimType = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role",
-            //        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes("THIS IS THE SIGNING SECRET")) //todo dev hardcoded
-            //    };
-            //    o.Authority = Configuration.GetSection("auth")["idaTenant"];
-            //    o.Audience = Configuration.GetSection("auth")["idaAudience"];
-            //    if (Environment.IsDevelopment()) { o.RequireHttpsMetadata = false; }
-            //});
 
             services.Configure<TokenManagement>(Configuration.GetSection("tokenManagement"));
             var tokenManagement = Configuration.GetSection("tokenManagement").Get<TokenManagement>();
@@ -146,7 +132,6 @@ namespace SFA.DAS.Notifications.Api2
                 app.UseHsts();
             }
 
-            //todo cors not included here
             app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseMvc();

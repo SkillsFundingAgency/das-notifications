@@ -5,6 +5,5 @@ namespace SFA.DAS.Notifications.Domain.Configuration
     public interface ITemplateConfigurationService
     {
         TemplateConfiguration Get();
-        Task<TemplateConfiguration> GetAsync();
     }
 }

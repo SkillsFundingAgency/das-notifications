@@ -10,7 +10,6 @@ namespace SFA.DAS.Notifications.Infrastructure.Configuration
     {
         protected const string ServiceName = "SFA.DAS.Notifications-Templates";
         private const string Version = "1.0";
-        //todo environment name was here...
 
         private readonly IConfiguration _configuration;
 
@@ -19,15 +18,7 @@ namespace SFA.DAS.Notifications.Infrastructure.Configuration
             _configuration = configuration;
         }
 
-        //todo config usage updated here
         public TemplateConfiguration Get()
-        {
-            var json = _configuration[$"{ServiceName}_{Version}"];
-            return JsonConvert.DeserializeObject<TemplateConfiguration>(json);
-        }
-
-        [Obsolete("use non async")] //todo remove this
-        public async Task<TemplateConfiguration> GetAsync()
         {
             var json = _configuration[$"{ServiceName}_{Version}"];
             return JsonConvert.DeserializeObject<TemplateConfiguration>(json);
