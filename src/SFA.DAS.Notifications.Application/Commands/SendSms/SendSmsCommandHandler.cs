@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using SFA.DAS.Notifications.Application.Interfaces;
 using SFA.DAS.Notifications.Domain.Configuration;
 using SFA.DAS.Notifications.Domain.Entities;
+using SFA.DAS.Notifications.Infrastructure;
 
 namespace SFA.DAS.Notifications.Application.Commands.SendSms
 {
