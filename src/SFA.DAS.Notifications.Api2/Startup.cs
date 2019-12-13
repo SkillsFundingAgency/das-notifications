@@ -48,6 +48,8 @@ namespace SFA.DAS.Notifications.Api2
                 }
             }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
+            services.AddHealthChecks();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v0.1", new Info { Title = "Notifications-Api", Version = "v0.1" });
@@ -148,6 +150,7 @@ namespace SFA.DAS.Notifications.Api2
             app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseMvc();
+            app.UseHealthChecks("/api/health");
             app.UseSwagger();
 
             app.UseSwaggerUI(c =>
