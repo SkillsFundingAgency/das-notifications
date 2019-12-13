@@ -80,10 +80,6 @@
       <Project>{5E500F50-5F57-482C-A5D0-4F12DD1C3A46}</Project>
       <Name>SFA.DAS.Notifications.Api.Types</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SFA.DAS.Notifications.Api\SFA.DAS.Notifications.Api.csproj">
-      <Project>{962B4E7C-D851-4BA2-94EE-BE6DC0E99656}</Project>
-      <Name>SFA.DAS.Notifications.Api</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -13,8 +13,4 @@
     <PackageReference Include="NUnit3TestAdapter" Version="3.15.1" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\SFA.DAS.Notifications.Api.Client\SFA.DAS.Notifications.Api.Client.csproj" />
-  </ItemGroup>
-
 </Project>
