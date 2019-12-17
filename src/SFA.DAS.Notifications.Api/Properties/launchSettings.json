@@ -17,7 +17,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "PensionsRegulatorApi": {
+    "NotificationsApi": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "api/healthcheck",

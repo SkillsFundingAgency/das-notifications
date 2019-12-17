@@ -29,7 +29,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.Notifications.Messa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.Notifications.MessageHandlers.UnitTests", "SFA.DAS.Notifications.MessageHandlers.UnitTests\SFA.DAS.Notifications.MessageHandlers.UnitTests.csproj", "{568E53A0-79F0-4C1B-A61C-DAEBA78A5E31}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.Notifications.Api2", "SFA.DAS.Notifications.Api2\SFA.DAS.Notifications.Api2.csproj", "{39942202-481F-493F-9B57-21CB4FB2E6C4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.Notifications.Api", "SFA.DAS.Notifications.Api\SFA.DAS.Notifications.Api.csproj", "{39942202-481F-493F-9B57-21CB4FB2E6C4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
