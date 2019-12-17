@@ -8,23 +8,15 @@
     <PackageReference Include="JWT" Version="5.3.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="2.2.0" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="NLog" Version="4.6.8" />
     <PackageReference Include="Polly" Version="5.0.6" />
     <PackageReference Include="SFA.DAS.Configuration" Version="3.0.77" />
     <PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="3.0.77" />
+    <PackageReference Include="structuremap" Version="4.7.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.Notifications.Application\SFA.DAS.Notifications.Application.csproj" />
     <ProjectReference Include="..\SFA.DAS.Notifications.Domain\SFA.DAS.Notifications.Domain.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="NLog">
-      <HintPath>..\..\..\..\..\Users\Tom\.nuget\packages\nlog\4.5.3\lib\netstandard2.0\NLog.dll</HintPath>
-    </Reference>
-    <Reference Include="StructureMap">
-      <HintPath>..\..\..\..\..\Users\Tom\.nuget\packages\structuremap\4.6.1\lib\netstandard2.0\StructureMap.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
 </Project>

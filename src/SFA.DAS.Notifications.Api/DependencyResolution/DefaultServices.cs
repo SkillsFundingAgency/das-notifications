@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using SFA.DAS.Notifications.Api2.Orchestrators;
+using SFA.DAS.Notifications.Api.Orchestrators;
 
-namespace SFA.DAS.Notifications.Api2.DependencyResolution
+namespace SFA.DAS.Notifications.Api.DependencyResolution
 {
     public static class DefaultServices
     {

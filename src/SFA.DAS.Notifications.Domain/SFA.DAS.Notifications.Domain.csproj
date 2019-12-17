@@ -1,16 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Reference Include="System.Collections">
-      <HintPath>..\..\..\..\..\Users\Tom\.nuget\packages\system.collections\4.3.0\ref\netstandard1.0\System.Collections.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Threading.Tasks">
-      <HintPath>..\..\..\..\..\Users\Tom\.nuget\packages\system.threading.tasks\4.3.0\ref\netstandard1.0\System.Threading.Tasks.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
 </Project>

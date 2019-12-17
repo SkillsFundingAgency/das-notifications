@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.Notifications.Api.Types;
-using SFA.DAS.Notifications.Api2.Core;
-using SFA.DAS.Notifications.Api2.Orchestrators;
+using SFA.DAS.Notifications.Api.Core;
+using SFA.DAS.Notifications.Api.Orchestrators;
 
-namespace SFA.DAS.Notifications.Api2.Controllers
+namespace SFA.DAS.Notifications.Api.Controllers
 {
     [Route("api/sms")]
     public class SmsController : ControllerBase

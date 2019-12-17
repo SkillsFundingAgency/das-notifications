@@ -2,10 +2,10 @@
 using Microsoft.Extensions.Logging;
 using NServiceBus;
 using SFA.DAS.Notifications.Api.Types;
-using SFA.DAS.Notifications.Api2.Core;
+using SFA.DAS.Notifications.Api.Core;
 using SFA.DAS.Notifications.Messages.Commands;
 
-namespace SFA.DAS.Notifications.Api2.Orchestrators
+namespace SFA.DAS.Notifications.Api.Orchestrators
 {
     public class NotificationOrchestrator : OrchestratorBase, INotificationOrchestrator
     {

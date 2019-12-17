@@ -6,7 +6,7 @@ using Microsoft.Extensions.Configuration;
 using NLog.Web;
 using SFA.DAS.Configuration.AzureTableStorage;
 
-namespace SFA.DAS.Notifications.Api2
+namespace SFA.DAS.Notifications.Api
 {
     public class Program
     {

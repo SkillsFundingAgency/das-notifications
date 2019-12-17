@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.Notifications.Api2.Security
+﻿namespace SFA.DAS.Notifications.Api.Security
 {
     public class ActiveDirectoryConfiguration
     {

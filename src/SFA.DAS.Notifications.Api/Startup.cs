@@ -12,8 +12,8 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using SFA.DAS.Notifications.Api2.DependencyResolution;
-using SFA.DAS.Notifications.Api2.Security;
+using SFA.DAS.Notifications.Api.DependencyResolution;
+using SFA.DAS.Notifications.Api.Security;
 using Swashbuckle.AspNetCore.Swagger;
 using NServiceBus;
 using SFA.DAS.Configuration;
@@ -23,7 +23,7 @@ using SFA.DAS.NServiceBus.Configuration.NewtonsoftJsonSerializer;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace SFA.DAS.Notifications.Api2
+namespace SFA.DAS.Notifications.Api
 {
     public class Startup
     {

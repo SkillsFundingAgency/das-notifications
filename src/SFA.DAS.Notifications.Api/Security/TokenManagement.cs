@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
-namespace SFA.DAS.Notifications.Api2.Security
+namespace SFA.DAS.Notifications.Api.Security
 {
     [JsonObject("tokenManagement")]
     public class TokenManagement

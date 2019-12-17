@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace SFA.DAS.Notifications.Api2.Core
+namespace SFA.DAS.Notifications.Api.Core
 {
     public class OrchestratorResponse
     {
