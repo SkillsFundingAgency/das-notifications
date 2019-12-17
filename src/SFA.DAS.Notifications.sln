@@ -3,16 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28917.181
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{CB97712B-FA0E-450D-AA94-07D986D172AE}"
-	ProjectSection(SolutionItems) = preProject
-		.editorconfig = .editorconfig
-		Build.fsx = Build.fsx
-		CustomTargets.fsx = CustomTargets.fsx
-		DefaultTargets.fsx = DefaultTargets.fsx
-		RunBuild.bat = RunBuild.bat
-		SharedAssemblyInfo.cs = SharedAssemblyInfo.cs
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{DC080B91-941B-4849-944E-4220115C3523}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.Notifications.Api.Types", "SFA.DAS.Notifications.Api.Types\SFA.DAS.Notifications.Api.Types.csproj", "{5E500F50-5F57-482C-A5D0-4F12DD1C3A46}"
