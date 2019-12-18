@@ -62,8 +62,6 @@ steps:
   inputs:
     command: pack
     packagesToPack: >
-      src/SFA.DAS.Notifications.Api.Types/SFA.DAS.Notifications.Api.Types.csproj;
-      src/SFA.DAS.Notifications.Api.Client/SFA.DAS.Notifications.Api.Client.csproj;
       src/SFA.DAS.Notifications.Messages/SFA.DAS.Notifications.Messages.csproj
     packDirectory: '$(build.artifactstagingdirectory)/publish'
     versioningScheme: byBuildNumber
