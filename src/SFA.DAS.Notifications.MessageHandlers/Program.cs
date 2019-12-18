@@ -1,8 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NLog.Extensions.Logging;
 using SFA.DAS.Notifications.MessageHandlers.DependencyResolution;
 using SFA.DAS.Notifications.MessageHandlers.Startup;
+using StructureMap;
+using System;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.Notifications.MessageHandlers
 {
@@ -10,26 +13,32 @@ namespace SFA.DAS.Notifications.MessageHandlers
     {
         static async Task Main(string[] args)
         {
-            using (var host = CreateHostBuilder(args).Build())
+            var hostBuilder = new HostBuilder();
+
+            try
             {
-                await host.StartAsync();
-                await host.WaitForShutdownAsync();
+                hostBuilder
+                    .UseDasEnvironment()
+                    .UseApplicationInsights()
+                    .ConfigureDasAppConfiguration(args)
+                    .ConfigureLogging(b => b.AddNLog())
+                    .UseConsoleLifetime()
+                    .UseStructureMap()
+                    .ConfigureServices((c, s) => s
+                      .AddMemoryCache()
+                      .AddNServiceBus(c.Configuration, c.HostingEnvironment.IsDevelopment()))
+                    .ConfigureContainer<Registry>(IoC.Initialize);
+
+                using (var host = hostBuilder.Build())
+                {
+                    await host.RunAsync();
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                throw;
             }
         }
-
-        private static IHostBuilder CreateHostBuilder(string[] args) =>
-            new HostBuilder()
-                .ConfigureDasWebJobs()
-                .ConfigureDasAppConfiguration(args)
-                .ConfigureLogging(b => b.AddNLog())
-                //.UseApplicationInsights()
-                //.UseDasEnvironment()
-                .UseConsoleLifetime()
-                //.ConfigureServices((c, s) => s.AddApplicationServices(c))
-                //.ConfigureServices((c, s) => s.AddHashingServices(c))
-                //.ConfigureServices((c, s) => s.AddCommitmentsApi(c))
-                //.ConfigureServices((c, s) => s.AddProviderServices(c))
-                .ConfigureServices((c, s) => s.AddDefaultServices(c))
-                .ConfigureServices((c, s) => s.AddDasNServiceBus());
     }
 }

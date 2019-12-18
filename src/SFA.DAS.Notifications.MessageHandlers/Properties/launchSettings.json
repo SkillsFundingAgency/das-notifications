@@ -1,10 +1,9 @@
 {
   "profiles": {
-    "SFA.DAS.Notifications.MessageHandlers3": {
+    "SFA.DAS.Notifications.MessageHandlers": {
       "commandName": "Project",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "APPSETTING_LoggingRedisConnectionString": "localhost:6379"
+        "APPSETTING_EnvironmentName": "LOCAL"
       }
     }
   }

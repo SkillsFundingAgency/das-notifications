@@ -1,64 +1,64 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Azure.ServiceBus.Primitives;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using NServiceBus;
 using SFA.DAS.Notifications.Infrastructure.Configuration;
-using SFA.DAS.Notifications.MessageHandlers.NServiceBus;
 using SFA.DAS.NServiceBus.Configuration;
 using SFA.DAS.NServiceBus.Configuration.AzureServiceBus;
 using SFA.DAS.NServiceBus.Configuration.NewtonsoftJsonSerializer;
 using SFA.DAS.NServiceBus.Configuration.NLog;
+using SFA.DAS.NServiceBus.Configuration.StructureMap;
 using SFA.DAS.NServiceBus.Hosting;
+using SFA.DAS.NServiceBus.SqlServer.Configuration;
+using SFA.DAS.UnitOfWork.NServiceBus.Configuration;
+using StructureMap;
+using System.Data.Common;
 
 namespace SFA.DAS.Notifications.MessageHandlers.Startup
 {
     public static class NServiceBusStartup
     {
-        public static IServiceCollection AddDasNServiceBus(this IServiceCollection services)
+        public static IServiceCollection AddNServiceBus(this IServiceCollection services, IConfiguration config, bool isDevelopment)
         {
             return services
-                .AddSingleton(s =>
+                .AddSingleton(p =>
                 {
-                    var configuration = s.GetService<IConfiguration>();
-                    var hostingEnvironment = s.GetService<IHostingEnvironment>();
+                    var configuration = p.GetService<IConfiguration>();
                     var serviceBusConfiguration = configuration.GetNotificationSection<NServiceBusConfiguration>("NServiceBusConfiguration");
-                    var isDevelopment = hostingEnvironment.IsDevelopment();
+                    var container = p.GetService<IContainer>();
+                    
                     var endpointConfiguration = new EndpointConfiguration("SFA.DAS.Notifications.MessageHandlers")
-                        .UseAzureServiceBusTransport(isDevelopment, serviceBusConfiguration.ServiceBusConnectionString)
-                        .UseErrorQueue("errors")
                         .UseInstallers()
                         .UseLicense(serviceBusConfiguration.NServiceBusLicense)
-                        .UseNotificationsMessageConventions()
+                        .UseErrorQueue("errors")
+                        .UseMessageConventions()
                         .UseNewtonsoftJsonSerializer()
                         .UseNLogFactory()
-                        .UseServiceCollection(services)
-                        ;
+                        .UseOutbox()
+                        .UseSqlServerPersistence(() => container.GetInstance<DbConnection>())
+                        .UseStructureMapBuilder(container)
+                        .UseUnitOfWork();
 
-                    return Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
+                    if (isDevelopment)
+                    {
+                        endpointConfiguration.UseLearningTransport();
+                    }
+                    else
+                    {
+                        var transport = endpointConfiguration.UseTransport<AzureServiceBusTransport>();
+                        var ruleNameShortener = new RuleNameShortener();
+
+                        var tokenProvider = TokenProvider.CreateManagedServiceIdentityTokenProvider();
+                        transport.CustomTokenProvider(tokenProvider);
+                        transport.ConnectionString(serviceBusConfiguration.ServiceBusConnectionString);
+                        transport.RuleNameShortener(ruleNameShortener.Shorten);
+                    }
+
+                    var endpoint = Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
+
+                    return endpoint;
                 })
                 .AddHostedService<NServiceBusHostedService>();
-        }
-
-        public static EndpointConfiguration UseAzureServiceBusTransport(
-            this EndpointConfiguration endpointConfiguration,
-            bool isDevelopment,
-            string connectionString
-        )
-        {
-            if (isDevelopment)
-            {
-                var transport = endpointConfiguration.UseTransport<LearningTransport>();
-                transport.Transactions(TransportTransactionMode.ReceiveOnly);
-            }
-
-            else
-            {
-                endpointConfiguration
-                    .UseAzureServiceBusTransport(connectionString, r => { })
-                ;
-            }
-
-            return endpointConfiguration;
-        }
+        }        
     }
 }

@@ -1,0 +1,22 @@
+﻿using MediatR;
+using SFA.DAS.Notifications.Application.Interfaces;
+using SFA.DAS.Notifications.Domain.Configuration;
+using SFA.DAS.Notifications.Infrastructure.Configuration;
+using SFA.DAS.Notifications.Infrastructure.ExecutionPolicies;
+using SFA.DAS.Notifications.Infrastructure.NotifyEmailService;
+using StructureMap;
+
+namespace SFA.DAS.Notifications.MessageHandlers.DependencyResolution
+{
+    public class DefaultRegistry : Registry
+    {
+        public DefaultRegistry()
+        {
+            For<ITemplateConfigurationService>().Use<TemplateConfigurationService>();
+            For<IEmailService>().Use<NotifyEmailService>();
+            For<INotifyHttpClientWrapper>().Use<NotifyHttpClientWrapper>();
+            For<ExecutionPolicy>().Use<SendMessageExecutionPolicy>();
+        }
+
+    }
+}
