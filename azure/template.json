@@ -236,7 +236,7 @@
                 },
                 "parameters": {
                     "appServiceName": {
-                        "value": "[variables('appServiceName')]"
+                        "value": "[variables('workerAppServiceName')]"
                     },
                     "appServicePlanName": {
                         "value": "[variables('workerAppServicePlanName')]"
