@@ -20,6 +20,7 @@ namespace SFA.DAS.Notifications.Api.UnitTests.ControllerTests.GivenSmsController
             mockNotificationOrchestrator.Setup(x => x.SendSms(It.IsAny<Sms>())).Returns(Task.FromResult(orchestratorResponse));
 
             var sut = new SmsController(mockNotificationOrchestrator.Object);
+            sut.ControllerContext = TestHelpers.CreateControllerContextWithUser();
 
             var request = new Sms();
             HttpResponseMessage controllerResponse = await sut.Post(request);

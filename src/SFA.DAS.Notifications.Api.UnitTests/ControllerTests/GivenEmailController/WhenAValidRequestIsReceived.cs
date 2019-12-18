@@ -1,6 +1,9 @@
 ﻿using System.Net;
 using System.Net.Http;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Notifications.Api.Controllers;
@@ -18,9 +21,10 @@ namespace SFA.DAS.Notifications.Api.UnitTests.ControllerTests.GivenEmailControll
             var orchestratorResponse = new OrchestratorResponse { Code = NotificationOrchestratorCodes.Post.Success };
             var mockNotificationOrchestrator = new Mock<INotificationOrchestrator>();
             mockNotificationOrchestrator.Setup(x => x.SendSms(It.IsAny<Sms>())).Returns(Task.FromResult(orchestratorResponse));
-
+            
             var sut = new SmsController(mockNotificationOrchestrator.Object);
-
+            sut.ControllerContext = TestHelpers.CreateControllerContextWithUser();
+            
             var request = new Sms();
             HttpResponseMessage controllerResponse = await sut.Post(request);
 

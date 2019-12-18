@@ -1,1 +1,1 @@
-dotnet SFA.DAS.Notifications.MessageHandlers3.dll
+dotnet SFA.DAS.Notifications.MessageHandlers.dll

@@ -20,6 +20,7 @@ namespace SFA.DAS.Notifications.Api.UnitTests.ControllerTests.GivenEmailControll
             mockNotificationOrchestrator.Setup(x => x.SendEmail(It.IsAny<Email>())).Returns(Task.FromResult(orchestratorResponse));
 
             var sut = new EmailController(mockNotificationOrchestrator.Object);
+            sut.ControllerContext = TestHelpers.CreateControllerContextWithUser();
 
             var request = new Email();
             HttpResponseMessage controllerResponse = await sut.Post(request);

@@ -4,8 +4,6 @@ using NLog.Extensions.Logging;
 using SFA.DAS.Notifications.MessageHandlers.DependencyResolution;
 using SFA.DAS.Notifications.MessageHandlers.Startup;
 
-//using SFA.DAS.Notifications.MessageHandlers3.StartupJobs;
-
 namespace SFA.DAS.Notifications.MessageHandlers
 {
     class Program
