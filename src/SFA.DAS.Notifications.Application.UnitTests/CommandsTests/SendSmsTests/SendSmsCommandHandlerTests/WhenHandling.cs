@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using FluentValidation;
+using MediatR;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
@@ -23,7 +25,7 @@ namespace SFA.DAS.Notifications.Application.UnitTests.CommandsTests.SendSmsTests
 
         private Mock<ITemplateConfigurationService> _templateConfigurationService;
         private Mock<ISmsService> _smsService;
-        private SendSmsCommandHandler _handler;
+        private IRequestHandler<SendSmsCommand> _handler;
         private SendSmsCommand _command;
 
         [SetUp]
@@ -71,14 +73,14 @@ namespace SFA.DAS.Notifications.Application.UnitTests.CommandsTests.SendSmsTests
             _command.TemplateId = "ThisIsNotAValidTemplateName";
 
             // Act + Assert
-            Assert.ThrowsAsync<ValidationException>(async () => await _handler.Handle(_command));
+            Assert.ThrowsAsync<ValidationException>(async () => await _handler.Handle(_command, new CancellationToken()));
         }
 
         [Test]
         public async Task ThenItShouldSendTheSms()
         {
             // Act
-            await _handler.Handle(_command);
+            await _handler.Handle(_command, new CancellationToken());
 
             // Assert
             _smsService.Verify(x => x.SendAsync(

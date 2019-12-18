@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
+using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Notifications.Application.Commands.SendEmail;
@@ -24,7 +26,7 @@ namespace SFA.DAS.Notifications.Application.UnitTests.CommandsTests.SendEmailTes
 
         private Mock<ITemplateConfigurationService> _templateConfigurationService;
         private Mock<IEmailService> _emailService;
-        private SendEmailCommandHandler _handler;
+        private IRequestHandler<SendEmailCommand> _handler;
         private SendEmailCommand _command;
 
         [SetUp]
@@ -74,7 +76,7 @@ namespace SFA.DAS.Notifications.Application.UnitTests.CommandsTests.SendEmailTes
             Exception thrownException = null;
             try
             {
-                await _handler.Handle(_command);
+                await _handler.Handle(_command, new CancellationToken());
             }
             catch (Exception exception)
             {

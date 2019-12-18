@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using FluentValidation;
+using MediatR;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
@@ -26,7 +28,7 @@ namespace SFA.DAS.Notifications.Application.UnitTests.CommandsTests.SendEmailTes
 
         private Mock<ITemplateConfigurationService> _templateConfigurationService;
         private Mock<IEmailService> _emailService;
-        private SendEmailCommandHandler _handler;
+        private IRequestHandler<SendEmailCommand> _handler;
         private SendEmailCommand _command;
 
         [SetUp]
@@ -77,14 +79,14 @@ namespace SFA.DAS.Notifications.Application.UnitTests.CommandsTests.SendEmailTes
             _command.TemplateId = "ThisIsNotAValidTemplateName";
 
             // Act + Assert
-            Assert.ThrowsAsync<ValidationException>(async () => await _handler.Handle(_command));
+            Assert.ThrowsAsync<ValidationException>(async () => await _handler.Handle(_command, new CancellationToken()));
         }
 
         [Test]
         public async Task ThenItShouldSendTheEmail()
         {
             // Act
-            await _handler.Handle(_command);
+            await _handler.Handle(_command, new CancellationToken());
 
             // Assert
             _emailService.Verify(x => x.SendAsync(

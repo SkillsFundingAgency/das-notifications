@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
+using MediatR;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
@@ -22,7 +24,7 @@ namespace SFA.DAS.Notifications.Application.UnitTests.CommandsTests.SendSmsTests
 
         private Mock<ITemplateConfigurationService> _templateConfigurationService;
         private Mock<ISmsService> _smsService;
-        private SendSmsCommandHandler _handler;
+        private IRequestHandler<SendSmsCommand> _handler;
         private SendSmsCommand _command;
 
         [SetUp]
@@ -68,7 +70,7 @@ namespace SFA.DAS.Notifications.Application.UnitTests.CommandsTests.SendSmsTests
             Exception thrownException = null;
             try
             {
-                await _handler.Handle(_command);
+                await _handler.Handle(_command, new CancellationToken());
             }
             catch (Exception exception)
             {

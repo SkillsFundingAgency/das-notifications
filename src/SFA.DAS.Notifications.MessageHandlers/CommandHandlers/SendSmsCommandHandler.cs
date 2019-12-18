@@ -30,7 +30,7 @@ namespace SFA.DAS.Notifications.MessageHandlers.CommandHandlers
                     Tokens = message.Tokens.ToDictionary(e => e.Key, e => e.Value)
                 };
 
-                await _mediator.SendAsync(command);
+                await _mediator.Send(command);
             }
             catch (Exception e)
             {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 using FluentValidation;
 using MediatR;
@@ -34,7 +35,7 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
             _emailService = emailService;
         }
 
-        protected override async Task HandleCore(SendEmailCommand command)
+        protected override async Task Handle(SendEmailCommand command, CancellationToken cancellationToken)
         {
             var messageId = Guid.NewGuid().ToString();
 

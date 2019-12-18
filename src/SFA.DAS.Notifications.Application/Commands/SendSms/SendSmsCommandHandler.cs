@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using FluentValidation;
 using MediatR;
@@ -31,7 +32,7 @@ namespace SFA.DAS.Notifications.Application.Commands.SendSms
             _smsService = smsService;
         }
 
-        protected override async Task HandleCore(SendSmsCommand command)
+        protected override async Task Handle(SendSmsCommand command, CancellationToken cancellationToken)
         {
             var messageId = Guid.NewGuid().ToString();
 
