@@ -19,7 +19,8 @@
         },
         "appServiceAllowedIPs": {
             "type": "array",
-            "defaultValue": []
+            "defaultValue": [
+            ]
         },
         "customHostname": {
             "type": "string"
@@ -47,6 +48,18 @@
         },
         "apiTokenSecret": {
             "type": "string"
+        },
+        "workerAppServicePlanSize": {
+            "type": "string",
+            "defaultValue": "1"
+        },
+        "workerAppServicePlanInstances": {
+            "type": "int",
+            "defaultValue": 2
+        },
+        "workerAppServicePlanTier": {
+            "type": "string",
+            "defaultValue": "Standard"
         }
     },
     "variables": {
@@ -161,6 +174,32 @@
                     },
                     "ipSecurityRestrictions": {
                         "value": "[parameters('appServiceAllowedIPs')]"
+                    }
+                }
+            }
+        },
+        {
+            "apiVersion": "2017-05-10",
+            "name": "worker-app-service-plan",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(variables('deploymentUrlBase'), 'app-service-plan.json')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "appServicePlanName": {
+                        "value": "[variables('workerAppServicePlanName')]"
+                    },
+                    "aspSize": {
+                        "value": "[parameters('workerAppServicePlanSize')]"
+                    },
+                    "aspInstances": {
+                        "value": "[parameters('workerAppServicePlanInstances')]"
+                    },
+                    "nonASETier": {
+                        "value": "[parameters('workerAppServicePlanTier')]"
                     }
                 }
             }
