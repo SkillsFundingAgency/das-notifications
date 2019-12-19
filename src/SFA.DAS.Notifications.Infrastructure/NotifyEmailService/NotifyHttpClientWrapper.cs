@@ -21,13 +21,11 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
     public class NotifyHttpClientWrapper : INotifyHttpClientWrapper
     {
         private readonly IConfiguration _configuration;
-        private readonly IDictionary<string, GovNotifyServiceCredentials> _consumerConfigurationLookup;
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
 
         public NotifyHttpClientWrapper(IConfiguration configuration)
         {
             _configuration = configuration;
-            _consumerConfigurationLookup = GetConsumerConfiguration();
         }
 
         public Task SendEmail(NotifyMessage content)
@@ -53,8 +51,7 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
 
             using (var httpClient = CreateHttpClient(configuration.NotifyServiceConfiguration.ApiBaseUrl))
             {
-                var serviceCredentials = GetServiceCredentials(configuration, content.SystemId);
-
+                var serviceCredentials = new GovNotifyServiceCredentials(configuration.NotifyServiceConfiguration.ServiceId, configuration.NotifyServiceConfiguration.ApiKey);
                 var token = JwtTokenUtility.CreateToken(serviceCredentials.ServiceId, serviceCredentials.ApiKey);
                 httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
@@ -78,36 +75,7 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
             {
                 BaseAddress = new Uri(baseUrl)
             };
-        }
-
-        private GovNotifyServiceCredentials GetServiceCredentials(NotificationServiceConfiguration configuration, string systemId)
-        {
-            return _consumerConfigurationLookup.TryGetValue(systemId, out var serviceCredential)
-                ? serviceCredential
-                : new GovNotifyServiceCredentials(
-                    configuration.NotifyServiceConfiguration.ServiceId,
-                    configuration.NotifyServiceConfiguration.ApiKey);
-        }
-
-        private IDictionary<string, GovNotifyServiceCredentials> GetConsumerConfiguration()
-        {
-            var lookup = new Dictionary<string, GovNotifyServiceCredentials>();
-
-            var consumerConfiguration = _configuration.GetNotificationSection<NotificationServiceConfiguration>()
-                .NotifyServiceConfiguration
-                .ConsumerConfiguration;
-
-            if (consumerConfiguration != null)
-            {
-                foreach (var config in consumerConfiguration)
-                {
-                    lookup.Add(config.ServiceName,
-                        GovNotifyServiceCredentials.FromV2ApiKey(config.ApiKey));
-                }
-            }
-
-            return lookup;
-        }
+        }       
 
         private async Task EnsureSuccessfulResponse(HttpResponseMessage response)
         {
