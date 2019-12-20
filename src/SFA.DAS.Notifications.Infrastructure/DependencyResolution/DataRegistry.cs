@@ -13,7 +13,7 @@ namespace SFA.DAS.Notifications.Infrastructure.DependencyResolution
     {
         public DataRegistry()
         {
-            For<DbConnection>().Use(c => new SqlConnection(c.GetInstance<IConfiguration>().GetNotificationSection<NotificationServiceConfiguration>().DatabaseConnectionString));
+            For<DbConnection>().Use(c => new SqlConnection(c.GetInstance<NotificationServiceConfiguration>().DatabaseConnectionString));
         }
     }
 

@@ -18,19 +18,17 @@ namespace SFA.DAS.Notifications.MessageHandlers.Startup
 {
     public static class NServiceBusStartup
     {
-        public static IServiceCollection AddNServiceBus(this IServiceCollection services, IConfiguration config, bool isDevelopment)
+        public static IServiceCollection AddNServiceBus(this IServiceCollection services, IConfiguration configuration, bool isDevelopment)
         {
             return services
                 .AddSingleton(p =>
                 {
-                    var configuration = p.GetService<IConfiguration>();
-                    var db = configuration.GetNotificationSection<NotificationServiceConfiguration>().DatabaseConnectionString;
-                    var serviceBusConfiguration = configuration.GetNotificationSection<NServiceBusConfiguration>("NServiceBusConfiguration");
+                    var nservicebusConfiguration = configuration.GetSection(NotificationConfigurationKeys.NServiceBusConfiguration).Get<NServiceBusConfiguration>();
                     var container = p.GetService<IContainer>();
                     
                     var endpointConfiguration = new EndpointConfiguration("SFA.DAS.Notifications.MessageHandlers")
                         .UseInstallers()
-                        .UseLicense(serviceBusConfiguration.NServiceBusLicense)
+                        .UseLicense(nservicebusConfiguration.NServiceBusLicense)
                         .UseErrorQueue("errors")
                         .UseMessageConventions()
                         .UseNewtonsoftJsonSerializer()
@@ -51,7 +49,7 @@ namespace SFA.DAS.Notifications.MessageHandlers.Startup
 
                         var tokenProvider = TokenProvider.CreateManagedServiceIdentityTokenProvider();
                         transport.CustomTokenProvider(tokenProvider);
-                        transport.ConnectionString(serviceBusConfiguration.ServiceBusConnectionString);
+                        transport.ConnectionString(nservicebusConfiguration.ServiceBusConnectionString);
                         transport.RuleNameShortener(ruleNameShortener.Shorten);
                     }
 

@@ -13,7 +13,7 @@ namespace SFA.DAS.Notifications.MessageHandlers.DependencyResolution
             registry.IncludeRegistry<NServiceBusUnitOfWorkRegistry>();
             registry.IncludeRegistry<DefaultRegistry>();
             registry.IncludeRegistry<DataRegistry>();
-            //registry.IncludeRegistry<ConfigurationRegistry>();
+            registry.IncludeRegistry<ConfigurationRegistry>();
         }
     }
 }

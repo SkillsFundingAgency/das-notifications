@@ -12,7 +12,7 @@ namespace SFA.DAS.Notifications.MessageHandlers.DependencyResolution
     {
         public DefaultRegistry()
         {
-            For<ITemplateConfigurationService>().Use<TemplateConfigurationService>();
+            //Use Local Email Service with SMTP Configuration for Testing.
             For<IEmailService>().Use<NotifyEmailService>();
             For<INotifyHttpClientWrapper>().Use<NotifyHttpClientWrapper>();
             For<ExecutionPolicy>().Use<SendMessageExecutionPolicy>();

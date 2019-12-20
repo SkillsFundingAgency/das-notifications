@@ -23,16 +23,16 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
 
         private readonly ILogger<SendEmailCommandHandler> _logger;
         private readonly IEmailService _emailService;
-        private readonly ITemplateConfigurationService _templateConfigurationService;
+        private readonly TemplateConfiguration _templateConfiguration;
 
         public SendEmailCommandHandler(
-            ITemplateConfigurationService templateConfigurationService,
             ILogger<SendEmailCommandHandler> logger,
-            IEmailService emailService)
+            IEmailService emailService,
+            TemplateConfiguration templateConfiguration)
         {
-            _templateConfigurationService = templateConfigurationService;
             _logger = logger;
             _emailService = emailService;
+            _templateConfiguration = templateConfiguration;
         }
 
         protected override async Task Handle(SendEmailCommand command, CancellationToken cancellationToken)
@@ -46,8 +46,7 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
 
             if (!IsGuid(command.TemplateId))
             {
-                TemplateConfiguration templateConfiguration = _templateConfigurationService.Get();
-                Template emailServiceTemplate = templateConfiguration.EmailServiceTemplates
+                Template emailServiceTemplate = _templateConfiguration.EmailServiceTemplates
                     .SingleOrDefault(
                         t => t.Id.Equals(command.TemplateId, StringComparison.InvariantCultureIgnoreCase)
                     );

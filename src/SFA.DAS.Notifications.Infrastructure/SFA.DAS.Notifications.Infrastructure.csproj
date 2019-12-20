@@ -11,6 +11,7 @@
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
     <PackageReference Include="NLog" Version="4.6.8" />
     <PackageReference Include="Polly" Version="5.0.6" />
+    <PackageReference Include="SFA.DAS.AutoConfiguration" Version="2.2.6" />
     <PackageReference Include="SFA.DAS.Configuration" Version="3.0.77" />
     <PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="3.0.77" />
     <PackageReference Include="structuremap" Version="4.7.1" />

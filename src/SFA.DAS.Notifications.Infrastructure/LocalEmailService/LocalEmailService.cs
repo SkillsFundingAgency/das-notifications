@@ -13,27 +13,25 @@ namespace SFA.DAS.Notifications.Infrastructure.LocalEmailService
 {
     public class LocalEmailService : IEmailService
     {
-        private readonly IConfiguration _configuration;
+        private readonly SmtpConfiguration _configuration;
 
-        public LocalEmailService(IConfiguration configuration)
+        public LocalEmailService(SmtpConfiguration configuration)
         {
             _configuration = configuration;
         }
 
         public async Task SendAsync(EmailMessage message)
         {
-            var config = JsonConvert.DeserializeObject<NotificationServiceConfiguration>(_configuration["SFA.DAS.Notifications_1.0"]);
-
             using (var client = new SmtpClient())
             {
-                client.Port = GetPortNumber(config.SmtpConfiguration.Port);
+                client.Port = GetPortNumber(_configuration.Port);
                 client.DeliveryMethod = SmtpDeliveryMethod.Network;
                 client.UseDefaultCredentials = false;
-                client.Host = config.SmtpConfiguration.ServerName;
+                client.Host = _configuration.ServerName;
 
-                if (!string.IsNullOrEmpty(config.SmtpConfiguration.UserName) && !string.IsNullOrEmpty(config.SmtpConfiguration.Password))
+                if (!string.IsNullOrEmpty(_configuration.UserName) && !string.IsNullOrEmpty(_configuration.Password))
                 {
-                    client.Credentials = new System.Net.NetworkCredential(config.SmtpConfiguration.UserName, config.SmtpConfiguration.Password);
+                    client.Credentials = new System.Net.NetworkCredential(_configuration.UserName, _configuration.Password);
                 }
 
                 var mail = new MailMessage(message.ReplyToAddress, message.RecipientsAddress) {

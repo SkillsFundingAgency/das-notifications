@@ -20,10 +20,10 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
 
     public class NotifyHttpClientWrapper : INotifyHttpClientWrapper
     {
-        private readonly IConfiguration _configuration;
+        private readonly NotifyServiceConfiguration _configuration;
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
 
-        public NotifyHttpClientWrapper(IConfiguration configuration)
+        public NotifyHttpClientWrapper(NotifyServiceConfiguration configuration)
         {
             _configuration = configuration;
         }
@@ -45,20 +45,18 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
             if (notificationsEndPoint.StartsWith("/"))
                 throw new ArgumentException("Cannot start with a /", nameof(notificationsEndPoint));
 
-            var configuration = _configuration.GetNotificationSection<NotificationServiceConfiguration>();
-            //var configuration = JsonConvert.DeserializeObject<NotificationServiceConfiguration>(_configuration["SFA.DAS.Notifications_1.0"]);
             content.Template = content.Template;
 
-            using (var httpClient = CreateHttpClient(configuration.NotifyServiceConfiguration.ApiBaseUrl))
+            using (var httpClient = CreateHttpClient(_configuration.ApiBaseUrl))
             {
-                var serviceCredentials = new GovNotifyServiceCredentials(configuration.NotifyServiceConfiguration.ServiceId, configuration.NotifyServiceConfiguration.ApiKey);
+                var serviceCredentials = new GovNotifyServiceCredentials(_configuration.ServiceId, _configuration.ApiKey);
                 var token = JwtTokenUtility.CreateToken(serviceCredentials.ServiceId, serviceCredentials.ApiKey);
                 httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
                 var serializeObject = JsonConvert.SerializeObject(content);
                 var stringContent = new StringContent(serializeObject, Encoding.UTF8, "application/json");
 
-                Logger.Info($"Sending communication request to Notify at {configuration.NotifyServiceConfiguration.ApiBaseUrl}/{notificationsEndPoint}");
+                Logger.Info($"Sending communication request to Notify at {_configuration.ApiBaseUrl}/{notificationsEndPoint}");
 
                 var request = new HttpRequestMessage(HttpMethod.Post, $"/{notificationsEndPoint}") {
                     Content = stringContent

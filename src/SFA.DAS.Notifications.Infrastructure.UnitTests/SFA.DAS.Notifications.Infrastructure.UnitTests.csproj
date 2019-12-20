@@ -19,4 +19,8 @@
     <ProjectReference Include="..\SFA.DAS.Notifications.Infrastructure\SFA.DAS.Notifications.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ConfigurationTests\" />
+  </ItemGroup>
+
 </Project>

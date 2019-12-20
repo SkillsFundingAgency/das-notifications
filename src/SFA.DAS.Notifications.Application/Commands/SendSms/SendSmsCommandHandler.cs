@@ -20,14 +20,14 @@ namespace SFA.DAS.Notifications.Application.Commands.SendSms
 #pragma warning restore IDE1006 // Naming Styles
 
         private readonly ILogger _logger;
-        private readonly ITemplateConfigurationService _templateConfigurationService;
+        private readonly TemplateConfiguration _templateConfiguration;
         private readonly ISmsService _smsService;
 
         public SendSmsCommandHandler(
-            ITemplateConfigurationService templateConfigurationService,
+            TemplateConfiguration templateConfiguration,
             ILogger logger, ISmsService smsService)
         {
-            _templateConfigurationService = templateConfigurationService;
+            _templateConfiguration = templateConfiguration;
             _logger = logger;
             _smsService = smsService;
         }
@@ -40,8 +40,7 @@ namespace SFA.DAS.Notifications.Application.Commands.SendSms
 
             Validate(command);
 
-            var templateConfiguration = _templateConfigurationService.Get();
-            SmsTemplate template = templateConfiguration.SmsServiceTemplates
+            SmsTemplate template = _templateConfiguration.SmsServiceTemplates
                 .SingleOrDefault(x => string.Equals(command.TemplateId, x.Id, StringComparison.InvariantCultureIgnoreCase));
 
             if (template == null)
@@ -56,7 +55,8 @@ namespace SFA.DAS.Notifications.Application.Commands.SendSms
 
             _logger.Log(LogLevel.Debug, $"Stored SMS message '{messageId}' in data store");
 
-            await _smsService.SendAsync(new SmsMessage {
+            await _smsService.SendAsync(new SmsMessage
+            {
                 TemplateId = command.TemplateId,
                 SystemId = command.SystemId,
                 RecipientsNumber = command.RecipientsNumber,

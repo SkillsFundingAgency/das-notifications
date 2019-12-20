@@ -3,23 +3,19 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
+using SFA.DAS.Notifications.Infrastructure.Configuration;
 using StructureMap;
 using System;
 
 namespace SFA.DAS.Notifications.MessageHandlers.Startup
 {
-    public static class ConfigurationKeys
-    {
-        public const string Notifications = "SFA.DAS.Notifications";
-    }
-
     public static class HostBuilderExtensions
     {
         public static IHostBuilder ConfigureDasAppConfiguration(this IHostBuilder hostBuilder, string[] args)
         {
             return hostBuilder.ConfigureAppConfiguration((context, builder) =>
             {
-                builder.AddAzureTableStorage(ConfigurationKeys.Notifications)
+                builder.AddAzureTableStorage(NotificationConfigurationKeys.Notifications, NotificationConfigurationKeys.NotificationsTemplates)
                     .AddJsonFile("appsettings.json", true, true)
                     .AddJsonFile($"appsettings.{context.HostingEnvironment.EnvironmentName}.json", true, true)
                     .AddEnvironmentVariables()
