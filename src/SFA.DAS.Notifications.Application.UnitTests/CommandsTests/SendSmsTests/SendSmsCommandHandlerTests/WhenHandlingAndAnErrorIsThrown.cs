@@ -22,7 +22,7 @@ namespace SFA.DAS.Notifications.Application.UnitTests.CommandsTests.SendSmsTests
         private string _recipientsNumber;
         private Dictionary<string, string> _tokens;
 
-        private Mock<ITemplateConfigurationService> _templateConfigurationService;
+        private TemplateConfiguration _templateConfiguration;
         private Mock<ISmsService> _smsService;
         private IRequestHandler<SendSmsCommand> _handler;
         private SendSmsCommand _command;
@@ -30,22 +30,21 @@ namespace SFA.DAS.Notifications.Application.UnitTests.CommandsTests.SendSmsTests
         [SetUp]
         public void Arrange()
         {
-            _templateConfigurationService = new Mock<ITemplateConfigurationService>();
-            _templateConfigurationService.Setup(s => s.Get())
-                .Returns(new TemplateConfiguration {
-                    SmsServiceTemplates = new List<SmsTemplate>
+            _templateConfiguration = new TemplateConfiguration
+            {
+                SmsServiceTemplates = new List<SmsTemplate>
                     {
                         new SmsTemplate {Id = TemplateName, ServiceId = TranslatedTemplateId},
                         new SmsTemplate {Id = "Not" + TemplateName, ServiceId = "fffb72dd-ef2d-4fcd-9d41-12a23801a5ea"}
                     }
-                });
+            };
 
             _smsService = new Mock<ISmsService>();
 
             _smsService.Setup(x => x.SendAsync(It.IsAny<SmsMessage>())).Throws(new Exception());
 
             _handler = new SendSmsCommandHandler(
-                _templateConfigurationService.Object,
+                _templateConfiguration,
                 Mock.Of<ILogger>(),
                 _smsService.Object);
 
@@ -56,7 +55,8 @@ namespace SFA.DAS.Notifications.Application.UnitTests.CommandsTests.SendSmsTests
             };
 
 
-            _command = new SendSmsCommand {
+            _command = new SendSmsCommand
+            {
                 SystemId = _systemId,
                 RecipientsNumber = _recipientsNumber,
                 TemplateId = TemplateName,

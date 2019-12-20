@@ -24,7 +24,7 @@ namespace SFA.DAS.Notifications.Application.UnitTests.CommandsTests.SendEmailTes
         private string _replyToAddress;
         private Dictionary<string, string> _tokens;
 
-        private Mock<ITemplateConfigurationService> _templateConfigurationService;
+        private TemplateConfiguration _templateConfiguration;
         private Mock<IEmailService> _emailService;
         private IRequestHandler<SendEmailCommand> _handler;
         private SendEmailCommand _command;
@@ -32,22 +32,20 @@ namespace SFA.DAS.Notifications.Application.UnitTests.CommandsTests.SendEmailTes
         [SetUp]
         public void Arrange()
         {
-            _templateConfigurationService = new Mock<ITemplateConfigurationService>();
-            _templateConfigurationService.Setup(s => s.Get())
-                .Returns(new TemplateConfiguration {
+            _templateConfiguration = new TemplateConfiguration {
                     EmailServiceTemplates = new List<Template>
                     {
                         new Template {Id = TemplateName, EmailServiceId = TranslatedTemplateId},
                         new Template {Id = "Not" + TemplateName, EmailServiceId = "fffb72dd-ef2d-4fcd-9d41-12a23801a5ea"}
                     }
-                });
+                };
 
             _emailService = new Mock<IEmailService>();
 
             _handler = new SendEmailCommandHandler(
-                _templateConfigurationService.Object,
                 Mock.Of<Microsoft.Extensions.Logging.ILogger<SendEmailCommandHandler>>(),
-                _emailService.Object);
+                _emailService.Object,
+                _templateConfiguration);
 
             _templateId = Guid.NewGuid().ToString();
             _systemId = "Test System";
