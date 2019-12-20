@@ -14,6 +14,7 @@
     <PackageReference Include="SFA.DAS.Configuration" Version="3.0.77" />
     <PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="3.0.77" />
     <PackageReference Include="structuremap" Version="4.7.1" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.0" />
   </ItemGroup>
 
   <ItemGroup>

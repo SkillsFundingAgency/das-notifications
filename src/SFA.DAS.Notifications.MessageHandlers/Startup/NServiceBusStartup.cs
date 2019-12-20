@@ -24,6 +24,7 @@ namespace SFA.DAS.Notifications.MessageHandlers.Startup
                 .AddSingleton(p =>
                 {
                     var configuration = p.GetService<IConfiguration>();
+                    var db = configuration.GetNotificationSection<NotificationServiceConfiguration>().DatabaseConnectionString;
                     var serviceBusConfiguration = configuration.GetNotificationSection<NServiceBusConfiguration>("NServiceBusConfiguration");
                     var container = p.GetService<IContainer>();
                     
