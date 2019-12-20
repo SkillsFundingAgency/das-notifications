@@ -98,6 +98,7 @@ jobs:
         contents: |
           src/**/*.dacpac
         targetFolder: '$(build.artifactstagingdirectory)/publish'
+        flattenfolders: true
     - task: PublishBuildArtifacts@1
       displayName: 'Publish Artifact'
       inputs:
