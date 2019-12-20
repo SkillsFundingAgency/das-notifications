@@ -16,68 +16,68 @@ jobs:
       name: 'DAS - Continuous Integration'
     workspace:
       clean: all
-  steps:
-    - task: gittools.gitversion.gitversion-task.GitVersion@5
-      displayName: GitVersion
-      inputs:
-        updateAssemblyInfo: true
+    steps:
+      - task: gittools.gitversion.gitversion-task.GitVersion@5
+        displayName: GitVersion
+        inputs:
+          updateAssemblyInfo: true
 
-    - task: DotNetCoreCLI@2
-      displayName: Restore
-      inputs:
-        command: restore
-        projects: "src/**/*.csproj"
+      - task: DotNetCoreCLI@2
+        displayName: Restore
+        inputs:
+          command: restore
+          projects: "src/**/*.csproj"
 
-    - task: DotNetCoreCLI@2
-      displayName: Build
-      inputs:
-        projects: "src/**/*.csproj"
-        arguments: "--configuration $(buildConfiguration) --no-restore"
+      - task: DotNetCoreCLI@2
+        displayName: Build
+        inputs:
+          projects: "src/**/*.csproj"
+          arguments: "--configuration $(buildConfiguration) --no-restore"
 
-    - task: DotNetCoreCLI@2
-      displayName: Test
-      inputs:
-        command: test
-        projects: "**/*Tests.csproj"
-        arguments: "--configuration $(buildConfiguration) --no-build"
+      - task: DotNetCoreCLI@2
+        displayName: Test
+        inputs:
+          command: test
+          projects: "**/*Tests.csproj"
+          arguments: "--configuration $(buildConfiguration) --no-build"
 
-    - task: DotNetCoreCLI@2
-      displayName: "Publish API"
-      inputs:
-        command: publish
-        publishWebProjects: false
-        projects: "src/SFA.DAS.Notifications.Api/SFA.DAS.Notifications.Api.csproj"
-        arguments: "--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory)/publish --no-restore --no-build"
+      - task: DotNetCoreCLI@2
+        displayName: "Publish API"
+        inputs:
+          command: publish
+          publishWebProjects: false
+          projects: "src/SFA.DAS.Notifications.Api/SFA.DAS.Notifications.Api.csproj"
+          arguments: "--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory)/publish --no-restore --no-build"
 
-    - task: DotNetCoreCLI@2
-      displayName: "Publish Web Job"
-      inputs:
-        command: publish
-        publishWebProjects: false
-        projects: "src/SFA.DAS.Notifications.MessageHandlers/SFA.DAS.Notifications.MessageHandlers.csproj"
-        arguments: "--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory)/publish --no-restore --no-build"
+      - task: DotNetCoreCLI@2
+        displayName: "Publish Web Job"
+        inputs:
+          command: publish
+          publishWebProjects: false
+          projects: "src/SFA.DAS.Notifications.MessageHandlers/SFA.DAS.Notifications.MessageHandlers.csproj"
+          arguments: "--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory)/publish --no-restore --no-build"
 
-    - task: DotNetCoreCLI@2
-      displayName: "dotnet pack"
-      inputs:
-        command: pack
-        packagesToPack: >
-          src/SFA.DAS.Notifications.Messages/SFA.DAS.Notifications.Messages.csproj
-        packDirectory: "$(build.artifactstagingdirectory)/publish"
-        versioningScheme: byBuildNumber
-        buildProperties: 'Version="$(Build.BuildNumber)"'
+      - task: DotNetCoreCLI@2
+        displayName: "dotnet pack"
+        inputs:
+          command: pack
+          packagesToPack: >
+            src/SFA.DAS.Notifications.Messages/SFA.DAS.Notifications.Messages.csproj
+          packDirectory: "$(build.artifactstagingdirectory)/publish"
+          versioningScheme: byBuildNumber
+          buildProperties: 'Version="$(Build.BuildNumber)"'
 
-    - task: CopyFiles@2
-      displayName: "Copy Files to: $(build.artifactstagingdirectory)"
-      inputs:
-        contents: |
-          azure/**
-        targetFolder: "$(build.artifactstagingdirectory)/publish"
+      - task: CopyFiles@2
+        displayName: "Copy Files to: $(build.artifactstagingdirectory)"
+        inputs:
+          contents: |
+            azure/**
+          targetFolder: "$(build.artifactstagingdirectory)/publish"
 
-    - task: PublishBuildArtifacts@1
-      displayName: "Publish Artifact"
-      inputs:
-        pathtoPublish: "$(build.artifactstagingdirectory)/publish"
+      - task: PublishBuildArtifacts@1
+        displayName: "Publish Artifact"
+        inputs:
+          pathtoPublish: "$(build.artifactstagingdirectory)/publish"
         
   - job: 'DACPACBuild'
     pool:
