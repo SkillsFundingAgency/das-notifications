@@ -27,6 +27,9 @@ jobs:
         inputs:
           command: restore
           projects: "src/**/*.csproj"
+          nugetConfigPath: "src/nuget.config"
+          feedsToUse: config
+          includeNuGetOrg: true
 
       - task: DotNetCoreCLI@2
         displayName: Build
