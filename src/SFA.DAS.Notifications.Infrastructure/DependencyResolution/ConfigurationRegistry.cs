@@ -12,7 +12,6 @@ namespace SFA.DAS.Notifications.Infrastructure.DependencyResolution
         {
             IncludeRegistry<AutoConfigurationRegistry>();
             AddConfiguration<NotificationServiceConfiguration>(NotificationConfigurationKeys.Notifications);
-            AddConfiguration<NotifyServiceConfiguration>(NotificationConfigurationKeys.NotifyServiceConfiguration);
             AddConfiguration<NServiceBusConfiguration>(NotificationConfigurationKeys.NServiceBusConfiguration);
             AddConfiguration<SmtpConfiguration>(NotificationConfigurationKeys.SmtpConfiguration);
 

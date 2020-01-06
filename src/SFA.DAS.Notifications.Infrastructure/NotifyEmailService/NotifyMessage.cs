@@ -12,7 +12,7 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
         [JsonProperty(PropertyName = "personalisation")]
         public Dictionary<string, string> Personalisation { get; set; }
         [JsonProperty(PropertyName = "reference")]
-        public object Reference { get; set; }
+        public string Reference { get; set; }
         [JsonProperty(PropertyName = "systemId")]
         public string SystemId { get; set; }
     }

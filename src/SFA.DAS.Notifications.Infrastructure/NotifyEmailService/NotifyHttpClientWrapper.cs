@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
 using NLog;
+using Notify.Client;
+using Notify.Exceptions;
 using SFA.DAS.Notifications.Domain.Http;
 using SFA.DAS.Notifications.Infrastructure.Configuration;
 
@@ -20,81 +18,60 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
 
     public class NotifyHttpClientWrapper : INotifyHttpClientWrapper
     {
-        private readonly NotifyServiceConfiguration _configuration;
+        private readonly NotificationServiceConfiguration _configuration;
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
 
-        public NotifyHttpClientWrapper(NotifyServiceConfiguration configuration)
+        public NotifyHttpClientWrapper(NotificationServiceConfiguration configuration)
         {
             _configuration = configuration;
         }
 
         public Task SendEmail(NotifyMessage content)
         {
-            return SendMessage(content, "notifications/email");
+            return SendMessage(content, CommunicationType.Email);
         }
 
         public Task SendSms(NotifyMessage content)
         {
-            return SendMessage(content, "notifications/sms");
+            return SendMessage(content, CommunicationType.Sms);
         }
-        
-        private async Task SendMessage(NotifyMessage content, string notificationsEndPoint)
+
+        private async Task SendMessage(NotifyMessage content, CommunicationType communicationType)
         {
-            if (string.IsNullOrEmpty(notificationsEndPoint))
-                throw new ArgumentNullException(nameof(notificationsEndPoint));
-            if (notificationsEndPoint.StartsWith("/"))
-                throw new ArgumentException("Cannot start with a /", nameof(notificationsEndPoint));
 
-            content.Template = content.Template;
+            var notificationsClient = new NotificationClient(_configuration.NotificationServiceApiKey);
 
-            using (var httpClient = CreateHttpClient(_configuration.ApiBaseUrl))
+            // Needs to be a dictionary<string,dynamic> for the client.....
+            var personalisationDictionary = content.Personalisation.ToDictionary(x => x.Key, x => x.Value as dynamic);
+            try
             {
-                var serviceCredentials = new GovNotifyServiceCredentials(_configuration.ApiKey);
-                var token = JwtTokenUtility.CreateToken(serviceCredentials.ServiceId, serviceCredentials.ApiKey);
-                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-                var serializeObject = JsonConvert.SerializeObject(content);
-                var stringContent = new StringContent(serializeObject, Encoding.UTF8, "application/json");
-
-                Logger.Info($"Sending communication request to Notify at {_configuration.ApiBaseUrl}/{notificationsEndPoint}");
-
-                var request = new HttpRequestMessage(HttpMethod.Post, $"/{notificationsEndPoint}") {
-                    Content = stringContent
-                };
-                var response = await httpClient.SendAsync(request);
-
-                await EnsureSuccessfulResponse(response);
+                Logger.Info($"Sending communication request to Gov Notify");
+                if (communicationType == CommunicationType.Email)
+                {
+                    var response = await notificationsClient.SendEmailAsync(content.To, content.Template, personalisationDictionary, content.Reference);
+                }
+                else if (communicationType == CommunicationType.Sms)
+                {
+                    var response = await notificationsClient.SendSmsAsync(content.To, content.Template, personalisationDictionary, content.Reference);
+                }
+            }
+            catch (NotifyClientException notifyClientException)
+            {
+                Logger.Error(notifyClientException, $"Error sending communication {communicationType.ToString()} to Gov Notify with Gov.Notify Client");
+                throw;
+            }
+            catch (Exception exception)
+            {
+                Logger.Error(exception, $"Generic Error sending communication {communicationType.ToString()} to Gov Notify");
+                throw;
             }
         }
-        
-        private static HttpClient CreateHttpClient(string baseUrl)
-        {
-            return new HttpClient
-            {
-                BaseAddress = new Uri(baseUrl)
-            };
-        }       
 
-        private async Task EnsureSuccessfulResponse(HttpResponseMessage response)
+        private enum CommunicationType
         {
-            if (response.IsSuccessStatusCode)
-            {
-                return;
-            }
-            switch ((int)response.StatusCode)
-            {
-                case 404:
-                    throw new ResourceNotFoundException(response.RequestMessage.RequestUri.ToString());
-                case 429:
-                    throw new TooManyRequestsException();
-                case 500:
-                    throw new InternalServerErrorException();
-                case 503:
-                    throw new ServiceUnavailableException();
-                default:
-                    string responseContent = await response.Content.ReadAsStringAsync();
-                    throw new HttpException((int)response.StatusCode, $"Unexpected HTTP exception - ({(int)response.StatusCode}): {response.ReasonPhrase})\r\n{responseContent}");
-            }
+            None,
+            Email,
+            Sms
         }
     }
 }
