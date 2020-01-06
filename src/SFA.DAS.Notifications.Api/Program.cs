@@ -3,6 +3,7 @@ using System.IO;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using NLog.Web;
 using SFA.DAS.Configuration.AzureTableStorage;
 
@@ -48,6 +49,10 @@ namespace SFA.DAS.Notifications.Api
                     config.AddUserSecrets<Startup>();
                 })
                 .UseUrls("https://localhost:5052")
-                .UseNLog();
+                .UseNLog()
+            .ConfigureLogging((hostingContext, logging) =>
+            {
+                logging.AddEventSourceLogger();
+            });
     }
 }
