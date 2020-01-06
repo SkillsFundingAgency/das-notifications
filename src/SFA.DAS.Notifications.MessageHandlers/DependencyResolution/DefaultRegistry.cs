@@ -14,7 +14,7 @@ namespace SFA.DAS.Notifications.MessageHandlers.DependencyResolution
         {
             //Use Local Email Service with SMTP Configuration for Testing.
             For<IEmailService>().Use<NotifyEmailService>();
-            For<INotifyHttpClientWrapper>().Use<NotifyHttpClientWrapper>();
+            For<INotifyClientWrapper>().Use<NotifyClientWrapper>();
             For<ExecutionPolicy>().Use<SendMessageExecutionPolicy>();
         }
 

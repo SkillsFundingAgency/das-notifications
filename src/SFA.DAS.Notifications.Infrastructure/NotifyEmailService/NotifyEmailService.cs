@@ -13,10 +13,10 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
     {
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
 
-        private readonly INotifyHttpClientWrapper _clientWrapper;
+        private readonly INotifyClientWrapper _clientWrapper;
         private readonly ExecutionPolicy _executionPolicy;
 
-        public NotifyEmailService(INotifyHttpClientWrapper clientWrapper, [RequiredPolicy(SendMessageExecutionPolicy.Name)]ExecutionPolicy executionPolicy)
+        public NotifyEmailService(INotifyClientWrapper clientWrapper, [RequiredPolicy(SendMessageExecutionPolicy.Name)]ExecutionPolicy executionPolicy)
         {
             if (clientWrapper == null)
                 throw new ArgumentNullException(nameof(clientWrapper));
