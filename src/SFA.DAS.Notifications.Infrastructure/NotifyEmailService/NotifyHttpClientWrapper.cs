@@ -49,7 +49,7 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
 
             using (var httpClient = CreateHttpClient(_configuration.ApiBaseUrl))
             {
-                var serviceCredentials = new GovNotifyServiceCredentials(_configuration.ServiceId, _configuration.ApiKey);
+                var serviceCredentials = new GovNotifyServiceCredentials(_configuration.ApiKey);
                 var token = JwtTokenUtility.CreateToken(serviceCredentials.ServiceId, serviceCredentials.ApiKey);
                 httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 

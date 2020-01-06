@@ -9,26 +9,17 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
         private const int GuidLength = 36;
 
         public string ServiceId { get; }
-
         public string ApiKey { get; }
 
-        public GovNotifyServiceCredentials(string serviceId, string apiKey)
+        public GovNotifyServiceCredentials(string apiKey)
         {
-            ServiceId = serviceId;
-            ApiKey = apiKey;
-        }
-
-        public static GovNotifyServiceCredentials FromV2ApiKey(string fromApiKey)
-        {
-            if (fromApiKey.Length < 74)
+            if (apiKey.Length < 74)
             {
                 throw new Exception("The API Key provided is invalid. Please ensure you are using a v2 API Key that is not empty or null");
             }
 
-            var serviceId = fromApiKey.Substring(fromApiKey.Length - ServiceIdStartPosition, GuidLength);
-            var apiKey = fromApiKey.Substring(fromApiKey.Length - ServiceApiKeyStartPosition, GuidLength);
-
-            return new GovNotifyServiceCredentials(serviceId, apiKey);
+            ServiceId = apiKey.Substring(apiKey.Length - ServiceIdStartPosition, GuidLength);
+            ApiKey = apiKey.Substring(apiKey.Length - ServiceApiKeyStartPosition, GuidLength);
         }
     }
 }

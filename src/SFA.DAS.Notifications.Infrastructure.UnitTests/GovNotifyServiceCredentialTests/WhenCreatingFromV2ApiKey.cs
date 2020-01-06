@@ -15,7 +15,7 @@ namespace SFA.DAS.Notifications.Infrastructure.UnitTests.GovNotifyServiceCredent
         [SetUp]
         public void Arrange()
         {
-            _serviceCredentials = GovNotifyServiceCredentials.FromV2ApiKey(V2ApiKey);
+            _serviceCredentials = new GovNotifyServiceCredentials(V2ApiKey);
         }
 
         [Test]
