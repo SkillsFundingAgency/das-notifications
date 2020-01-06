@@ -92,31 +92,7 @@ namespace SFA.DAS.Notifications.Api
                 };
             });
 
-            var ourTestJwt = GenToken(tokenManagement);
-
             services.AddNServiceBus(BuildNServiceBusConfiguration());
-        }
-
-        private string GenToken(TokenManagement tokenManagement)
-        {
-            var token = string.Empty;
-
-            var claim = new[]
-            {
-                new Claim(ClaimTypes.Name, "test user")
-            };
-            var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(tokenManagement.Secret));
-            var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-            var jwtToken = new JwtSecurityToken(
-                tokenManagement.Issuer,
-                tokenManagement.Audience,
-                claim,
-                expires: DateTime.Now.AddMinutes(tokenManagement.AccessExpiration),
-                signingCredentials: credentials
-            );
-            token = new JwtSecurityTokenHandler().WriteToken(jwtToken);
-            return token;
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
