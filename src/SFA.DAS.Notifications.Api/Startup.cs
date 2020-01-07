@@ -61,24 +61,24 @@ namespace SFA.DAS.Notifications.Api
 
             services.AddHealthChecks();
 
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v0.1", new Info { Title = "Notifications-Api", Version = "v0.1" });
-                c.AddSecurityDefinition("Bearer", new ApiKeyScheme
-                {
-                    Description = "JWT Authorization header using the Bearer scheme. Please Enter \"Bearer {token}\" into the value box.",
-                    Name = "Authorization",
-                    In = "header",
-                    Type = "apiKey"
-                });
-                c.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>> {
-                    {"Bearer",new string[]{ } }
-                });
-                // Set the comments path for the Swagger JSON and UI.
-                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                c.IncludeXmlComments(xmlPath);
-            });
+            // services.AddSwaggerGen(c =>
+            // {
+            //     c.SwaggerDoc("v0.1", new Info { Title = "Notifications-Api", Version = "v0.1" });
+            //     c.AddSecurityDefinition("Bearer", new ApiKeyScheme
+            //     {
+            //         Description = "JWT Authorization header using the Bearer scheme. Please Enter \"Bearer {token}\" into the value box.",
+            //         Name = "Authorization",
+            //         In = "header",
+            //         Type = "apiKey"
+            //     });
+            //     c.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>> {
+            //         {"Bearer",new string[]{ } }
+            //     });
+            //     // Set the comments path for the Swagger JSON and UI.
+            //     var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            //     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+            //     c.IncludeXmlComments(xmlPath);
+            // });
 
             services.AddTransient<INotificationOrchestrator, NotificationOrchestrator>();
             services.Configure<TokenManagement>(Configuration.GetSection("tokenManagement"));
@@ -127,13 +127,13 @@ namespace SFA.DAS.Notifications.Api
             app.UseAuthentication();
             app.UseMvc();
             app.UseHealthChecks("/api/health");
-            app.UseSwagger();
+            // app.UseSwagger();
 
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v0.1/swagger.json", "Notifications Api V0.1");
-                c.RoutePrefix = string.Empty;
-            });
+            // app.UseSwaggerUI(c =>
+            // {
+            //     c.SwaggerEndpoint("/swagger/v0.1/swagger.json", "Notifications Api V0.1");
+            //     c.RoutePrefix = string.Empty;
+            // });
         }
     }
 }
