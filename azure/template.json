@@ -92,7 +92,6 @@
         "appServiceName": "[concat(variables('resourceNamePrefix'), 'api-as')]",
         "workerAppServiceName": "[concat(variables('resourceNamePrefix'), 'wkr-as')]",
         "workerAppServicePlanName": "[concat(variables('resourceNamePrefix'), 'wkr-asp')]",
-        "storageAccountName": "[concat('das',toLower(parameters('resourceEnvironmentName')),parameters('serviceName'),'str')]",
         "databaseName": "[concat(variables('resourceNamePrefix'), '-db')]"
     },
     "resources": [
@@ -176,10 +175,6 @@
                             {
                                 "name": "ConfigurationStorageConnectionString",
                                 "value": "[parameters('configurationStorageConnectionString')]"
-                            },
-                            {
-                                "name": "StorageConnectionString",
-                                "value": "[reference('storage-account').outputs.storageConnectionString.value]"
                             },
                             {
                                 "name": "InstrumentationKey",
@@ -299,10 +294,6 @@
                                 "value": "[parameters('configurationStorageConnectionString')]"
                             },
                             {
-                                "name": "StorageConnectionString",
-                                "value": "[reference('storage-account').outputs.storageConnectionString.value]"
-                            },
-                            {
                                 "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
                                 "value": "[reference('worker-application-insights').outputs.InstrumentationKey.value]"
                             }
@@ -337,23 +328,6 @@
             "copy": {
                 "name": "role-assignments",
                 "count": 3
-            }
-        },
-        {
-            "apiVersion": "2017-05-10",
-            "name": "storage-account",
-            "type": "Microsoft.Resources/deployments",
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[concat(variables('deploymentUrlBase'), 'storage-account-arm.json')]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "storageAccountName": {
-                        "value": "[variables('storageAccountName')]"
-                    }
-                }
             }
         },
         {
@@ -401,10 +375,6 @@
         "WorkerAppServiceName": {
             "type": "string",
             "value": "[variables('workerAppServiceName')]"
-        },
-        "StorageAccountName": {
-            "type": "string",
-            "value": "[variables('storageAccountName')]"
         },
         "DatabaseName": {
             "type": "string",
