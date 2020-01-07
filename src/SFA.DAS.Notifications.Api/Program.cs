@@ -33,12 +33,14 @@ namespace SFA.DAS.Notifications.Api
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
+                .UseNLog()
                 .ConfigureAppConfiguration((hostingContext, config) =>
                 {
                     var environmentName = hostingContext.HostingEnvironment.EnvironmentName;
                     config.SetBasePath(Directory.GetCurrentDirectory());
                     config.AddJsonFile("appSettings.json", optional: false, reloadOnChange: false);
-                    config.AddAzureTableStorage(options => {
+                    config.AddAzureTableStorage(options =>
+                    {
                         options.ConfigurationKeys = new[] { "SFA.DAS.Notifications" };
                         options.EnvironmentNameEnvironmentVariableName = "APPSETTING_EnvironmentName";
                         options.StorageConnectionStringEnvironmentVariableName = "APPSETTING_ConfigurationStorageConnectionString";
@@ -47,12 +49,7 @@ namespace SFA.DAS.Notifications.Api
                     config.AddJsonFile($"appSettings.{environmentName}.json", optional: true, reloadOnChange: false);
                     config.AddEnvironmentVariables();
                     config.AddUserSecrets<Startup>();
-                })
-                .UseUrls("https://localhost:5052")
-                .UseNLog()
-            .ConfigureLogging((hostingContext, logging) =>
-            {
-                logging.AddEventSourceLogger();
-            });
+                });               
+
     }
 }
