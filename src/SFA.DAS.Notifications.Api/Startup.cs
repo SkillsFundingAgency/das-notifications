@@ -1,10 +1,4 @@
-﻿using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.IO;
-using System.Reflection;
-using System.Security.Claims;
-using System.Text;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -12,34 +6,49 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using SFA.DAS.Notifications.Api.DependencyResolution;
+using SFA.DAS.Configuration.AzureTableStorage;
+using SFA.DAS.Notifications.Api.Orchestrators;
 using SFA.DAS.Notifications.Api.Security;
 using Swashbuckle.AspNetCore.Swagger;
-using NServiceBus;
-using SFA.DAS.Configuration;
-using SFA.DAS.NServiceBus.Configuration;
-using SFA.DAS.NServiceBus.Configuration.AzureServiceBus;
-using SFA.DAS.NServiceBus.Configuration.NewtonsoftJsonSerializer;
-using System.Collections;
+using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
+using System.Text;
 
 namespace SFA.DAS.Notifications.Api
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration, IHostingEnvironment environment)
-        {
-            Configuration = configuration;
-            Environment = environment;
-        }
-
         public IConfiguration Configuration { get; }
         public IHostingEnvironment Environment { get; }
+
+        public Startup(IConfiguration configuration, IHostingEnvironment hostingContext)
+        {
+            Configuration = configuration;
+            Environment = hostingContext;
+            var environmentName = hostingContext.EnvironmentName;
+
+            var config = new ConfigurationBuilder()
+                    .SetBasePath(Directory.GetCurrentDirectory())
+                    .AddJsonFile("appSettings.json", optional: false, reloadOnChange: false)
+                    .AddJsonFile($"appSettings.{environmentName}.json", optional: true, reloadOnChange: false)
+                    .AddEnvironmentVariables()
+                    .AddUserSecrets<Startup>()
+                    .AddAzureTableStorage(options =>
+                    {
+                        options.ConfigurationKeys = new[] { "SFA.DAS.Notifications" };
+                        options.EnvironmentNameEnvironmentVariableName = "APPSETTING_EnvironmentName";
+                        options.StorageConnectionStringEnvironmentVariableName = "APPSETTING_ConfigurationStorageConnectionString";
+                        options.PreFixConfigurationKeys = false;
+                    }).Build();
+
+            Configuration = config;
+        }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddADAuthentication(Configuration); replaced with below
             services.AddMvc(options =>
             {
                 if (!Environment.IsDevelopment())
@@ -53,7 +62,8 @@ namespace SFA.DAS.Notifications.Api
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v0.1", new Info { Title = "Notifications-Api", Version = "v0.1" });
-                c.AddSecurityDefinition("Bearer", new ApiKeyScheme {
+                c.AddSecurityDefinition("Bearer", new ApiKeyScheme
+                {
                     Description = "JWT Authorization header using the Bearer scheme. Please Enter \"Bearer {token}\" into the value box.",
                     Name = "Authorization",
                     In = "header",
@@ -68,8 +78,7 @@ namespace SFA.DAS.Notifications.Api
                 c.IncludeXmlComments(xmlPath);
             });
 
-            services.AddDefaultServices();
-
+            services.AddTransient<INotificationOrchestrator, NotificationOrchestrator>();
             services.Configure<TokenManagement>(Configuration.GetSection("tokenManagement"));
             var tokenManagement = Configuration.GetSection("tokenManagement").Get<TokenManagement>();
             var secret = Encoding.ASCII.GetBytes(tokenManagement.Secret);
@@ -82,7 +91,8 @@ namespace SFA.DAS.Notifications.Api
             {
                 x.RequireHttpsMetadata = false;
                 x.SaveToken = true;
-                x.TokenValidationParameters = new TokenValidationParameters {
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(tokenManagement.Secret)),
                     ValidIssuer = tokenManagement.Issuer,
@@ -91,8 +101,6 @@ namespace SFA.DAS.Notifications.Api
                     ValidateAudience = false
                 };
             });
-
-            services.AddNServiceBus(BuildNServiceBusConfiguration());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -119,28 +127,6 @@ namespace SFA.DAS.Notifications.Api
                 c.SwaggerEndpoint("/swagger/v0.1/swagger.json", "Notifications Api V0.1");
                 c.RoutePrefix = string.Empty;
             });
-        }
-
-        private EndpointConfiguration BuildNServiceBusConfiguration()
-        {
-            var isDevelopment = System.Environment.GetEnvironmentVariable(EnvironmentVariableNames.EnvironmentName).IsDevelopment();
-
-            var endpointConfiguration = new EndpointConfiguration("SFA.DAS.Notifications.MessageHandlers.TestHarness")
-                .UseErrorQueue()
-                .UseInstallers()
-                .UseMessageConventions()
-                .UseNewtonsoftJsonSerializer();
-
-            if (isDevelopment)
-            {
-                endpointConfiguration.UseLearningTransport(s => s.AddRouting());
-            }
-            else
-            {
-                endpointConfiguration.UseAzureServiceBusTransport(Configuration.GetSection("NServiceBusConfiguration")["ServiceBusConnectionString"], s => s.AddRouting());
-            }
-
-            return endpointConfiguration;
         }
     }
 }
