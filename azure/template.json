@@ -52,6 +52,12 @@
         "logAnalyticsWorkspaceName": {
             "type": "string"
         },
+        "loggingRedisConnectionString": {
+            "type": "string"
+        },
+        "loggingRedisKey": {
+            "type": "string"
+        },
         "environmentName": {
             "type": "string"
         },
@@ -155,6 +161,14 @@
                     },
                     "appServiceAppSettings": {
                         "value": [
+                            {
+                                "name": "LoggingRedisConnectionString",
+                                "value": "[parameters('loggingRedisConnectionString')]"
+                            },
+                            {
+                                "name": "LoggingRedisKey",
+                                "value": "[parameters('loggingRedisKey')]"
+                            },
                             {
                                 "name": "EnvironmentName",
                                 "value": "[parameters('environmentName')]"
@@ -268,6 +282,14 @@
                     },
                     "appServiceAppSettings": {
                         "value": [
+                            {
+                                "name": "LoggingRedisConnectionString",
+                                "value": "[parameters('loggingRedisConnectionString')]"
+                            },
+                            {
+                                "name": "LoggingRedisKey",
+                                "value": "[parameters('loggingRedisKey')]"
+                            },
                             {
                                 "name": "EnvironmentName",
                                 "value": "[parameters('environmentName')]"
