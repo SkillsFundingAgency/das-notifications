@@ -52,6 +52,9 @@
         "logAnalyticsWorkspaceName": {
             "type": "string"
         },
+        "sharedStorageAccountConnectionString": {
+            "type": "string"
+        },
         "loggingRedisConnectionString": {
             "type": "string"
         },
