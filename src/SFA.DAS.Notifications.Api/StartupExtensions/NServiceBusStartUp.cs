@@ -27,7 +27,8 @@ namespace SFA.DAS.Notifications.Api.StartupExtensions
                 .UseOutbox(true)
                 .UseServicesBuilder(serviceProvider)
                 .UseSqlServerPersistence(() => new SqlConnection(configuration["DatabaseConnectionString"]))
-                .UseUnitOfWork();
+                .UseUnitOfWork()
+                .UseSendOnly();
             
             if (configurationIsLocalOrDev)
             {

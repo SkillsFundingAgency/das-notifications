@@ -25,11 +25,12 @@ namespace SFA.DAS.Notifications.MessageHandlers.Startup
                 {
                     var nservicebusConfiguration = configuration.GetSection(NotificationConfigurationKeys.NServiceBusConfiguration).Get<NServiceBusConfiguration>();
                     var container = p.GetService<IContainer>();
-                    
-                    var endpointConfiguration = new EndpointConfiguration("SFA.DAS.Notifications.MessageHandlers")
+
+                    var endpointName = "SFA.DAS.Notifications.MessageHandlers";
+                    var endpointConfiguration = new EndpointConfiguration(endpointName)
+                        .UseErrorQueue($"{endpointName}-errors")
                         .UseInstallers()
                         .UseLicense(nservicebusConfiguration.NServiceBusLicense)
-                        .UseErrorQueue("errors")
                         .UseMessageConventions()
                         .UseNewtonsoftJsonSerializer()
                         .UseNLogFactory()
@@ -58,6 +59,6 @@ namespace SFA.DAS.Notifications.MessageHandlers.Startup
                     return endpoint;
                 })
                 .AddHostedService<NServiceBusHostedService>();
-        }        
+        }
     }
 }
