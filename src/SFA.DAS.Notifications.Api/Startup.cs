@@ -81,13 +81,15 @@ namespace SFA.DAS.Notifications.Api
 
             services.AddTransient<INotificationOrchestrator, NotificationOrchestrator>();
             var apiAuthentication = Configuration.GetSection("ApiAuthentication").Get<ApiAuthentication>();
-            
-            // Need to add AD Auth?
 
+            // Need to add AD Auth?
+            services.AddAuthorization(o =>
+            {
+                o.AddPolicy("default", policy => { policy.RequireAuthenticatedUser(); });
+            })
             services.AddAuthentication(x =>
             {
-                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(x =>
             {
                 x.RequireHttpsMetadata = false;
