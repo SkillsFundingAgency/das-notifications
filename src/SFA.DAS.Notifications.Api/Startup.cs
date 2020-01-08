@@ -82,14 +82,14 @@ namespace SFA.DAS.Notifications.Api
             services.AddTransient<INotificationOrchestrator, NotificationOrchestrator>();
             var apiAuthentication = Configuration.GetSection("ApiAuthentication").Get<ApiAuthentication>();
 
-            // Need to add AD Auth?
             services.AddAuthorization(o =>
             {
                 o.AddPolicy("default", policy => { policy.RequireAuthenticatedUser(); });
             });
             services.AddAuthentication(x =>
             {
-                x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(x =>
             {
                 x.RequireHttpsMetadata = false;
@@ -97,11 +97,12 @@ namespace SFA.DAS.Notifications.Api
                 x.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(apiAuthentication.ApiTokenSecret)),
-                    ValidIssuer = apiAuthentication.ApiIssuer,
                     ValidateIssuer = true,
                     ValidateAudience = true,
-                    ValidAudiences = apiAuthentication.ApiAudiences.Split(',')
+                    ValidateLifetime = true,
+                    ValidIssuer = apiAuthentication.ApiIssuer,
+                    ValidAudiences = apiAuthentication.ApiAudiences.Split(' '),
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(apiAuthentication.ApiTokenSecret))
                 };
             });
         }
