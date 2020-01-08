@@ -86,7 +86,7 @@ namespace SFA.DAS.Notifications.Api
             services.AddAuthorization(o =>
             {
                 o.AddPolicy("default", policy => { policy.RequireAuthenticatedUser(); });
-            })
+            });
             services.AddAuthentication(x =>
             {
                 x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
