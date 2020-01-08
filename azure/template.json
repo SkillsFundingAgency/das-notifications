@@ -298,6 +298,20 @@
                                 "value": "[reference('worker-application-insights').outputs.InstrumentationKey.value]"
                             }
                         ]
+                    },
+					"appServiceConnectionStrings": {
+                        "value": [
+                            {
+                                "name": "AzureWebJobsStorage",
+                                "connectionString": "[parameters('sharedStorageAccountConnectionString')]",
+                                "type": "Custom"
+                            },
+                            {
+                                "name": "AzureWebJobsDashboard",
+                                "connectionString": "[parameters('sharedStorageAccountConnectionString')]",
+                                "type": "Custom"
+                            }
+                        ]
                     }
                 }
             }
