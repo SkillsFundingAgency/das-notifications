@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Notifications.Api.Controllers;
@@ -15,11 +16,12 @@ namespace SFA.DAS.Notifications.Api.UnitTests.ControllerTests.GivenEmailControll
         [Test]
         public async Task ThenShouldReturnHttpBadRequestStatus()
         {
+            var mockLogger = new Mock<ILogger<EmailController>>();
             var orchestratorResponse = new OrchestratorResponse { Code = NotificationOrchestratorCodes.Post.ValidationFailure };
             var mockNotificationOrchestrator = new Mock<INotificationOrchestrator>();
             mockNotificationOrchestrator.Setup(x => x.SendEmail(It.IsAny<Email>())).Returns(Task.FromResult(orchestratorResponse));
 
-            var sut = new EmailController(mockNotificationOrchestrator.Object);
+            var sut = new EmailController(mockNotificationOrchestrator.Object, mockLogger.Object);
             sut.ControllerContext = TestHelpers.CreateControllerContextWithUser();
 
             var request = new Email();

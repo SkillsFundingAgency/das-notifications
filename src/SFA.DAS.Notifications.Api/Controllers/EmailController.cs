@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.Notifications.Api.Types;
 using SFA.DAS.Notifications.Api.Orchestrators;
+using Microsoft.Extensions.Logging;
 
 namespace SFA.DAS.Notifications.Api.Controllers
 {
@@ -14,13 +15,15 @@ namespace SFA.DAS.Notifications.Api.Controllers
     public class EmailController : ControllerBase
     {
         private readonly INotificationOrchestrator _orchestrator;
+        private readonly ILogger<EmailController> _logger;
 
-        public EmailController(INotificationOrchestrator orchestrator)
+        public EmailController(INotificationOrchestrator orchestrator, ILogger<EmailController> logger)
         {
             if (orchestrator == null)
                 throw new ArgumentNullException(nameof(orchestrator));
 
             _orchestrator = orchestrator;
+            _logger = logger;
         }
 
         [HttpPost]
@@ -28,19 +31,27 @@ namespace SFA.DAS.Notifications.Api.Controllers
         [Authorize(Roles = "SendEmail")]
         public async Task<HttpResponseMessage> Post(Email notification)
         {
-            if (string.IsNullOrEmpty(notification.SystemId)
-                && !string.IsNullOrEmpty(User.Identity.Name))
+            try
             {
-                notification.SystemId = User.Identity.Name;
-            }
+                if (string.IsNullOrEmpty(notification.SystemId)
+                    && !string.IsNullOrEmpty(User.Identity.Name))
+                {
+                    notification.SystemId = User.Identity.Name;
+                }
 
-            var result = await _orchestrator.SendEmail(notification);
-            if (result.Code == NotificationOrchestratorCodes.Post.ValidationFailure)
+                var result = await _orchestrator.SendEmail(notification);
+                if (result.Code == NotificationOrchestratorCodes.Post.ValidationFailure)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.BadRequest);
+                }
+
+                return new HttpResponseMessage(HttpStatusCode.OK);
+            }
+            catch (Exception e)
             {
-                return new HttpResponseMessage(HttpStatusCode.BadRequest);
+                _logger.LogError(e.Message, e.StackTrace);
+                return new HttpResponseMessage(HttpStatusCode.InternalServerError);
             }
-
-            return new HttpResponseMessage(HttpStatusCode.OK);
         }
     }
 }
