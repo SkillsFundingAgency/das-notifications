@@ -36,7 +36,6 @@ namespace SFA.DAS.Notifications.Api
                     .AddJsonFile("appSettings.json", optional: false, reloadOnChange: false)
                     .AddJsonFile($"appSettings.{environmentName}.json", optional: true, reloadOnChange: false)
                     .AddEnvironmentVariables()
-                    .AddUserSecrets<Startup>()
                     .AddAzureTableStorage(options =>
                     {
                         options.ConfigurationKeys = new[] { "SFA.DAS.Notifications" };
@@ -81,9 +80,9 @@ namespace SFA.DAS.Notifications.Api
             });
 
             services.AddTransient<INotificationOrchestrator, NotificationOrchestrator>();
-            services.Configure<TokenManagement>(Configuration.GetSection("tokenManagement"));
-            var tokenManagement = Configuration.GetSection("tokenManagement").Get<TokenManagement>();
-            var secret = Encoding.ASCII.GetBytes(tokenManagement.Secret);
+            var apiAuthentication = Configuration.GetSection("ApiAuthentication").Get<ApiAuthentication>();
+            
+            // Need to add AD Auth?
 
             services.AddAuthentication(x =>
             {
@@ -96,11 +95,11 @@ namespace SFA.DAS.Notifications.Api
                 x.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(tokenManagement.Secret)),
-                    ValidIssuer = tokenManagement.Issuer,
-                    ValidAudience = tokenManagement.Audience,
-                    ValidateIssuer = false,
-                    ValidateAudience = false
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(apiAuthentication.ApiTokenSecret)),
+                    ValidIssuer = apiAuthentication.ApiIssuer,
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidAudiences = apiAuthentication.ApiAudiences.Split(',')
                 };
             });
         }

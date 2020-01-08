@@ -32,8 +32,9 @@ namespace SFA.DAS.Notifications.Api
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                .UseNServiceBusContainer()
                 .UseStartup<Startup>()
-                .UseNLog()
-                .UseNServiceBusContainer();             
+                .UseNLog();
+
     }
 }

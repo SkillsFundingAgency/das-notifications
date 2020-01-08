@@ -1,28 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
-
-namespace SFA.DAS.Notifications.Api.Security
+﻿namespace SFA.DAS.Notifications.Api.Security
 {
-    [JsonObject("tokenManagement")]
-    public class TokenManagement
+    public class ApiAuthentication
     {
-        [JsonProperty("secret")]
-        public string Secret { get; set; }
+        public string ApiTokenSecret { get; set; }
 
-        [JsonProperty("issuer")]
-        public string Issuer { get; set; }
+        public string ApiIssuer { get; set; }
 
-        [JsonProperty("audience")]
-        public string Audience { get; set; }
-
-        [JsonProperty("accessExpiration")]
-        public int AccessExpiration { get; set; }
-
-        [JsonProperty("refreshExpiration")]
-        public int RefreshExpiration { get; set; }
-
+        public string ApiAudiences { get; set; }
     }
 }
