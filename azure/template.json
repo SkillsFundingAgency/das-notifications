@@ -67,15 +67,6 @@
         "configurationStorageConnectionString": {
             "type": "securestring"
         },
-        "apiIssuer": {
-            "type": "string"
-        },
-        "apiAudiences": {
-            "type": "string"
-        },
-        "apiTokenSecret": {
-            "type": "string"
-        },
         "workerAppServicePlanSize": {
             "type": "string",
             "defaultValue": "1"
@@ -182,18 +173,6 @@
                             {
                                 "name": "InstrumentationKey",
                                 "value": "[reference('application-insights').outputs.InstrumentationKey.value]"
-                            },
-                            {
-                                "name": "ApiIssuer",
-                                "value": "[parameters('apiIssuer')]"
-                            },
-                            {
-                                "name": "ApiAudiences",
-                                "value": "[parameters('apiAudiences')]"
-                            },
-                            {
-                                "name": "ApiTokenSecret",
-                                "value": "[parameters('apiTokenSecret')]"
                             }
                         ]
                     },
