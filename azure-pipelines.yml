@@ -58,7 +58,7 @@ jobs:
           command: publish
           publishWebProjects: false
           projects: "src/SFA.DAS.Notifications.MessageHandlers/SFA.DAS.Notifications.MessageHandlers.csproj"
-          arguments: "--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory)/SFA.DAS.Notifications.MessageHandlers/App_Data/jobs/continuous/Notifications-MessageHandlers --no-restore --no-build"
+          arguments: "--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory)/publish/SFA.DAS.Notifications.MessageHandlers/App_Data/jobs/continuous/Notifications-MessageHandlers --no-restore --no-build"
       - task: DotNetCoreCLI@2
         displayName: "dotnet pack"
         inputs:
