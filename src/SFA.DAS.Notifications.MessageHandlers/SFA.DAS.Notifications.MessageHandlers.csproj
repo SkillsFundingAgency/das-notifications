@@ -1,9 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk;Microsoft.NET.Sdk.Publish">
   <PropertyGroup>
+    <LangVersion>latest</LangVersion>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.2</TargetFramework>
-    <LangVersion>latest</LangVersion>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <IsWebJobProject>true</IsWebJobProject>
+    <WebJobName>Notifications-MessageHandlers</WebJobName>
+    <WebJobType>Continuous</WebJobType>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Properties\launchSettings.json" />
