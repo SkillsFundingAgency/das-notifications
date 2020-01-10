@@ -46,7 +46,7 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
 
             if (!IsGuid(command.TemplateId))
             {
-                Template emailServiceTemplate = _templateConfiguration.EmailServiceTemplates
+                var emailServiceTemplate = _templateConfiguration.EmailServiceTemplates
                     .SingleOrDefault(
                         t => t.Id.Equals(command.TemplateId, StringComparison.InvariantCultureIgnoreCase)
                     );

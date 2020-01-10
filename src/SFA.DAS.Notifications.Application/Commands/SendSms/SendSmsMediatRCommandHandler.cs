@@ -40,7 +40,7 @@ namespace SFA.DAS.Notifications.Application.Commands.SendSms
 
             Validate(command);
 
-            SmsTemplate template = _templateConfiguration.SmsServiceTemplates
+            var template = _templateConfiguration.SmsServiceTemplates
                 .SingleOrDefault(x => string.Equals(command.TemplateId, x.Id, StringComparison.InvariantCultureIgnoreCase));
 
             if (template == null)
