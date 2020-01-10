@@ -21,7 +21,7 @@ namespace SFA.DAS.Notifications.Infrastructure.SendGridSmtpEmailService
 
         public async Task SendAsync(EmailMessage message)
         {
-            var config = JsonConvert.DeserializeObject<NotificationServiceConfiguration>(_configuration["SFA.DAS.Notifications_1.0"]);
+            var config = JsonConvert.DeserializeObject<NotificationServiceConfiguration>(_configuration["SFA.DAS.Notifications.MessageHandlers_1.0"]);
 
             using (var client = new SmtpClient())
             {

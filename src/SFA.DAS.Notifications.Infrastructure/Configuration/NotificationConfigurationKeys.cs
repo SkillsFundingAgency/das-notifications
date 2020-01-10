@@ -6,7 +6,7 @@ namespace SFA.DAS.Notifications.Infrastructure.Configuration
 {
     public static class NotificationConfigurationKeys
     {
-        public const string Notifications = "SFA.DAS.Notifications";
+        public const string Notifications = "SFA.DAS.Notifications.MessageHandlers";
         public static string NServiceBusConfiguration = $"{Notifications}:NServiceBusConfiguration";
         
         //Local SMTP Configuration for local email service.

@@ -38,7 +38,7 @@ namespace SFA.DAS.Notifications.Api
                     .AddEnvironmentVariables()
                     .AddAzureTableStorage(options =>
                     {
-                        options.ConfigurationKeys = new[] { "SFA.DAS.Notifications" };
+                        options.ConfigurationKeys = new[] { "SFA.DAS.Notifications.MessageHandlers" };
                         options.EnvironmentNameEnvironmentVariableName = "APPSETTING_EnvironmentName";
                         options.StorageConnectionStringEnvironmentVariableName = "APPSETTING_ConfigurationStorageConnectionString";
                         options.PreFixConfigurationKeys = false;
