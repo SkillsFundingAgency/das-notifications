@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using NServiceBus;
-using SendSmsCommand = SFA.DAS.Notifications.Application.Commands.SendSms.SendSmsCommand;
+using SFA.DAS.Notifications.Application.Commands.SendSms;
 
 namespace SFA.DAS.Notifications.MessageHandlers.CommandHandlers
 {
@@ -23,7 +23,7 @@ namespace SFA.DAS.Notifications.MessageHandlers.CommandHandlers
         {
             try
             {
-                var command = new SendSmsCommand {
+                var command = new SendSmsMediatRCommand {
                     SystemId = "X",
                     TemplateId = message.TemplateId,
                     RecipientsNumber = message.RecipientsNumber,

@@ -12,7 +12,7 @@ using SFA.DAS.Notifications.Infrastructure;
 
 namespace SFA.DAS.Notifications.Application.Commands.SendSms
 {
-    public class SendSmsCommandHandler : AsyncRequestHandler<SendSmsCommand>
+    public class SendSmsMediatRCommandHandler : AsyncRequestHandler<SendSmsMediatRCommand>
     {
         [QueueName]
 #pragma warning disable IDE1006 // Naming Styles
@@ -23,7 +23,7 @@ namespace SFA.DAS.Notifications.Application.Commands.SendSms
         private readonly TemplateConfiguration _templateConfiguration;
         private readonly ISmsService _smsService;
 
-        public SendSmsCommandHandler(
+        public SendSmsMediatRCommandHandler(
             TemplateConfiguration templateConfiguration,
             ILogger logger, ISmsService smsService)
         {
@@ -32,7 +32,7 @@ namespace SFA.DAS.Notifications.Application.Commands.SendSms
             _smsService = smsService;
         }
 
-        protected override async Task Handle(SendSmsCommand command, CancellationToken cancellationToken)
+        protected override async Task Handle(SendSmsMediatRCommand command, CancellationToken cancellationToken)
         {
             var messageId = Guid.NewGuid().ToString();
 
@@ -67,9 +67,9 @@ namespace SFA.DAS.Notifications.Application.Commands.SendSms
             _logger.Log(LogLevel.Debug, $"Published SMS message '{messageId}' to queue");
         }
 
-        private void Validate(SendSmsCommand command)
+        private void Validate(SendSmsMediatRCommand command)
         {
-            var validator = new SendSmsCommandValidator();
+            var validator = new SendSmsMediatRCommandValidator();
 
             var validationResult = validator.Validate(command);
 

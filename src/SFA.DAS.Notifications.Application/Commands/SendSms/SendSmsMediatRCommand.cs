@@ -3,7 +3,7 @@ using MediatR;
 
 namespace SFA.DAS.Notifications.Application.Commands.SendSms
 {
-    public class SendSmsCommand : IRequest
+    public class SendSmsMediatRCommand : IRequest
     {
         public string SystemId { get; set; }
         public string TemplateId { get; set; }

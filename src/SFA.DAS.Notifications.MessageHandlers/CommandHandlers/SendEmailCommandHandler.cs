@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using NServiceBus;
-using SendEmailCommand = SFA.DAS.Notifications.Application.Commands.SendEmail.SendEmailCommand;
+using SFA.DAS.Notifications.Application.Commands.SendEmail;
 
 
 namespace SFA.DAS.Notifications.MessageHandlers.CommandHandlers
@@ -24,7 +24,7 @@ namespace SFA.DAS.Notifications.MessageHandlers.CommandHandlers
         {
             try
             {
-                var command = new SendEmailCommand {
+                var command = new SendEmailMediatRCommand {
                     SystemId = "X",
                     TemplateId = message.TemplateId,
                     Subject = message.Subject,

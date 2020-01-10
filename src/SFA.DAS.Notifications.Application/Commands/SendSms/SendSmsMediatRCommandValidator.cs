@@ -2,9 +2,9 @@
 
 namespace SFA.DAS.Notifications.Application.Commands.SendSms
 {
-    public class SendSmsCommandValidator : AbstractValidator<SendSmsCommand>
+    public class SendSmsMediatRCommandValidator : AbstractValidator<SendSmsMediatRCommand>
     {
-        public SendSmsCommandValidator()
+        public SendSmsMediatRCommandValidator()
         {
             RuleFor(model => model.SystemId).NotEmpty();
             RuleFor(model => model.TemplateId).NotEmpty();

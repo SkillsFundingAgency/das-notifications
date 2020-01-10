@@ -26,8 +26,8 @@ namespace SFA.DAS.Notifications.Application.UnitTests.CommandsTests.SendEmailTes
 
         private TemplateConfiguration _templateConfiguration;
         private Mock<IEmailService> _emailService;
-        private IRequestHandler<SendEmailCommand> _handler;
-        private SendEmailCommand _command;
+        private IRequestHandler<SendEmailMediatRCommand> _handler;
+        private SendEmailMediatRCommand _command;
 
         [SetUp]
         public void Arrange()
@@ -42,8 +42,8 @@ namespace SFA.DAS.Notifications.Application.UnitTests.CommandsTests.SendEmailTes
 
             _emailService = new Mock<IEmailService>();
 
-            _handler = new SendEmailCommandHandler(
-                Mock.Of<Microsoft.Extensions.Logging.ILogger<SendEmailCommandHandler>>(),
+            _handler = new SendEmailMediatRCommandHandler(
+                Mock.Of<Microsoft.Extensions.Logging.ILogger<SendEmailMediatRCommandHandler>>(),
                 _emailService.Object,
                 _templateConfiguration);
 
@@ -56,7 +56,7 @@ namespace SFA.DAS.Notifications.Application.UnitTests.CommandsTests.SendEmailTes
                 {"Key1", "Value1"}
             };
 
-            _command = new SendEmailCommand {
+            _command = new SendEmailMediatRCommand {
                 SystemId = _systemId,
                 Subject = _subject,
                 RecipientsAddress = _recipientsAddress,

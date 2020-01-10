@@ -25,8 +25,8 @@ namespace SFA.DAS.Notifications.Application.UnitTests.CommandsTests.SendSmsTests
 
         private TemplateConfiguration _templateConfiguration;
         private Mock<ISmsService> _smsService;
-        private IRequestHandler<SendSmsCommand> _handler;
-        private SendSmsCommand _command;
+        private IRequestHandler<SendSmsMediatRCommand> _handler;
+        private SendSmsMediatRCommand _command;
 
         [SetUp]
         public void Arrange()
@@ -42,7 +42,7 @@ namespace SFA.DAS.Notifications.Application.UnitTests.CommandsTests.SendSmsTests
 
             _smsService = new Mock<ISmsService>();
 
-            _handler = new SendSmsCommandHandler(
+            _handler = new SendSmsMediatRCommandHandler(
                 _templateConfiguration,
                 Mock.Of<ILogger>(),
                 _smsService.Object);
@@ -55,7 +55,7 @@ namespace SFA.DAS.Notifications.Application.UnitTests.CommandsTests.SendSmsTests
             };
 
 
-            _command = new SendSmsCommand
+            _command = new SendSmsMediatRCommand
             {
                 SystemId = _systemId,
                 RecipientsNumber = _recipientsNumber,
