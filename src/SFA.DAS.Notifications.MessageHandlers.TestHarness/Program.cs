@@ -17,13 +17,13 @@ namespace SFA.DAS.Notifications.MessageHandlers.TestHarness
         public static async Task Main()
         {
             var builder = new ConfigurationBuilder()
-                .AddAzureTableStorage("SFA.DAS.Notifications");
+                .AddAzureTableStorage("SFA.DAS.Notifications.MessageHandlers");
 
            IConfigurationRoot configuration = builder.Build();
 
             var provider = new ServiceCollection()
                 .AddOptions()
-                .Configure<NotificationServiceConfiguration>(configuration.GetSection("SFA.DAS.Notifications")).BuildServiceProvider();
+                .Configure<NotificationServiceConfiguration>(configuration.GetSection("SFA.DAS.Notifications.MessageHandlers")).BuildServiceProvider();
 
             var config = provider.GetService<IOptions<NotificationServiceConfiguration>>().Value.NServiceBusConfiguration;
             var isDevelopment = Environment.GetEnvironmentVariable(EnvironmentVariableNames.EnvironmentName) == "LOCAL";
