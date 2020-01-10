@@ -10,7 +10,7 @@ using SFA.DAS.Notifications.Api.Orchestrators;
 
 namespace SFA.DAS.Notifications.Api.Controllers
 {
-    [Route("api/sms")]
+    [Route("api/[controller]")]
     public class SmsController : ControllerBase
     {
         private readonly INotificationOrchestrator _orchestrator;
