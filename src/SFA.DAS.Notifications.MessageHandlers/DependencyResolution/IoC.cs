@@ -8,7 +8,6 @@ namespace SFA.DAS.Notifications.MessageHandlers.DependencyResolution
     {
         public static void Initialize(Registry registry)
         {
-            // From Provider Reg
             registry.IncludeRegistry<MediatorRegistry>();
             registry.IncludeRegistry<NServiceBusUnitOfWorkRegistry>();
             registry.IncludeRegistry<DefaultRegistry>();
