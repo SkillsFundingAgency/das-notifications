@@ -72,10 +72,7 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
 
                 await _emailService.SendAsync(new EmailMessage {
                     TemplateId = command.TemplateId,
-                    SystemId = command.SystemId,
-                    Subject = command.Subject,
                     RecipientsAddress = command.RecipientsAddress,
-                    ReplyToAddress = command.ReplyToAddress,
                     Tokens = command.Tokens,
                     Reference = messageId
                 });

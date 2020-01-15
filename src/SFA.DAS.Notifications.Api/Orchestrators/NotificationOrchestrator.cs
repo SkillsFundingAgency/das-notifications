@@ -25,9 +25,7 @@ namespace SFA.DAS.Notifications.Api.Orchestrators
             await _publisher.Send(new SendEmailCommand(
                 request.TemplateId,
                 request.RecipientsAddress,
-                request.ReplyToAddress,
-                request.Tokens,
-                request.Subject
+                request.Tokens
             ));
 
             return GetOrchestratorResponse(NotificationOrchestratorCodes.Post.Success);

@@ -34,7 +34,7 @@ namespace SFA.DAS.Notifications.MessageHandlers.UnitTests
 
             _handler = new SendEmailCommandHandler(_mediator.Object, _logger.Object);
 
-            _message = new Messages.Commands.SendEmailCommand("templateId", "to@test.com", "reply@test.com", new ReadOnlyDictionary<string, string>(dictionary), "subject");
+            _message = new Messages.Commands.SendEmailCommand("templateId", "to@test.com", new ReadOnlyDictionary<string, string>(dictionary));
         }
 
         [Test]
@@ -42,7 +42,7 @@ namespace SFA.DAS.Notifications.MessageHandlers.UnitTests
         {
             await _handler.Handle(_message, Mock.Of<IMessageHandlerContext>());
 
-            _mediator.Verify(x => x.Send(It.Is<SendEmailMediatRCommand>(c => c.TemplateId == _message.TemplateId && c.RecipientsAddress == _message.RecipientsAddress && c.ReplyToAddress == _message.ReplyToAddress), It.IsAny<CancellationToken>()));
+            _mediator.Verify(x => x.Send(It.Is<SendEmailMediatRCommand>(c => c.TemplateId == _message.TemplateId && c.RecipientsAddress == _message.RecipientsAddress), It.IsAny<CancellationToken>()));
         }
 
         [Test]

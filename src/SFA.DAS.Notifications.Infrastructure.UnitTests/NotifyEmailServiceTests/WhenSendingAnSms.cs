@@ -86,15 +86,5 @@ namespace SFA.DAS.Notifications.Infrastructure.UnitTests.NotifyEmailServiceTests
             // Assert
             _httpClient.Verify(c => c.SendSms(It.Is<NotifyMessage>(m => m.Personalisation != null)));
         }
-
-        [Test]
-        public async Task ThenItShouldSendAMessageWithTheCorrectSystemId()
-        {
-            // Act
-            await _service.SendAsync(_sms);
-
-            // Assert
-            _httpClient.Verify(c => c.SendSms(It.Is<NotifyMessage>(m => m.SystemId == SystemId)));
-        }
     }
 }

@@ -9,6 +9,5 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
         public string Template { get; set; }
         public Dictionary<string, string> Personalisation { get; set; }
         public string Reference { get; set; }
-        public string SystemId { get; set; }
     }
 }

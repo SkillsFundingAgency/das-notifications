@@ -41,7 +41,7 @@ namespace SFA.DAS.Notifications.MessageHandlers.TestHarness
                         case ConsoleKey.A:
                             var readOnlyDictionary = new ReadOnlyDictionary<string, string>(dictionary);
 
-                            await _publisher.Send(new SendEmailCommand("ProviderCohortApproved", "test@test.co.uk", "noreply@sfa.gov.uk", readOnlyDictionary, "Test Subject"));
+                            await _publisher.Send(new SendEmailCommand("ProviderCohortApproved", "test@test.co.uk", readOnlyDictionary));
                             Console.WriteLine();
                             Console.WriteLine($"Sent SendEmailCommand");
                             break;
