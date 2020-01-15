@@ -37,8 +37,7 @@ namespace SFA.DAS.Notifications.Infrastructure.UnitTests.NotifyEmailServiceTests
                 Tokens = new Dictionary<string, string>
                 {
                     { TokenKey, TokenValue }
-                },
-                SystemId = SystemId
+                }
             };
         }
 
@@ -85,16 +84,6 @@ namespace SFA.DAS.Notifications.Infrastructure.UnitTests.NotifyEmailServiceTests
 
             // Assert
             _httpClient.Verify(c => c.SendEmail(It.Is<NotifyMessage>(m => m.Personalisation != null)));
-        }
-
-        [Test]
-        public async Task ThenItShouldSendAMessageWithTheCorrectSystemId()
-        {
-            // Act
-            await _service.SendAsync(_email);
-
-            // Assert
-            _httpClient.Verify(c => c.SendEmail(It.Is<NotifyMessage>(m => m.SystemId == SystemId)));
         }
     }
 }

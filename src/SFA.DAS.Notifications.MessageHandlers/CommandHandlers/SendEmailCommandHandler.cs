@@ -25,11 +25,8 @@ namespace SFA.DAS.Notifications.MessageHandlers.CommandHandlers
             try
             {
                 var command = new SendEmailMediatRCommand {
-                    SystemId = "X",
                     TemplateId = message.TemplateId,
-                    Subject = message.Subject,
                     RecipientsAddress = message.RecipientsAddress,
-                    ReplyToAddress = message.ReplyToAddress,
                     Tokens = message.Tokens.ToDictionary(e => e.Key, e => e.Value)
                 };
 

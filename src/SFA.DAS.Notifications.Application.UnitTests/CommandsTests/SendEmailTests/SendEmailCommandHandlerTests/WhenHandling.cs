@@ -61,10 +61,7 @@ namespace SFA.DAS.Notifications.Application.UnitTests.CommandsTests.SendEmailTes
 
             _command = new SendEmailMediatRCommand
             {
-                SystemId = _systemId,
-                Subject = _subject,
                 RecipientsAddress = _recipientsAddress,
-                ReplyToAddress = _replyToAddress,
                 TemplateId = _templateId,
                 Tokens = _tokens
             };
@@ -90,10 +87,7 @@ namespace SFA.DAS.Notifications.Application.UnitTests.CommandsTests.SendEmailTes
             _emailService.Verify(x => x.SendAsync(
                 It.Is<EmailMessage>(message =>
                     message.TemplateId == _templateId
-                    && message.SystemId == _systemId
-                    && message.Subject == _subject
                     && message.RecipientsAddress == _recipientsAddress
-                    && message.ReplyToAddress == _replyToAddress
                     && message.Tokens == _tokens
                     &! string.IsNullOrEmpty(message.Reference))));
         }

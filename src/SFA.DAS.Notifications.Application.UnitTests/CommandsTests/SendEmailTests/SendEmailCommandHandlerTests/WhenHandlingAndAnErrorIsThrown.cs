@@ -57,10 +57,7 @@ namespace SFA.DAS.Notifications.Application.UnitTests.CommandsTests.SendEmailTes
             };
 
             _command = new SendEmailMediatRCommand {
-                SystemId = _systemId,
-                Subject = _subject,
                 RecipientsAddress = _recipientsAddress,
-                ReplyToAddress = _replyToAddress,
                 TemplateId = _templateId,
                 Tokens = _tokens
             };

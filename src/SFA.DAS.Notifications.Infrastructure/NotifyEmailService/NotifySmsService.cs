@@ -30,8 +30,7 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
             {
                 To = message.RecipientsNumber,
                 Template = message.TemplateId,
-                Personalisation = (message.Tokens ?? new Dictionary<string, string>()).ToDictionary(item => item.Key.ToLower(), item => item.Value),
-                SystemId = message.SystemId
+                Personalisation = (message.Tokens ?? new Dictionary<string, string>()).ToDictionary(item => item.Key.ToLower(), item => item.Value)
             };
 
             return _executionPolicy.ExecuteAsync(() => _httpClientWrapper.SendSms(notifyMessage));
