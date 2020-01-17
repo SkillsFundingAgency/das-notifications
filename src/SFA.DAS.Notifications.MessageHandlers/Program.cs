@@ -26,7 +26,8 @@ namespace SFA.DAS.Notifications.MessageHandlers
                     .UseStructureMap()
                     .ConfigureServices((c, s) => s
                       .AddMemoryCache()
-                      .AddNServiceBus(c.Configuration, c.HostingEnvironment.IsDevelopment()))
+                      .AddNServiceBus(c.Configuration, c.HostingEnvironment.IsDevelopment())
+                      .AddApplicationInsightsTelemetry())
                     .ConfigureContainer<Registry>(IoC.Initialize);
 
                 using (var host = hostBuilder.Build())

@@ -58,6 +58,7 @@ namespace SFA.DAS.Notifications.Api
                 }
             }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
+            services.AddApplicationInsightsTelemetry();
             services.AddHealthChecks();
 
             services.AddSwaggerGen(c =>
