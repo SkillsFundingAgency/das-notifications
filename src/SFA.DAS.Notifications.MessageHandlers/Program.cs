@@ -1,5 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.ApplicationInsights.Extensibility;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
 using SFA.DAS.Notifications.MessageHandlers.DependencyResolution;
 using SFA.DAS.Notifications.MessageHandlers.Startup;
@@ -19,22 +21,18 @@ namespace SFA.DAS.Notifications.MessageHandlers
             {
                 hostBuilder
                     .UseDasEnvironment()
-                    .UseApplicationInsights()
                     .ConfigureDasAppConfiguration(args)
-                    .ConfigureLogging((c, b) =>
+                    .ConfigureLogging((context, b) =>
                     {
                         b.AddNLog();
-                        if (!string.IsNullOrWhiteSpace(c.Configuration["APPINSIGHTS_INSTRUMENTATIONKEY"]))
-                        {
-                            b.Services.AddApplicationInsightsTelemetry(c.Configuration["APPINSIGHTS_INSTRUMENTATIONKEY"]);
-                        }
+                        b.AddApplicationInsightsWebJobs(o => o.InstrumentationKey = context.Configuration["APPINSIGHTS_INSTRUMENTATIONKEY"]);
                     })
                     .UseConsoleLifetime()
                     .UseStructureMap()
                     .ConfigureServices((c, s) => s
                         .AddMemoryCache()
                         .AddNServiceBus(c.Configuration, c.HostingEnvironment.IsDevelopment()))
-                    .ConfigureContainer<Registry>(IoC.Initialize);
+                        .ConfigureContainer<Registry>(IoC.Initialize);
 
                 using (var host = hostBuilder.Build())
                 {

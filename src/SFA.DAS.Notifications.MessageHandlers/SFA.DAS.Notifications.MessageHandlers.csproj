@@ -16,10 +16,11 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MediatR" Version="7.0.0" />
+    <PackageReference Include="Microsoft.ApplicationInsights.DependencyCollector" Version="2.12.0" />
     <PackageReference Include="Microsoft.Azure.DocumentDB.Core" Version="2.3.0" />
-    <PackageReference Include="Microsoft.Azure.WebJobs" Version="3.0.8" />
+    <PackageReference Include="Microsoft.Azure.WebJobs" Version="3.0.14" />
     <PackageReference Include="Microsoft.Azure.WebJobs.Extensions" Version="3.0.2" />
-    <PackageReference Include="Microsoft.Azure.WebJobs.Logging.ApplicationInsights" Version="3.0.8" />
+    <PackageReference Include="Microsoft.Azure.WebJobs.Logging.ApplicationInsights" Version="3.0.14" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="2.2.0" />

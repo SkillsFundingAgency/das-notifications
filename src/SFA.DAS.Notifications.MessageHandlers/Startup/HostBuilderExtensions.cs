@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.Notifications.Infrastructure.Configuration;
@@ -34,13 +33,6 @@ namespace SFA.DAS.Notifications.MessageHandlers.Startup
         public static IHostBuilder UseStructureMap(this IHostBuilder builder)
         {
             return builder.UseServiceProviderFactory(new StructureMapServiceProviderFactory(null));
-        }
-
-        public static IHostBuilder UseApplicationInsights(this IHostBuilder builder)
-        {
-            builder.ConfigureLogging((c, b) => b.AddApplicationInsights(o => o.InstrumentationKey = c.Configuration["APPINSIGHTS_INSTRUMENTATIONKEY"]));
-
-            return builder;
         }
     }
 }
