@@ -21,13 +21,19 @@ namespace SFA.DAS.Notifications.MessageHandlers
                     .UseDasEnvironment()
                     .UseApplicationInsights()
                     .ConfigureDasAppConfiguration(args)
-                    .ConfigureLogging(b => b.AddNLog())
+                    .ConfigureLogging((c, b) =>
+                    {
+                        b.AddNLog();
+                        if (!string.IsNullOrWhiteSpace(c.Configuration["APPINSIGHTS_INSTRUMENTATIONKEY"]))
+                        {
+                            b.Services.AddApplicationInsightsTelemetry(c.Configuration["APPINSIGHTS_INSTRUMENTATIONKEY"]);
+                        }
+                    })
                     .UseConsoleLifetime()
                     .UseStructureMap()
                     .ConfigureServices((c, s) => s
-                      .AddMemoryCache()
-                      .AddNServiceBus(c.Configuration, c.HostingEnvironment.IsDevelopment()))
-                      //.AddApplicationInsightsTelemetry(c.Configuration["APPINSIGHTS_INSTRUMENTATIONKEY"]))
+                        .AddMemoryCache()
+                        .AddNServiceBus(c.Configuration, c.HostingEnvironment.IsDevelopment()))
                     .ConfigureContainer<Registry>(IoC.Initialize);
 
                 using (var host = hostBuilder.Build())
