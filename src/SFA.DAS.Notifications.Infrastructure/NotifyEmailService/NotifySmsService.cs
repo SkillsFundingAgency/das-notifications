@@ -10,11 +10,11 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
 {
     public class NotifySmsService : ISmsService
     {
-        private readonly INotifyHttpClientWrapper _httpClientWrapper;
+        private readonly INotifyClientWrapper _httpClientWrapper;
         private readonly ExecutionPolicy _executionPolicy;
 
         public NotifySmsService(
-            INotifyHttpClientWrapper httpClientWrapper,
+            INotifyClientWrapper httpClientWrapper,
             [RequiredPolicy(SendMessageExecutionPolicy.Name)]ExecutionPolicy executionPolicy)
         {
             if (httpClientWrapper == null)
@@ -30,8 +30,7 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
             {
                 To = message.RecipientsNumber,
                 Template = message.TemplateId,
-                Personalisation = (message.Tokens ?? new Dictionary<string, string>()).ToDictionary(item => item.Key.ToLower(), item => item.Value),
-                SystemId = message.SystemId
+                Personalisation = (message.Tokens ?? new Dictionary<string, string>()).ToDictionary(item => item.Key.ToLower(), item => item.Value)
             };
 
             return _executionPolicy.ExecuteAsync(() => _httpClientWrapper.SendSms(notifyMessage));

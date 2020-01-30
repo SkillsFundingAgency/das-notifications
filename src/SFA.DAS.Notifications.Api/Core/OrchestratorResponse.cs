@@ -1,4 +1,4 @@
-﻿using FluentValidation.Results;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace SFA.DAS.Notifications.Api.Core
 {

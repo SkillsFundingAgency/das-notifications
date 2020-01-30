@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using FluentValidation;
+using MediatR;
+using Microsoft.Extensions.Logging;
 using Moq;
-using Newtonsoft.Json;
 using NUnit.Framework;
-using SFA.DAS.Messaging;
-using SFA.DAS.NLog.Logger;
 using SFA.DAS.Notifications.Application.Commands.SendEmail;
+using SFA.DAS.Notifications.Application.Interfaces;
 using SFA.DAS.Notifications.Domain.Configuration;
 using SFA.DAS.Notifications.Domain.Entities;
-using SFA.DAS.Notifications.Domain.Repositories;
 
 namespace SFA.DAS.Notifications.Application.UnitTests.CommandsTests.SendEmailTests.SendEmailCommandHandlerTests
 {
@@ -19,84 +19,52 @@ namespace SFA.DAS.Notifications.Application.UnitTests.CommandsTests.SendEmailTes
         private const string TemplateName = "MyTemplate";
         private const string TranslatedTemplateId = "c53d62b6-df51-489b-8736-ee94d6346a28";
 
-        private Mock<INotificationsRepository> _notificationsRepository;
-        private Mock<IMessagePublisher> _messagePublisher;
-        private Mock<ITemplateConfigurationService> _templateConfigurationService;
-        private SendEmailCommandHandler _handler;
-        private SendEmailCommand _command;
+        private string _templateId;
+        private string _systemId;
+        private string _subject;
+        private string _recipientsAddress;
+        private string _replyToAddress;
+        private Dictionary<string, string> _tokens;
+
+        private TemplateConfiguration _templateConfiguration;
+        private Mock<IEmailService> _emailService;
+        private IRequestHandler<SendEmailMediatRCommand> _handler;
+        private SendEmailMediatRCommand _command;
 
         [SetUp]
         public void Arrange()
         {
-            _notificationsRepository = new Mock<INotificationsRepository>();
-
-            _messagePublisher = new Mock<IMessagePublisher>();
-
-            _templateConfigurationService = new Mock<ITemplateConfigurationService>();
-            _templateConfigurationService.Setup(s => s.GetAsync())
-                .ReturnsAsync(new TemplateConfiguration
+            _templateConfiguration = new TemplateConfiguration
                 {
-                    EmailServiceTemplates = new System.Collections.Generic.List<Template>
+                    EmailServiceTemplates = new List<Template>
                     {
                         new Template {Id = TemplateName, EmailServiceId = TranslatedTemplateId},
                         new Template {Id = "Not" + TemplateName, EmailServiceId = "fffb72dd-ef2d-4fcd-9d41-12a23801a5ea"}
                     }
-                });
+                };
 
-            _handler = new SendEmailCommandHandler(
-                _notificationsRepository.Object,
-                _messagePublisher.Object,
-                _templateConfigurationService.Object,
-                Mock.Of<ILog>());
+            _emailService = new Mock<IEmailService>();
 
-            _command = new SendEmailCommand
-            {
-                SystemId = Guid.NewGuid().ToString(),
-                Subject = "Unit test emails",
-                RecipientsAddress = "user.one@unit.tests",
-                ReplyToAddress = "noreply@unit.tests",
-                TemplateId = Guid.NewGuid().ToString(),
-                Tokens = new Dictionary<string, string>
-                {
-                    {"Key1", "Value1"}
-                }
+            _handler = new SendEmailMediatRCommandHandler(
+                Mock.Of<ILogger<SendEmailMediatRCommandHandler>>(),
+                _emailService.Object,
+                _templateConfiguration);
+
+            _templateId = Guid.NewGuid().ToString();
+            _systemId = "Test System";
+            _subject = "Test Email";
+            _recipientsAddress = "testo@recipient.com";
+            _replyToAddress = "replyo@recipient.com";
+            _tokens = new Dictionary<string, string> {
+                {"Key1", "Value1"}
             };
-        }
 
-        [Test]
-        public async Task ThenItShouldSaveTheMessageToTheRepository()
-        {
-            // Act
-            await _handler.Handle(_command);
-
-            // Assert
-            var expectedData = JsonConvert.SerializeObject(new NotificationEmailContent
+            _command = new SendEmailMediatRCommand
             {
-                Subject = _command.Subject,
-                RecipientsAddress = _command.RecipientsAddress,
-                ReplyToAddress = _command.ReplyToAddress,
-                Tokens = _command.Tokens
-            });
-            _notificationsRepository.Verify(r => r.Create(
-                It.Is<Notification>(n => 
-                    n.Status == NotificationStatus.New
-                    && n.Format == NotificationFormat.Email
-                    && n.TemplateId == _command.TemplateId
-                    && n.Data == expectedData)),
-                Times.Once);
-        }
-
-        [Test]
-        public async Task ThenItShouldTranslateTemplateIdFromServiceForRequestedTemplateIfNotAGuid()
-        {
-            // Arrange
-            _command.TemplateId = TemplateName;
-
-            // Act
-            await _handler.Handle(_command);
-
-            // Assert
-            _notificationsRepository.Verify(r => r.Create(It.Is<Notification>(n => n.TemplateId == TranslatedTemplateId)), Times.Once);
+                RecipientsAddress = _recipientsAddress,
+                TemplateId = _templateId,
+                Tokens = _tokens
+            };
         }
 
         [Test]
@@ -106,7 +74,22 @@ namespace SFA.DAS.Notifications.Application.UnitTests.CommandsTests.SendEmailTes
             _command.TemplateId = "ThisIsNotAValidTemplateName";
 
             // Act + Assert
-            Assert.ThrowsAsync<ValidationException>(async () => await _handler.Handle(_command));
+            Assert.ThrowsAsync<ValidationException>(async () => await _handler.Handle(_command, new CancellationToken()));
+        }
+
+        [Test]
+        public async Task ThenItShouldSendTheEmail()
+        {
+            // Act
+            await _handler.Handle(_command, new CancellationToken());
+
+            // Assert
+            _emailService.Verify(x => x.SendAsync(
+                It.Is<EmailMessage>(message =>
+                    message.TemplateId == _templateId
+                    && message.RecipientsAddress == _recipientsAddress
+                    && message.Tokens == _tokens
+                    &! string.IsNullOrEmpty(message.Reference))));
         }
     }
 }

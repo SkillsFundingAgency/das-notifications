@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "SFA.DAS.Notifications.MessageHandlers.TestHarness": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "APPSETTING_EnvironmentName": "LOCAL"
+      }
+    }
+  }
+}

@@ -2,9 +2,10 @@
 {
     public class NotificationServiceConfiguration
     {
+        public string NotificationServiceApiKey { get; set; }
+        public string DatabaseConnectionString { get; set; }
         public SmtpConfiguration SmtpConfiguration { get; set; }
-        public AzureServiceBusMessageServiceConfiguration AzureServiceBusMessageServiceConfiguration { get; set; }
-        public NotificationsStorageConfiguration NotificationsStorageConfiguration { get; set; }
-        public NotifyServiceConfiguration NotifyServiceConfiguration { get; set; }
+        public NServiceBusConfiguration NServiceBusConfiguration { get; set; }
+        public string EmailService { get; set; }
     }
 }

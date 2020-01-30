@@ -2,16 +2,16 @@
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Web.Http;
-using SFA.DAS.Notifications.Api.Attributes;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using SFA.DAS.Notifications.Api.Types;
 using SFA.DAS.Notifications.Api.Core;
 using SFA.DAS.Notifications.Api.Orchestrators;
-using SFA.DAS.Notifications.Api.Types;
 
 namespace SFA.DAS.Notifications.Api.Controllers
 {
-    [RoutePrefix("api/sms")]
-    public class SmsController : ApiController
+    [Route("api/[controller]")]
+    public class SmsController : ControllerBase
     {
         private readonly INotificationOrchestrator _orchestrator;
 
@@ -23,8 +23,9 @@ namespace SFA.DAS.Notifications.Api.Controllers
             _orchestrator = orchestrator;
         }
 
+        [HttpPost]
         [Route("")]
-        [ApiAuthorize(Roles = "SendSMS")]
+        [Authorize(Roles = "SendSMS")]
         public async Task<HttpResponseMessage> Post(Sms notification)
         {
             if (string.IsNullOrEmpty(notification.SystemId)

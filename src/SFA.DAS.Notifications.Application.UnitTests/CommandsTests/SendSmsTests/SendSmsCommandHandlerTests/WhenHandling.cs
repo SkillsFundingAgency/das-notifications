@@ -1,16 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using FluentValidation;
+using MediatR;
+using Microsoft.Extensions.Logging;
 using Moq;
-using Newtonsoft.Json;
 using NUnit.Framework;
-using SFA.DAS.Messaging;
-using SFA.DAS.NLog.Logger;
 using SFA.DAS.Notifications.Application.Commands.SendSms;
+using SFA.DAS.Notifications.Application.Interfaces;
 using SFA.DAS.Notifications.Domain.Configuration;
 using SFA.DAS.Notifications.Domain.Entities;
-using SFA.DAS.Notifications.Domain.Repositories;
 
 namespace SFA.DAS.Notifications.Application.UnitTests.CommandsTests.SendSmsTests.SendSmsCommandHandlerTests
 {
@@ -19,80 +18,50 @@ namespace SFA.DAS.Notifications.Application.UnitTests.CommandsTests.SendSmsTests
         private const string TemplateName = "MyTemplate";
         private const string TranslatedTemplateId = "c53d62b6-df51-489b-8736-ee94d6346a28";
 
-        private Mock<INotificationsRepository> _notificationsRepository;
-        private Mock<IMessagePublisher> _messagePublisher;
-        private Mock<ITemplateConfigurationService> _templateConfigurationService;
-        private SendSmsCommandHandler _handler;
-        private SendSmsCommand _command;
+        private string _templateId;
+        private string _systemId;
+        private string _recipientsNumber;
+        private Dictionary<string, string> _tokens;
+
+        private TemplateConfiguration _templateConfiguration;
+        private Mock<ISmsService> _smsService;
+        private IRequestHandler<SendSmsMediatRCommand> _handler;
+        private SendSmsMediatRCommand _command;
 
         [SetUp]
         public void Arrange()
         {
-            _notificationsRepository = new Mock<INotificationsRepository>();
-
-            _messagePublisher = new Mock<IMessagePublisher>();
-
-            _templateConfigurationService = new Mock<ITemplateConfigurationService>();
-            _templateConfigurationService.Setup(s => s.GetAsync())
-                .ReturnsAsync(new TemplateConfiguration
-                {
-                    SmsServiceTemplates = new List<SmsTemplate>
+            _templateConfiguration = new TemplateConfiguration
+            {
+                SmsServiceTemplates = new List<SmsTemplate>
                     {
                         new SmsTemplate {Id = TemplateName, ServiceId = TranslatedTemplateId},
                         new SmsTemplate {Id = "Not" + TemplateName, ServiceId = "fffb72dd-ef2d-4fcd-9d41-12a23801a5ea"}
                     }
-                });
-
-            _handler = new SendSmsCommandHandler(
-                _notificationsRepository.Object,
-                _messagePublisher.Object,
-                _templateConfigurationService.Object,
-                Mock.Of<ILog>());
-
-            _command = new SendSmsCommand
-            {
-                SystemId = Guid.NewGuid().ToString(),
-                RecipientsNumber = "299792458",
-                TemplateId = TemplateName,
-                Tokens = new Dictionary<string, string>
-                {
-                    {"Key1", "Value1"}
-                }
             };
-        }
 
-        [Test]
-        public async Task ThenItShouldSaveTheMessageToTheRepository()
-        {
-            // Act
-            await _handler.Handle(_command);
+            _smsService = new Mock<ISmsService>();
 
-            // Assert
-            var expectedData = JsonConvert.SerializeObject(new NotificationSmsContent
+            _handler = new SendSmsMediatRCommandHandler(
+                _templateConfiguration,
+                Mock.Of<ILogger>(),
+                _smsService.Object);
+
+            _templateId = TranslatedTemplateId;
+            _systemId = "Test System";
+            _recipientsNumber = "07123456789";
+            _tokens = new Dictionary<string, string> {
+                {"Key1", "Value1"}
+            };
+
+
+            _command = new SendSmsMediatRCommand
             {
-                RecipientsNumber = _command.RecipientsNumber,
-                Tokens = _command.Tokens
-            });
-            _notificationsRepository.Verify(r => r.Create(
-                It.Is<Notification>(n => 
-                    n.Status == NotificationStatus.New
-                    && n.Format == NotificationFormat.Sms
-                    && n.TemplateId == _command.TemplateId
-                    && n.Data == expectedData)),
-                Times.Once);
-        }
-
-        [Test]
-        public async Task ThenItShouldTranslateTemplateIdFromServiceForRequestedTemplateIfNotAGuid()
-        {
-            // Arrange
-            _command.TemplateId = TemplateName;
-
-            // Act
-            await _handler.Handle(_command);
-
-            // Assert
-            _notificationsRepository.Verify(r => r.Create(It.Is<Notification>(n => n.TemplateId == TranslatedTemplateId)), Times.Once);
+                SystemId = _systemId,
+                RecipientsNumber = _recipientsNumber,
+                TemplateId = TemplateName,
+                Tokens = _tokens
+            };
         }
 
         [Test]
@@ -102,7 +71,23 @@ namespace SFA.DAS.Notifications.Application.UnitTests.CommandsTests.SendSmsTests
             _command.TemplateId = "ThisIsNotAValidTemplateName";
 
             // Act + Assert
-            Assert.ThrowsAsync<ValidationException>(async () => await _handler.Handle(_command));
+            Assert.ThrowsAsync<ValidationException>(async () => await _handler.Handle(_command, new CancellationToken()));
+        }
+
+        [Test]
+        public async Task ThenItShouldSendTheSms()
+        {
+            // Act
+            await _handler.Handle(_command, new CancellationToken());
+
+            // Assert
+            _smsService.Verify(x => x.SendAsync(
+                It.Is<SmsMessage>(message =>
+                    message.TemplateId == _templateId
+                    && message.SystemId == _systemId
+                    && message.RecipientsNumber == _recipientsNumber
+                    && message.Tokens == _tokens
+                    & !string.IsNullOrEmpty(message.Reference))));
         }
     }
 }

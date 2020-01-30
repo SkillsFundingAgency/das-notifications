@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
-using SFA.DAS.Notifications.Api.Core;
 using SFA.DAS.Notifications.Api.Types;
+using SFA.DAS.Notifications.Api.Core;
 
 namespace SFA.DAS.Notifications.Api.Orchestrators
 {

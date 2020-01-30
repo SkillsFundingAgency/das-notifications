@@ -16,7 +16,7 @@ namespace SFA.DAS.Notifications.Infrastructure.UnitTests.NotifyEmailServiceTests
         private const string TokenValue = "Value1";
         private const string SystemId = "TestSystem";
 
-        private Mock<INotifyHttpClientWrapper> _httpClient;
+        private Mock<INotifyClientWrapper> _httpClient;
         private NotifyEmailService.NotifySmsService _service;
         private SmsMessage _sms;
         private NoopExecutionPolicy _executionPolicy;
@@ -24,7 +24,7 @@ namespace SFA.DAS.Notifications.Infrastructure.UnitTests.NotifyEmailServiceTests
         [SetUp]
         public void Arrange()
         {
-            _httpClient = new Mock<INotifyHttpClientWrapper>();
+            _httpClient = new Mock<INotifyClientWrapper>();
 
             _executionPolicy = new NoopExecutionPolicy();
 
@@ -85,16 +85,6 @@ namespace SFA.DAS.Notifications.Infrastructure.UnitTests.NotifyEmailServiceTests
 
             // Assert
             _httpClient.Verify(c => c.SendSms(It.Is<NotifyMessage>(m => m.Personalisation != null)));
-        }
-
-        [Test]
-        public async Task ThenItShouldSendAMessageWithTheCorrectSystemId()
-        {
-            // Act
-            await _service.SendAsync(_sms);
-
-            // Assert
-            _httpClient.Verify(c => c.SendSms(It.Is<NotifyMessage>(m => m.SystemId == SystemId)));
         }
     }
 }
