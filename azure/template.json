@@ -107,7 +107,7 @@
                         "value": "[parameters('sharedKeyVaultName')]"
                     },
                     "keyVaultResourceGroup": {
-                        "value": "[parameters('sharedManagementResourceGroup')]"
+                        "value": "[parameters('sharedEnvResourceGroup')]"
                     }
                 }
             }
