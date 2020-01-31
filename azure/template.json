@@ -92,6 +92,7 @@
         {
             "apiVersion": "2017-05-10",
             "name": "app-service-certificate",
+            "resourceGroup": "[parameters('sharedEnvResourceGroup')]",
             "type": "Microsoft.Resources/deployments",
             "properties": {
                 "mode": "Incremental",
@@ -107,7 +108,10 @@
                         "value": "[parameters('sharedKeyVaultName')]"
                     },
                     "keyVaultResourceGroup": {
-                        "value": "[parameters('sharedEnvResourceGroup')]"
+                        "value": "[parameters('sharedManagementResourceGroup')]"
+                    },
+                    "serverFarmId": {
+                        "value": "[resourceId(parameters('sharedEnvResourceGroup'), 'Microsoft.Web/serverfarms', parameters('sharedBackEndAppServicePlanName'))]"
                     }
                 }
             }
@@ -281,7 +285,7 @@
                             }
                         ]
                     },
-					"appServiceConnectionStrings": {
+                    "appServiceConnectionStrings": {
                         "value": [
                             {
                                 "name": "AzureWebJobsStorage",
