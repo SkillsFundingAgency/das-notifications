@@ -27,7 +27,7 @@ namespace SFA.DAS.Notifications.MessageHandlers.CommandHandlers
                     SystemId = "X",
                     TemplateId = message.TemplateId,
                     RecipientsNumber = message.RecipientsNumber,
-                    Tokens = message.Tokens.ToDictionary(e => e.Key, e => e.Value)
+                    Tokens = message.Tokens
                 };
 
                 await _mediator.Send(command);

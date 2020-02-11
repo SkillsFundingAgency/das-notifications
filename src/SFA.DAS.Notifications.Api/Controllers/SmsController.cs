@@ -11,6 +11,7 @@ using SFA.DAS.Notifications.Api.Orchestrators;
 namespace SFA.DAS.Notifications.Api.Controllers
 {
     [Route("api/[controller]")]
+    [ApiController]
     public class SmsController : ControllerBase
     {
         private readonly INotificationOrchestrator _orchestrator;
