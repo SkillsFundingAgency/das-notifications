@@ -44,7 +44,7 @@ namespace SFA.DAS.Notifications.Application.UnitTests.CommandsTests.SendSmsTests
 
             _handler = new SendSmsMediatRCommandHandler(
                 _templateConfiguration,
-                Mock.Of<ILogger>(),
+                Mock.Of<ILogger<SendSmsMediatRCommandHandler>>(),
                 _smsService.Object);
 
             _templateId = TranslatedTemplateId;

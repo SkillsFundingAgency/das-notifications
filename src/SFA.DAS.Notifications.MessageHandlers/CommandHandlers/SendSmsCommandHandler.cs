@@ -11,9 +11,9 @@ namespace SFA.DAS.Notifications.MessageHandlers.CommandHandlers
     public class SendSmsCommandHandler : IHandleMessages<Messages.Commands.SendSmsCommand>
     {
         private readonly IMediator _mediator;
-        private readonly ILogger _logger;
+        private readonly ILogger<SendSmsCommandHandler> _logger;
 
-        public SendSmsCommandHandler(IMediator mediator, ILogger logger)
+        public SendSmsCommandHandler(IMediator mediator, ILogger<SendSmsCommandHandler> logger)
         {
             _mediator = mediator;
             _logger = logger;
