@@ -58,6 +58,7 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
             catch (NotifyClientException notifyClientException)
             {
                 Logger.Error(notifyClientException, $"Error sending communication {communicationType.ToString()} to Gov Notify with Gov.Notify Client");
+                if (!(communicationType == CommunicationType.Sms && notifyClientException.Message.IndexOf("ValidationError") > 0)) throw;
             }
             catch (Exception exception)
             {
