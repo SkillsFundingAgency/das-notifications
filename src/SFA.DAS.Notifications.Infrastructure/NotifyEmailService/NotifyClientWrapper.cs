@@ -38,7 +38,6 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
 
         private async Task SendMessage(NotifyMessage content, CommunicationType communicationType)
         {
-
             var notificationsClient = new NotificationClient(_configuration.NotificationServiceApiKey);
 
             // Needs to be a dictionary<string,dynamic> for the client.....
@@ -58,13 +57,26 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
             catch (NotifyClientException notifyClientException)
             {
                 Logger.Error(notifyClientException, $"Error sending communication {communicationType.ToString()} to Gov Notify with Gov.Notify Client");
-                if (!(communicationType == CommunicationType.Sms && notifyClientException.Message.IndexOf("ValidationError") > 0)) throw;
+
+                if (communicationType != CommunicationType.Sms || !SuppressSmsError(notifyClientException.Message))
+                    throw;
             }
             catch (Exception exception)
             {
                 Logger.Error(exception, $"Generic Error sending communication {communicationType.ToString()} to Gov Notify");
                 throw;
             }
+        }
+
+        private bool SuppressSmsError(string message)
+        {
+            // raised when a non-valid uk mobile number is used or non-uk number with an invalid international prefix
+            var invalidPhoneNumber = message.Contains("ValidationError");
+
+            // raised when a non-uk international number is used and the GOVUK Notify account has been configured to not allow international numbers
+            var internationalNumbersBarred = message.Contains("BadRequestError") && message.Contains("Cannot send to international mobile numbers");
+
+            return invalidPhoneNumber || internationalNumbersBarred;
         }
 
         private enum CommunicationType
