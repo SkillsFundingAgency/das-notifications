@@ -13,7 +13,9 @@ namespace SFA.DAS.Notifications.Api
     {
         public static void Main(string[] args)
         {
-            var logger = NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
+            var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            var logger = NLogBuilder.ConfigureNLog(environment == "Development" ? "nlog.Development.config" : "nlog.config").GetCurrentClassLogger();
+
             try
             {
                 logger.Info("Starting up host");
