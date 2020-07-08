@@ -24,7 +24,7 @@ namespace SFA.DAS.Notifications.MessageHandlers
                     .ConfigureDasAppConfiguration(args)
                     .ConfigureLogging((context, b) =>
                     {
-                        b.AddNLog();
+                        b.AddNLog(context.HostingEnvironment.IsDevelopment() ? "nlog.development.config" : "nlog.config");
                         b.AddApplicationInsightsWebJobs(o => o.InstrumentationKey = context.Configuration["APPINSIGHTS_INSTRUMENTATIONKEY"]);
                     })
                     .UseConsoleLifetime()
