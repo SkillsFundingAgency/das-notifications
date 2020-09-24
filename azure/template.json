@@ -17,6 +17,9 @@
         "sharedBackEndAppServicePlanName": {
             "type": "string"
         },
+        "sharedBackEndSubnetResourceId": {
+            "type": "string"
+        },
         "appServiceAllowedIPs": {
             "type": "array",
             "defaultValue": [
@@ -82,6 +85,18 @@
         "workerAppServicePlanTier": {
             "type": "string",
             "defaultValue": "Standard"
+        },
+        "sharedEnvVirtualNetworkName": {
+            "type": "string"
+        },
+        "subnetObject": {
+            "type": "object"
+        },
+        "subnetServiceEndpointList": {
+            "type": "array"
+        },
+        "subnetDelegations": {
+            "type": "array"
         }
     },
     "variables": {
@@ -157,6 +172,9 @@
                     "appServicePlanResourceGroup": {
                         "value": "[parameters('sharedEnvResourceGroup')]"
                     },
+                    "subnetResourceId": {
+                        "value": "[parameters('sharedBackEndSubnetResourceId')]"
+                    },
                     "appServiceAppSettings": {
                         "value": [
                             {
@@ -189,6 +207,36 @@
                     },
                     "ipSecurityRestrictions": {
                         "value": "[parameters('appServiceAllowedIPs')]"
+                    }
+                }
+            }
+        },
+        {
+            "apiVersion": "2017-05-10",
+            "name": "worker-subnet",
+            "resourceGroup": "[parameters('sharedEnvResourceGroup')]",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(variables('deploymentUrlBase'),'subnet.json')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "virtualNetworkName": {
+                        "value": "[parameters('sharedEnvVirtualNetworkName')]"
+                    },
+                    "subnetName": {
+                        "value": "[parameters('subnetObject').name]"
+                    },
+                    "subnetAddressPrefix": {
+                        "value": "[parameters('subnetObject').addressSpace]"
+                    },
+                    "serviceEndpointList": {
+                        "value": "[parameters('subnetServiceEndpointList')]"
+                    },
+                    "delegations": {
+                        "value": "[parameters('subnetDelegations')]"
                     }
                 }
             }
@@ -258,6 +306,9 @@
                     },
                     "appServicePlanResourceGroup": {
                         "value": "[resourceGroup().name]"
+                    },
+                    "subnetResourceId": {
+                        "value": "[reference('worker-subnet').outputs.SubnetResourceId.value]"
                     },
                     "deployStagingSlot": {
                         "value": false
