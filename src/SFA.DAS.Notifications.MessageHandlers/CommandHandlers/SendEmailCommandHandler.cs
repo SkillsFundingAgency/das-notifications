@@ -31,6 +31,8 @@ namespace SFA.DAS.Notifications.MessageHandlers.CommandHandlers
                 };
 
                 await _mediator.Send(command);
+
+                await context.Reply(new Messages.Commands.SendEmailCommandSuccess(message));
             }
             catch (Exception e)
             {

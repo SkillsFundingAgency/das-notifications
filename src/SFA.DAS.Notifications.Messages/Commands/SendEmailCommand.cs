@@ -15,4 +15,18 @@ namespace SFA.DAS.Notifications.Messages.Commands
             Tokens = tokens;
         }
     }
+
+    public class SendEmailCommandSuccess
+    {
+        public string TemplateId { get; }
+        public string RecipientsAddress { get; }
+        public IReadOnlyDictionary<string, string> Tokens { get; }
+
+        public SendEmailCommandSuccess(SendEmailCommand command)
+        {
+            TemplateId = command.TemplateId;
+            RecipientsAddress = command.RecipientsAddress;
+            Tokens = command.Tokens;
+        }
+    }
 }
