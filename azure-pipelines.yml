@@ -15,82 +15,61 @@ resources:
   - repository: das-platform-building-blocks
     type: github
     name: SkillsFundingAgency/das-platform-building-blocks
-    ref: refs/heads/master
-    endpoint: "GitHub (SFA)"
+    ref: refs/tags/0.4.10
+    endpoint: SkillsFundingAgency
 
 jobs:
   - job: 'CodeBuild'
     pool: 
-      name: 'DAS - Continuous Integration'
+      name: DAS - Continuous Integration Agents
+      demands: LATEST_DOTNET_VERSION -equals 3.1
     workspace:
       clean: all
     steps:
-      - task: gittools.gitversion.gitversion-task.GitVersion@5
-        displayName: GitVersion
-        inputs:
-          updateAssemblyInfo: true
+    - template: azure-pipelines-templates/build/step/gitversion.yml@das-platform-building-blocks
 
-      - task: DotNetCoreCLI@2
-        displayName: Restore
-        inputs:
-          command: restore
-          projects: "src/**/*.csproj"
-          nugetConfigPath: "src/nuget.config"
-          feedsToUse: config
+    - template: azure-pipelines-templates/build/step/app-build.yml@das-platform-building-blocks
 
-      - task: DotNetCoreCLI@2
-        displayName: Build
-        inputs:
-          projects: "src/**/*.csproj"
-          arguments: "--configuration $(buildConfiguration) --no-restore"
+    - template: azure-pipelines-templates/dependency-check.yml@das-platform-building-blocks
 
-      - task: DotNetCoreCLI@2
-        displayName: Test
-        inputs:
-          command: test
-          projects: "**/*Tests.csproj"
-          arguments: "--configuration $(buildConfiguration) --no-build"
+    - task: DotNetCoreCLI@2
+      displayName: "Publish API"
+      inputs:
+        command: publish
+        publishWebProjects: false
+        projects: "src/SFA.DAS.Notifications.Api/SFA.DAS.Notifications.Api.csproj"
+        arguments: "--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory)/publish --no-restore --no-build"
 
-      - template: azure-pipelines-templates/dependency-check.yml@das-platform-building-blocks
+    - task: DotNetCoreCLI@2
+      displayName: "Publish Web Job"
+      inputs:
+        command: publish
+        publishWebProjects: false
+        projects: "src/SFA.DAS.Notifications.MessageHandlers/SFA.DAS.Notifications.MessageHandlers.csproj"
+        arguments: "--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory)/publish/SFA.DAS.Notifications.MessageHandlers/App_Data/jobs/continuous/Notifications-MessageHandlers --no-restore --no-build"
+        zipAfterPublish: false
+        modifyOutputPath: false
+    - task: DotNetCoreCLI@2
+      displayName: "dotnet pack"
+      inputs:
+        command: pack
+        packagesToPack: >
+          src/SFA.DAS.Notifications.Messages/SFA.DAS.Notifications.Messages.csproj
+        packDirectory: "$(build.artifactstagingdirectory)/publish"
+        versioningScheme: byBuildNumber
+        buildProperties: 'Version="$(Build.BuildNumber)"'
 
-      - task: DotNetCoreCLI@2
-        displayName: "Publish API"
-        inputs:
-          command: publish
-          publishWebProjects: false
-          projects: "src/SFA.DAS.Notifications.Api/SFA.DAS.Notifications.Api.csproj"
-          arguments: "--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory)/publish --no-restore --no-build"
+    - task: CopyFiles@2
+      displayName: "Copy Files to: $(build.artifactstagingdirectory)"
+      inputs:
+        contents: |
+          azure/**
+        targetFolder: "$(build.artifactstagingdirectory)/publish"
 
-      - task: DotNetCoreCLI@2
-        displayName: "Publish Web Job"
-        inputs:
-          command: publish
-          publishWebProjects: false
-          projects: "src/SFA.DAS.Notifications.MessageHandlers/SFA.DAS.Notifications.MessageHandlers.csproj"
-          arguments: "--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory)/publish/SFA.DAS.Notifications.MessageHandlers/App_Data/jobs/continuous/Notifications-MessageHandlers --no-restore --no-build"
-          zipAfterPublish: false
-          modifyOutputPath: false
-      - task: DotNetCoreCLI@2
-        displayName: "dotnet pack"
-        inputs:
-          command: pack
-          packagesToPack: >
-            src/SFA.DAS.Notifications.Messages/SFA.DAS.Notifications.Messages.csproj
-          packDirectory: "$(build.artifactstagingdirectory)/publish"
-          versioningScheme: byBuildNumber
-          buildProperties: 'Version="$(Build.BuildNumber)"'
-
-      - task: CopyFiles@2
-        displayName: "Copy Files to: $(build.artifactstagingdirectory)"
-        inputs:
-          contents: |
-            azure/**
-          targetFolder: "$(build.artifactstagingdirectory)/publish"
-
-      - task: PublishBuildArtifacts@1
-        displayName: "Publish Artifact"
-        inputs:
-          pathtoPublish: "$(build.artifactstagingdirectory)/publish"
+    - task: PublishBuildArtifacts@1
+      displayName: "Publish Artifact"
+      inputs:
+        pathtoPublish: "$(build.artifactstagingdirectory)/publish"
         
   - job: 'DACPACBuild'
     pool:
