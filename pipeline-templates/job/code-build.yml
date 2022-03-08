@@ -2,92 +2,97 @@ jobs:
 - job: 'CodeBuild'
   pool: 
     name: 'DAS - Continuous Integration'
+  variables:
+  - group: BUILD Management Resources
+  - name: buildConfiguration
+    value: release
   workspace:
     clean: all
   steps:
-    - task: gittools.gitversion.gitversion-task.GitVersion@5
-      displayName: GitVersion
-      inputs:
-        updateAssemblyInfo: true
+  - task: gittools.gitversion.gitversion-task.GitVersion@5
+    displayName: GitVersion
+    inputs:
+      updateAssemblyInfo: true
 
-    - task: SonarCloudPrepare@1
-      displayName: Prepare SonarCloud analysis configuration
-      condition: and(succeeded(), or(in(variables['Build.SourceBranch'], 'refs/heads/master', 'refs/heads/main'), eq(variables['Build.Reason'], 'PullRequest')))
-      inputs:
-        SonarCloud: ESFA - SonarCloud
-        organization: $(SonarCloudOrganisationKey)
-        scannerMode: MSBuild
-        projectName: "$(Build.DefinitionName)"
-        projectKey: SkillsFundingAgency_das-referencedata
+  - task: SonarCloudPrepare@1
+    displayName: Prepare SonarCloud analysis configuration
+    condition: and(succeeded(), or(in(variables['Build.SourceBranch'], 'refs/heads/master', 'refs/heads/main'), eq(variables['Build.Reason'], 'PullRequest')))
+    inputs:
+      SonarCloud: ESFA - SonarCloud
+      organization: $(SonarCloudOrganisationKey)
+      scannerMode: MSBuild
+      projectName: "$(Build.DefinitionName)"
+      projectKey: SkillsFundingAgency_das-referencedata
 
-    - task: DotNetCoreCLI@2
-      displayName: Restore
-      inputs:
-        command: restore
-        projects: "src/**/*.csproj"
-        nugetConfigPath: "src/nuget.config"
-        feedsToUse: config
+  - task: DotNetCoreCLI@2
+    displayName: Restore
+    inputs:
+      command: restore
+      projects: "src/**/*.csproj"
+      nugetConfigPath: "src/nuget.config"
+      feedsToUse: config
 
-    - task: DotNetCoreCLI@2
-      displayName: Build
-      inputs:
-        projects: "src/**/*.csproj"
-        arguments: "--configuration $(buildConfiguration) --no-restore"
+  - task: DotNetCoreCLI@2
+    displayName: Build
+    inputs:
+      projects: "src/**/*.csproj"
+      arguments: "--configuration $(buildConfiguration) --no-restore"
 
-    - task: DotNetCoreCLI@2
-      displayName: Test
-      inputs:
-        command: test
-        projects: "**/*Tests.csproj"
-        arguments: "--configuration $(buildConfiguration) --no-build"
+  - task: DotNetCoreCLI@2
+    displayName: Test
+    inputs:
+      command: test
+      projects: "**/*Tests.csproj"
+      arguments: "--configuration $(buildConfiguration) --no-build"
 
-    - template: azure-pipelines-templates/build/step/dependency-check.yml@das-platform-building-blocks
+  - template: azure-pipelines-templates/build/step/dependency-check.yml@das-platform-building-blocks
 
-    - task: DotNetCoreCLI@2
-      displayName: "Publish API"
-      inputs:
-        command: publish
-        publishWebProjects: false
-        projects: "src/SFA.DAS.Notifications.Api/SFA.DAS.Notifications.Api.csproj"
-        arguments: "--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory)/publish --no-restore --no-build"
+  - task: DotNetCoreCLI@2
+    displayName: "Publish API"
+    inputs:
+      command: publish
+      publishWebProjects: false
+      projects: "src/SFA.DAS.Notifications.Api/SFA.DAS.Notifications.Api.csproj"
+      arguments: "--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory)/publish --no-restore --no-build"
 
-    - task: DotNetCoreCLI@2
-      displayName: "Publish Web Job"
-      inputs:
-        command: publish
-        publishWebProjects: false
-        projects: "src/SFA.DAS.Notifications.MessageHandlers/SFA.DAS.Notifications.MessageHandlers.csproj"
-        arguments: "--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory)/publish/SFA.DAS.Notifications.MessageHandlers/App_Data/jobs/continuous/Notifications-MessageHandlers --no-restore --no-build"
-        zipAfterPublish: false
-        modifyOutputPath: false
-    - task: DotNetCoreCLI@2
-      displayName: "dotnet pack"
-      inputs:
-        command: pack
-        packagesToPack: >
-          src/SFA.DAS.Notifications.Messages/SFA.DAS.Notifications.Messages.csproj
-        packDirectory: "$(build.artifactstagingdirectory)/publish"
-        versioningScheme: byBuildNumber
-        buildProperties: 'Version="$(Build.BuildNumber)"'
+  - task: DotNetCoreCLI@2
+    displayName: "Publish Web Job"
+    inputs:
+      command: publish
+      publishWebProjects: false
+      projects: "src/SFA.DAS.Notifications.MessageHandlers/SFA.DAS.Notifications.MessageHandlers.csproj"
+      arguments: "--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory)/publish/SFA.DAS.Notifications.MessageHandlers/App_Data/jobs/continuous/Notifications-MessageHandlers --no-restore --no-build"
+      zipAfterPublish: false
+      modifyOutputPath: false
+      
+  - task: DotNetCoreCLI@2
+    displayName: "dotnet pack"
+    inputs:
+      command: pack
+      packagesToPack: >
+        src/SFA.DAS.Notifications.Messages/SFA.DAS.Notifications.Messages.csproj
+      packDirectory: "$(build.artifactstagingdirectory)/publish"
+      versioningScheme: byBuildNumber
+      buildProperties: 'Version="$(Build.BuildNumber)"'
 
-    - task: SonarCloudAnalyze@1
-      displayName: Run SonarCloud analysis
-      condition: and(succeeded(), or(in(variables['Build.SourceBranch'], 'refs/heads/master', 'refs/heads/main'), eq(variables['Build.Reason'], 'PullRequest')))
+  - task: SonarCloudAnalyze@1
+    displayName: Run SonarCloud analysis
+    condition: and(succeeded(), or(in(variables['Build.SourceBranch'], 'refs/heads/master', 'refs/heads/main'), eq(variables['Build.Reason'], 'PullRequest')))
 
-    - task: SonarCloudPublish@1
-      displayName: Publish SonarCloud analysis results on build summary
-      condition: and(succeeded(), or(in(variables['Build.SourceBranch'], 'refs/heads/master', 'refs/heads/main'), eq(variables['Build.Reason'], 'PullRequest')))
-      inputs:
-        pollingTimeoutSec: '300'
+  - task: SonarCloudPublish@1
+    displayName: Publish SonarCloud analysis results on build summary
+    condition: and(succeeded(), or(in(variables['Build.SourceBranch'], 'refs/heads/master', 'refs/heads/main'), eq(variables['Build.Reason'], 'PullRequest')))
+    inputs:
+      pollingTimeoutSec: '300'
 
-    - task: CopyFiles@2
-      displayName: "Copy Files to: $(build.artifactstagingdirectory)"
-      inputs:
-        contents: |
-          azure/**
-        targetFolder: "$(build.artifactstagingdirectory)/publish"
+  - task: CopyFiles@2
+    displayName: "Copy Files to: $(build.artifactstagingdirectory)"
+    inputs:
+      contents: |
+        azure/**
+      targetFolder: "$(build.artifactstagingdirectory)/publish"
 
-    - task: PublishBuildArtifacts@1
-      displayName: "Publish Artifact"
-      inputs:
-        pathtoPublish: "$(build.artifactstagingdirectory)/publish"
+  - task: PublishBuildArtifacts@1
+    displayName: "Publish Artifact"
+    inputs:
+      pathtoPublish: "$(build.artifactstagingdirectory)/publish"
