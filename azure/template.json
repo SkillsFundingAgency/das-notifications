@@ -97,6 +97,10 @@
         },
         "subnetDelegations": {
             "type": "array"
+        },
+        "utcValue": {
+            "type": "string",
+            "defaultValue": "[utcNow('yyMMddHHmmss')]"
         }
     },
     "variables": {
@@ -110,7 +114,7 @@
     "resources": [
         {
             "apiVersion": "2017-05-10",
-            "name": "app-service-certificate",
+            "name": "[concat(variables('appServiceName'), '-app-service-certificate-', parameters('utcValue'))]",
             "resourceGroup": "[parameters('sharedEnvResourceGroup')]",
             "type": "Microsoft.Resources/deployments",
             "properties": {
@@ -134,7 +138,7 @@
         },
         {
             "apiVersion": "2017-05-10",
-            "name": "application-insights",
+            "name": "[concat(variables('appServiceName'), '-application-insights-', parameters('utcValue'))]",
             "type": "Microsoft.Resources/deployments",
             "properties": {
                 "mode": "Incremental",
@@ -154,7 +158,7 @@
         },
         {
             "apiVersion": "2017-05-10",
-            "name": "app-service",
+            "name": "[concat(variables('appServiceName'), '-app-service-', parameters('utcValue'))]",
             "type": "Microsoft.Resources/deployments",
             "properties": {
                 "mode": "Incremental",
@@ -196,7 +200,7 @@
                                 },
                                 {
                                     "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
-                                    "value": "[reference('application-insights').outputs.InstrumentationKey.value]"
+                                    "value": "[reference(concat(variables('appServiceName'), '-application-insights-', parameters('utcValue'))).outputs.InstrumentationKey.value]"
                                 }
                             ]
                         }
@@ -205,7 +209,7 @@
                         "value": "[parameters('customHostname')]"
                     },
                     "certificateThumbprint": {
-                        "value": "[reference('app-service-certificate').outputs.certificateThumbprint.value]"
+                        "value": "[reference(concat(variables('appServiceName'), '-app-service-certificate-', parameters('utcValue'))).outputs.certificateThumbprint.value]"
                     },
                     "ipSecurityRestrictions": {
                         "value": "[parameters('appServiceAllowedIPs')]"
@@ -215,7 +219,7 @@
         },
         {
             "apiVersion": "2017-05-10",
-            "name": "notifications-worker-subnet",
+            "name": "[concat(parameters('subnetObject').name, '-notifications-worker-subnet-', parameters('utcValue'))]",
             "resourceGroup": "[parameters('sharedEnvResourceGroup')]",
             "type": "Microsoft.Resources/deployments",
             "properties": {
@@ -245,7 +249,7 @@
         },
         {
             "apiVersion": "2021-04-01",
-            "name": "notifications-worker-sql-firewall-rule",
+            "name": "[concat(parameters('subnetObject').name, '-notifications-worker-sql-firewall-rule-', parameters('utcValue'))]",
             "resourceGroup": "[parameters('sharedEnvResourceGroup')]",
             "type": "Microsoft.Resources/deployments",
             "properties": {
@@ -259,14 +263,14 @@
                         "value": "[parameters('sharedSQLServerName')]"
                     },
                     "subnetResourceIdList": {
-                        "value": "[createArray(reference('notifications-worker-subnet').outputs.SubnetResourceId.value)]"
+                        "value": "[createArray(reference(concat(parameters('subnetObject').name, '-notifications-worker-subnet-', parameters('utcValue'))).outputs.SubnetResourceId.value)]"
                     }
                 }
             }
         },
         {
             "apiVersion": "2017-05-10",
-            "name": "worker-app-service-plan",
+            "name": "[concat(variables('workerAppServiceName'), '-worker-app-service-plan-', parameters('utcValue'))]",
             "type": "Microsoft.Resources/deployments",
             "properties": {
                 "mode": "Incremental",
@@ -292,7 +296,7 @@
         },
         {
             "apiVersion": "2017-05-10",
-            "name": "worker-application-insights",
+            "name": "[concat(variables('workerAppServiceName'), '-worker-application-insights-', parameters('utcValue'))]",
             "type": "Microsoft.Resources/deployments",
             "properties": {
                 "mode": "Incremental",
@@ -312,7 +316,7 @@
         },
         {
             "apiVersion": "2017-05-10",
-            "name": "worker-app-service",
+            "name": "[concat(variables('workerAppServiceName'), '-worker-app-service-', parameters('utcValue'))]",
             "type": "Microsoft.Resources/deployments",
             "properties": {
                 "mode": "Incremental",
@@ -331,7 +335,7 @@
                         "value": "[resourceGroup().name]"
                     },
                     "subnetResourceId": {
-                        "value": "[reference('notifications-worker-subnet').outputs.SubnetResourceId.value]"
+                        "value": "[reference(concat(parameters('subnetObject').name, '-notifications-worker-subnet-', parameters('utcValue'))).outputs.SubnetResourceId.value]"
                     },
                     "deployStagingSlot": {
                         "value": false
@@ -357,7 +361,7 @@
                                 },
                                 {
                                     "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
-                                    "value": "[reference('worker-application-insights').outputs.InstrumentationKey.value]"
+                                    "value": "[reference(concat(variables('workerAppServiceName'), '-worker-application-insights-', parameters('utcValue'))).outputs.InstrumentationKey.value]"
                                 }
                             ]
                         }
@@ -383,7 +387,7 @@
         },
         {
             "apiVersion": "2017-05-10",
-            "name": "[concat('role-assignments-', copyIndex())]",
+            "name": "[concat('notifications-role-assignments-', copyIndex(), parameters('utcValue'))]",
             "type": "Microsoft.Resources/deployments",
             "resourceGroup": "[parameters('sharedEnvResourceGroup')]",
             "properties": {
@@ -394,7 +398,7 @@
                 },
                 "parameters": {
                     "principalId": {
-                        "value": "[createArray(reference('app-service').outputs.managedServiceIdentityId.value, reference('app-service').outputs.stagingManagedServiceIdentityId.value, reference('worker-app-service').outputs.managedServiceIdentityId.value)[copyIndex()]]"
+                        "value": "[createArray(reference(concat(variables('appServiceName'), '-app-service-', parameters('utcValue'))).outputs.managedServiceIdentityId.value, reference(concat(variables('appServiceName'), '-app-service-', parameters('utcValue'))).outputs.stagingManagedServiceIdentityId.value, reference(concat(variables('workerAppServiceName'), '-worker-app-service-', parameters('utcValue'))).outputs.managedServiceIdentityId.value)[copyIndex()]]"
                     },
                     "assignmentType": {
                         "value": "ServiceBusOwner"
@@ -411,7 +415,7 @@
         },
         {
             "apiVersion": "2017-05-10",
-            "name": "sql-database",
+            "name": "[concat(variables('databaseName'), '-sql-database-', parameters('utcValue'))]",
             "type": "Microsoft.Resources/deployments",
             "resourceGroup": "[parameters('sharedEnvResourceGroup')]",
             "properties": {
