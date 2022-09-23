@@ -1,4 +1,5 @@
-﻿using Microsoft.Azure.ServiceBus.Primitives;
+﻿using System.Data.Common;
+using Microsoft.Azure.ServiceBus.Primitives;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NServiceBus;
@@ -12,7 +13,6 @@ using SFA.DAS.NServiceBus.Hosting;
 using SFA.DAS.NServiceBus.SqlServer.Configuration;
 using SFA.DAS.UnitOfWork.NServiceBus.Configuration;
 using StructureMap;
-using System.Data.Common;
 
 namespace SFA.DAS.Notifications.MessageHandlers.Startup
 {
@@ -34,7 +34,7 @@ namespace SFA.DAS.Notifications.MessageHandlers.Startup
                         .UseMessageConventions()
                         .UseNewtonsoftJsonSerializer()
                         .UseNLogFactory()
-                        .UseOutbox()
+                        .UseOutbox(true)
                         .UseSqlServerPersistence(() => container.GetInstance<DbConnection>())
                         .UseStructureMapBuilder(container)
                         .UseUnitOfWork();
