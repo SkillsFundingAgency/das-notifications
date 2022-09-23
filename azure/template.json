@@ -20,10 +20,8 @@
         "sharedBackEndSubnetResourceId": {
             "type": "string"
         },
-        "appServiceAllowedIPs": {
-            "type": "array",
-            "defaultValue": [
-            ]
+        "backEndAccessRestrictions": {
+            "type": "array"
         },
         "customHostname": {
             "type": "string"
@@ -96,6 +94,9 @@
             "type": "array"
         },
         "subnetDelegations": {
+            "type": "array"
+        },
+        "workerAccessRestrictions": {
             "type": "array"
         },
         "utcValue": {
@@ -212,7 +213,7 @@
                         "value": "[reference(concat(variables('appServiceName'), '-app-service-certificate-', parameters('utcValue'))).outputs.certificateThumbprint.value]"
                     },
                     "ipSecurityRestrictions": {
-                        "value": "[parameters('appServiceAllowedIPs')]"
+                        "value": "[parameters('backEndAccessRestrictions')]"
                     }
                 }
             }
@@ -339,6 +340,9 @@
                     },
                     "deployStagingSlot": {
                         "value": false
+                    },
+                    "ipSecurityRestrictions": {
+                        "value": "[parameters('workerAccessRestrictions')]"
                     },
                     "appServiceAppSettings": {
                         "value": {
