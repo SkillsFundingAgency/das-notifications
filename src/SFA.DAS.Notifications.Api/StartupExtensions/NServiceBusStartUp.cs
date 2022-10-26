@@ -24,7 +24,7 @@ namespace SFA.DAS.Notifications.Api.StartupExtensions
                 .UseInstallers()
                 .UseMessageConventions()
                 .UseNewtonsoftJsonSerializer()
-                .UseOutbox(true)
+                .UseOutbox()
                 .UseServicesBuilder(serviceProvider)
                 .UseSqlServerPersistence(() => new SqlConnection(configuration["DatabaseConnectionString"]))
                 .UseUnitOfWork()
