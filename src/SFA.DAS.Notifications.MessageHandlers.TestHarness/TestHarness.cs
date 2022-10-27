@@ -41,13 +41,13 @@ namespace SFA.DAS.Notifications.MessageHandlers.TestHarness
                         case ConsoleKey.A:
                             var readOnlyDictionary = new ReadOnlyDictionary<string, string>(dictionary);
 
-                            await _publisher.Send(new SendEmailCommand("ProviderCohortApproved", "test@test.co.uk", readOnlyDictionary));
+                            await _publisher.Send(new SendEmailCommand("EmployerCohortApproved", "test@test.co.uk", readOnlyDictionary));
                             Console.WriteLine();
                             Console.WriteLine($"Sent SendEmailCommand");
                             break;
 
                         case ConsoleKey.B:
-                            await _publisher.Send(new SendSmsCommand("ProviderCohortApproved", "test@test.co.uk", "07123456789", dictionary));
+                            await _publisher.Send(new SendSmsCommand("EmployerCohortApproved", "test@test.co.uk", "07123456789", dictionary));
                             Console.WriteLine();
                             Console.WriteLine($"Sent SendSmsCommand");
                             break;
