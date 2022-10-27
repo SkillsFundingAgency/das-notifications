@@ -26,8 +26,6 @@ namespace SFA.DAS.Notifications.Infrastructure.DependencyResolution
                         AccessToken = azureServiceTokenProvider.GetAccessTokenAsync(AzureResource).Result
                     };
             });
-            
-            //For<DbConnection>().Use(c => new SqlConnection(c.GetInstance<NotificationServiceConfiguration>().DatabaseConnectionString));
         }
     }
 
