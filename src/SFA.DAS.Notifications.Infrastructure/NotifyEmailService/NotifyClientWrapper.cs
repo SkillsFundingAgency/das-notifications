@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 using NLog;
 using Notify.Client;
 using Notify.Exceptions;
@@ -36,12 +38,39 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
             return SendMessage(content, CommunicationType.Sms);
         }
 
+        private static JObject CreateRequestParams(string templateId, Dictionary<string, dynamic> personalisation = null, string clientReference = null)
+        {
+            JObject value = new JObject();
+            if (personalisation != null)
+            {
+                value = JObject.FromObject(personalisation);
+            }
+
+            JObject jObject = new JObject
+            {
+                { "template_id", templateId },
+                { "personalisation", value }
+            };
+            if (clientReference != null)
+            {
+                jObject.Add("reference", clientReference);
+            }
+
+            return jObject;
+        }
+
         private async Task SendMessage(NotifyMessage content, CommunicationType communicationType)
         {
             var notificationsClient = new NotificationClient(_configuration.NotificationServiceApiKey);
 
             // Needs to be a dictionary<string,dynamic> for the client.....
             var personalisationDictionary = content.Personalisation.ToDictionary(x => x.Key, x => x.Value as dynamic);
+
+            foreach(var attachment in content.Attachments)
+            {
+                personalisationDictionary.Add(attachment.Key, NotificationClient.PrepareUpload(attachment.Value));
+            }
+
             try
             {
                 Logger.Info($"Sending communication request to Gov Notify");

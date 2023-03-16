@@ -39,7 +39,11 @@ namespace SFA.DAS.Notifications.MessageHandlers.Startup
                         .UseStructureMapBuilder(container)
                         .UseUnitOfWork();
 
-                    if (isDevelopment)
+                    //var blobServiceClient = new BlobServiceClient("UseDevelopmentStorage=true");
+                    var dataBus = endpointConfiguration.UseDataBus<AzureDataBus>()
+                                .Container("testcontainer");
+
+                    if (isDevelopment && 1==2)
                     {
                         endpointConfiguration.UseLearningTransport();
                     }
@@ -48,8 +52,8 @@ namespace SFA.DAS.Notifications.MessageHandlers.Startup
                         var transport = endpointConfiguration.UseTransport<AzureServiceBusTransport>();
                         var ruleNameShortener = new RuleNameShortener();
 
-                        var tokenProvider = TokenProvider.CreateManagedServiceIdentityTokenProvider();
-                        transport.CustomTokenProvider(tokenProvider);
+                        //var tokenProvider = TokenProvider.CreateManagedServiceIdentityTokenProvider();
+                        //transport.CustomTokenProvider(tokenProvider);
                         transport.ConnectionString(nservicebusConfiguration.ServiceBusConnectionString);
                         transport.RuleNameShortener(ruleNameShortener.Shorten);
                     }

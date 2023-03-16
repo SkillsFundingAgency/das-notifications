@@ -74,6 +74,7 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
                     TemplateId = command.TemplateId,
                     RecipientsAddress = command.RecipientsAddress,
                     Tokens = command.Tokens,
+                    Attachments = command.Attachments,
                     Reference = messageId
                 });
             }
@@ -103,10 +104,10 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
             if (!validationResult.IsValid)
                 throw new ValidationException(validationResult.Errors);
         }
+
         private bool IsGuid(string value)
         {
-            Guid x;
-            return Guid.TryParse(value, out x);
+            return Guid.TryParse(value, out _);
         }
     }
 }
