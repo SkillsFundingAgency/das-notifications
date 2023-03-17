@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Azure.Storage.Blobs;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -42,6 +43,17 @@ namespace SFA.DAS.Notifications.MessageHandlers.TestHarness
             {
                 endpointConfiguration.UseAzureServiceBusTransport(config.ServiceBusConnectionString, s => s.AddRouting());
             }
+
+            var blobServiceClient = new BlobServiceClient("UseDevelopmentStorage=true");
+            var dataBus = endpointConfiguration.UseDataBus<AzureDataBus>()
+                        .Container("testcontainer")
+                        .UseBlobServiceClient(blobServiceClient);
+
+            var conventions = endpointConfiguration.Conventions();
+            conventions.DefiningDataBusPropertiesAs(property =>
+            {
+                return property.Name.EndsWith("DataBus");
+            });
 
             var endpoint = await Endpoint.Start(endpointConfiguration);
 

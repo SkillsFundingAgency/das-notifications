@@ -29,7 +29,7 @@ namespace SFA.DAS.Notifications.MessageHandlers.CommandHandlers
                     TemplateId = message.TemplateId,
                     RecipientsAddress = message.RecipientsAddress,
                     Tokens = message.Tokens.ToDictionary(e => e.Key, e => e.Value),
-                    Attachments = message.Attachments.Value
+                    Attachments = message.AttachmentsDataBus.ToDictionary(e => e.Key, e => e.Value)
                 };
                 
                 await _mediator.Send(command);

@@ -38,27 +38,6 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
             return SendMessage(content, CommunicationType.Sms);
         }
 
-        private static JObject CreateRequestParams(string templateId, Dictionary<string, dynamic> personalisation = null, string clientReference = null)
-        {
-            JObject value = new JObject();
-            if (personalisation != null)
-            {
-                value = JObject.FromObject(personalisation);
-            }
-
-            JObject jObject = new JObject
-            {
-                { "template_id", templateId },
-                { "personalisation", value }
-            };
-            if (clientReference != null)
-            {
-                jObject.Add("reference", clientReference);
-            }
-
-            return jObject;
-        }
-
         private async Task SendMessage(NotifyMessage content, CommunicationType communicationType)
         {
             var notificationsClient = new NotificationClient(_configuration.NotificationServiceApiKey);
@@ -85,14 +64,14 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
             }
             catch (NotifyClientException notifyClientException)
             {
-                Logger.Error(notifyClientException, $"Error sending communication {communicationType.ToString()} to Gov Notify with Gov.Notify Client");
+                Logger.Error(notifyClientException, $"Error sending communication {communicationType} to Gov Notify with Gov.Notify Client");
 
                 if (communicationType != CommunicationType.Sms || !SuppressSmsError(notifyClientException.Message))
                     throw;
             }
             catch (Exception exception)
             {
-                Logger.Error(exception, $"Generic Error sending communication {communicationType.ToString()} to Gov Notify");
+                Logger.Error(exception, $"Generic Error sending communication {communicationType} to Gov Notify");
                 throw;
             }
         }
