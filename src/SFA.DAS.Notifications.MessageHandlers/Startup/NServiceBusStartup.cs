@@ -1,4 +1,5 @@
 ﻿using System.Data.Common;
+using Azure.Storage.Blobs;
 using Microsoft.Azure.ServiceBus.Primitives;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -39,6 +40,18 @@ namespace SFA.DAS.Notifications.MessageHandlers.Startup
                         .UseStructureMapBuilder(container)
                         .UseUnitOfWork();
 
+                    var containerName = "databus";
+                    var blobServiceClient = new BlobServiceClient(nservicebusConfiguration.BlobStorageDataBusConnectionString);
+                    var dataBus = endpointConfiguration.UseDataBus<AzureDataBus>()
+                                .Container(containerName)
+                                .UseBlobServiceClient(blobServiceClient);
+
+                    var conventions = endpointConfiguration.Conventions();
+                    conventions.DefiningDataBusPropertiesAs(property =>
+                    {
+                        return property.Name.EndsWith("DataBus");
+                    });
+
                     if (isDevelopment)
                     {
                         endpointConfiguration.UseLearningTransport();
@@ -48,7 +61,7 @@ namespace SFA.DAS.Notifications.MessageHandlers.Startup
                         var transport = endpointConfiguration.UseTransport<AzureServiceBusTransport>();
                         var ruleNameShortener = new RuleNameShortener();
 
-                        var tokenProvider = TokenProvider.CreateManagedServiceIdentityTokenProvider();
+                        var tokenProvider = TokenProvider.CreateManagedIdentityTokenProvider();
                         transport.CustomTokenProvider(tokenProvider);
                         transport.ConnectionString(nservicebusConfiguration.ServiceBusConnectionString);
                         transport.RuleNameShortener(ruleNameShortener.Shorten);

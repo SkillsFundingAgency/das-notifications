@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 using NLog;
 using Notify.Client;
 using Notify.Exceptions;
@@ -42,6 +44,12 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
 
             // Needs to be a dictionary<string,dynamic> for the client.....
             var personalisationDictionary = content.Personalisation.ToDictionary(x => x.Key, x => x.Value as dynamic);
+
+            foreach(var attachment in content.Attachments)
+            {
+                personalisationDictionary.Add(attachment.Key, NotificationClient.PrepareUpload(attachment.Value));
+            }
+
             try
             {
                 Logger.Info($"Sending communication request to Gov Notify");
@@ -56,14 +64,14 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
             }
             catch (NotifyClientException notifyClientException)
             {
-                Logger.Error(notifyClientException, $"Error sending communication {communicationType.ToString()} to Gov Notify with Gov.Notify Client");
+                Logger.Error(notifyClientException, $"Error sending communication {communicationType} to Gov Notify with Gov.Notify Client");
 
                 if (communicationType != CommunicationType.Sms || !SuppressSmsError(notifyClientException.Message))
                     throw;
             }
             catch (Exception exception)
             {
-                Logger.Error(exception, $"Generic Error sending communication {communicationType.ToString()} to Gov Notify");
+                Logger.Error(exception, $"Generic Error sending communication {communicationType} to Gov Notify");
                 throw;
             }
         }
