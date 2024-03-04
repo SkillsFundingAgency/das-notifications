@@ -33,20 +33,13 @@ namespace SFA.DAS.Notifications.MessageHandlers.TestHarness
 
                 try
                 {
-                    var tokenDictionary = new Dictionary<string, string>
-                    {
-                        { "cohort_reference", "MYREF1" }
-                    };
-
-                    var attachmentDictionary = new Dictionary<string, byte[]>
-                    {
-                        { "file_reference", new byte[10] }
-                    };
+                    var dictionary = new Dictionary<string, string>();
+                    dictionary.Add("cohort_reference", "MYREF1");
 
                     switch (key)
                     {
                         case ConsoleKey.A:
-                            var readOnlyDictionary = new ReadOnlyDictionary<string, string>(tokenDictionary);
+                            var readOnlyDictionary = new ReadOnlyDictionary<string, string>(dictionary);
 
                             await _publisher.Send(new SendEmailCommand("EmployerCohortApproved", "test@test.co.uk", readOnlyDictionary));
                             Console.WriteLine();
@@ -54,15 +47,9 @@ namespace SFA.DAS.Notifications.MessageHandlers.TestHarness
                             break;
 
                         case ConsoleKey.B:
-                            await _publisher.Send(new SendSmsCommand("EmployerCohortApproved", "test@test.co.uk", "07123456789", tokenDictionary));
+                            await _publisher.Send(new SendSmsCommand("EmployerCohortApproved", "test@test.co.uk", "07123456789", dictionary));
                             Console.WriteLine();
                             Console.WriteLine($"Sent SendSmsCommand");
-                            break;
-
-                        case ConsoleKey.C:
-                            var readOnlyAttachmentDictionary = new ReadOnlyDictionary<string, byte[]>(attachmentDictionary);
-                            var dataBusProp = new ReadOnlyDictionary<string, byte[]>(readOnlyAttachmentDictionary);
-                            await _publisher.Send(new SendEmailWithAttachmentsCommand("EmployerCohortApproved", "test@test.co.uk", tokenDictionary, dataBusProp));
                             break;
                     }
                 }

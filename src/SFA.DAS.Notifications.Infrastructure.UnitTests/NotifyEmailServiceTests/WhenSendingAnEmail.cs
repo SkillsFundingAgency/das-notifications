@@ -14,10 +14,6 @@ namespace SFA.DAS.Notifications.Infrastructure.UnitTests.NotifyEmailServiceTests
         private const string TemplateId = "81476cee-9863-40ee-8b18-33dcb898e9c9";
         private const string TokenKey = "Key1";
         private const string TokenValue = "Value1";
-        private const string AttachmentKey1 = "File1";
-        private byte[] AttachmentBytes1 = new byte[10];
-        private const string AttachmentKey2 = "File2";
-        private byte[] AttachmentBytes2 = new byte[5];
         private const string SystemId = "TestSystem";
 
         private Mock<INotifyClientWrapper> _httpClient;
@@ -41,11 +37,6 @@ namespace SFA.DAS.Notifications.Infrastructure.UnitTests.NotifyEmailServiceTests
                 Tokens = new Dictionary<string, string>
                 {
                     { TokenKey, TokenValue }
-                },
-                Attachments = new Dictionary<string, byte[]>
-                {
-                    { AttachmentKey1, AttachmentBytes1 },
-                    { AttachmentKey2, AttachmentBytes2 }
                 }
             };
         }
@@ -93,33 +84,6 @@ namespace SFA.DAS.Notifications.Infrastructure.UnitTests.NotifyEmailServiceTests
 
             // Assert
             _httpClient.Verify(c => c.SendEmail(It.Is<NotifyMessage>(m => m.Personalisation != null)));
-        }
-
-        [Test]
-        public async Task ThenItShouldSendAMessageWithTheCorrectAttachments()
-        {
-            //Act 
-            await _service.SendAsync(_email);
-
-            //Assert
-            _httpClient.Verify(c => c.SendEmail(It.Is<NotifyMessage>(m => m.Attachments != null
-                                                                          && m.Attachments.ContainsKey(AttachmentKey1.ToLower())
-                                                                          && m.Attachments[AttachmentKey1.ToLower()] == AttachmentBytes1
-                                                                          && m.Attachments.ContainsKey(AttachmentKey2.ToLower())
-                                                                          && m.Attachments[AttachmentKey2.ToLower()] == AttachmentBytes2)));
-        }
-
-        [Test]
-        public async Task ThenItShouldSendMessageWithNoAttachmentIfAttachmentsIsNull()
-        {
-            //Arrange
-            _email.Attachments = null;
-
-            //Act
-            await _service.SendAsync(_email);
-
-            //Assert
-            _httpClient.Verify(c => c.SendEmail(It.Is<NotifyMessage>(m => m.Attachments != null)));
         }
     }
 }

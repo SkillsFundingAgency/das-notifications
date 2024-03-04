@@ -43,6 +43,7 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
 
             Validate(command);
 
+
             if (!IsGuid(command.TemplateId))
             {
                 var emailServiceTemplate = _templateConfiguration.EmailServiceTemplates
@@ -68,17 +69,19 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
 
             try
             {
+
                 await _emailService.SendAsync(new EmailMessage {
                     TemplateId = command.TemplateId,
                     RecipientsAddress = command.RecipientsAddress,
                     Tokens = command.Tokens,
-                    Attachments = command.Attachments,
                     Reference = messageId
                 });
             }
             catch (Exception ex)
             {
-                if (ex is HttpException httpException && httpException.StatusCode.Equals(HttpStatusCode.BadRequest))
+                var httpException = ex as HttpException;
+
+                if (httpException != null && httpException.StatusCode.Equals(HttpStatusCode.BadRequest))
                 {
                     _logger.Log(LogLevel.Warning, ex, "Bad Request - Message will not be re-processed.");
                 }
@@ -100,10 +103,10 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
             if (!validationResult.IsValid)
                 throw new ValidationException(validationResult.Errors);
         }
-
         private bool IsGuid(string value)
         {
-            return Guid.TryParse(value, out _);
+            Guid x;
+            return Guid.TryParse(value, out x);
         }
     }
 }
