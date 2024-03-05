@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentValidation;
@@ -26,7 +25,6 @@ namespace SFA.DAS.Notifications.Application.UnitTests.CommandsTests.SendEmailTes
         private string _recipientsAddress;
         private string _replyToAddress;
         private Dictionary<string, string> _tokens;
-        private Dictionary<string, byte[]> _attachments;
 
         private TemplateConfiguration _templateConfiguration;
         private Mock<IEmailService> _emailService;
@@ -60,18 +58,12 @@ namespace SFA.DAS.Notifications.Application.UnitTests.CommandsTests.SendEmailTes
             _tokens = new Dictionary<string, string> {
                 {"Key1", "Value1"}
             };
-            _attachments = new Dictionary<string, byte[]>
-            {
-                {"File1", new byte[10] }
-            };
-
 
             _command = new SendEmailMediatRCommand
             {
                 RecipientsAddress = _recipientsAddress,
                 TemplateId = _templateId,
-                Tokens = _tokens,
-                Attachments = _attachments
+                Tokens = _tokens
             };
         }
 
@@ -97,7 +89,6 @@ namespace SFA.DAS.Notifications.Application.UnitTests.CommandsTests.SendEmailTes
                     message.TemplateId == _templateId
                     && message.RecipientsAddress == _recipientsAddress
                     && message.Tokens == _tokens
-                    && message.Attachments == _attachments
                     &! string.IsNullOrEmpty(message.Reference))));
         }
     }

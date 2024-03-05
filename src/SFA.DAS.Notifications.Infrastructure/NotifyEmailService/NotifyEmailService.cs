@@ -33,7 +33,6 @@ namespace SFA.DAS.Notifications.Infrastructure.NotifyEmailService
                 To = message.RecipientsAddress,
                 Template = message.TemplateId,
                 Personalisation = (message.Tokens ?? new Dictionary<string, string>()).ToDictionary(item => item.Key.ToLower(), item => item.Value),
-                Attachments = (message.Attachments ?? new Dictionary<string, byte[]>()).ToDictionary(item => item.Key.ToLower(), item => item.Value),
                 Reference = message.Reference
             };
 

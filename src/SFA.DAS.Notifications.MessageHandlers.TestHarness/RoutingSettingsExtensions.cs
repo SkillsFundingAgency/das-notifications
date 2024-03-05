@@ -10,7 +10,6 @@ namespace SFA.DAS.Notifications.MessageHandlers.TestHarness
         public static void AddRouting(this RoutingSettings routingSettings)
         {
             routingSettings.RouteToEndpoint(typeof(SendEmailCommand), NotificationsMessageHandler);
-            routingSettings.RouteToEndpoint(typeof(SendEmailWithAttachmentsCommand), NotificationsMessageHandler);
             routingSettings.RouteToEndpoint(typeof(SendSmsCommand), NotificationsMessageHandler);
         }
     }

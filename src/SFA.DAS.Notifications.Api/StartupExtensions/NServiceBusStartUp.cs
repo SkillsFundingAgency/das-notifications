@@ -11,7 +11,6 @@ using SFA.DAS.NServiceBus.Hosting;
 using SFA.DAS.NServiceBus.SqlServer.Configuration;
 using SFA.DAS.UnitOfWork.NServiceBus.Configuration;
 using SFA.DAS.Notifications.Messages.Commands;
-using Azure.Storage.Blobs;
 
 namespace SFA.DAS.Notifications.Api.StartupExtensions
 {
@@ -30,9 +29,7 @@ namespace SFA.DAS.Notifications.Api.StartupExtensions
                 .UseSqlServerPersistence(() => new SqlConnection(configuration["DatabaseConnectionString"]))
                 .UseUnitOfWork()
                 .UseSendOnly();
-
             
-
             if (configurationIsLocalOrDev)
             {
                 endpointConfiguration.UseLearningTransport();
@@ -60,7 +57,6 @@ namespace SFA.DAS.Notifications.Api.StartupExtensions
         {
             routingSettings.RouteToEndpoint(typeof(SendEmailCommand), NotificationsMessageHandler);
             routingSettings.RouteToEndpoint(typeof(SendSmsCommand), NotificationsMessageHandler);
-            routingSettings.RouteToEndpoint(typeof(SendEmailWithAttachmentsCommand), NotificationsMessageHandler);
         }
     }
 }
