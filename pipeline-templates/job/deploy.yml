@@ -1,0 +1,102 @@
+parameters:
+  ServiceConnection:
+  SolutionBaseName:
+  Environment:
+  OverrideBlockOnPossibleDataLoss:
+
+jobs:
+- deployment: DeployWebApp
+  pool:
+    name: DAS - Continuous Deployment Agents
+  environment: ${{ parameters.Environment }}
+  strategy:
+    runOnce:
+      deploy:
+        steps:
+        - checkout: das-employer-config
+
+        - powershell: |
+            if ("AT","TEST","TEST2","DEMO" -contains "${{ parameters.Environment }}") {
+              Write-Host "##vso[task.setvariable variable=envSuffix]Dev"
+            } elseif ("PROD","PP" -contains "${{ parameters.Environment }}") {
+              Write-Host "##vso[task.setvariable variable=envSuffix]Prod"
+            } elseif ("MO" -eq "${{ parameters.Environment }}") {
+              Write-Host "##vso[task.setvariable variable=envSuffix]MO"
+            } else {
+              Write-Host "##vso[task.setvariable variable=envSuffix]Unknown"
+            }
+          displayName: "Set Environment Suffix"
+
+        - task: PowerShell@2
+          displayName: "Set EmailServiceTemplates: $(envSuffix)"
+          inputs:
+            targetType: filePath
+            filePath: '$(Pipeline.Workspace)/das-employer-config/Configuration/Tools/ConvertTo-VSTSVariable.ps1'
+            arguments: '-ConfigPath $(Pipeline.Workspace)/das-employer-config/Configuration/das-notifications/SFA.DAS.Notifications-Templates-$(envSuffix).json -VariableName EmailServiceTemplates'
+
+        - task: PowerShell@2
+          displayName: "Set SmsServiceTemplates: $(envSuffix)"
+          inputs:
+            targetType: filePath
+            filePath: '$(Pipeline.Workspace)/das-employer-config/Configuration/Tools/ConvertTo-VSTSVariable.ps1'
+            arguments: '-ConfigPath $(Pipeline.Workspace)/das-employer-config/Configuration/das-notifications/SFA.DAS.Notifications-SmsTemplates-$(envSuffix).json -VariableName SmsServiceTemplates'
+
+        - template: azure-pipelines-templates/deploy/step/set-backendaccessrestrictions-variable.yml@das-platform-building-blocks
+          parameters:
+             ServiceConnection: ${{ parameters.ServiceConnection }}
+             SharedEnvResourceGroup: $(SharedEnvResourceGroup)
+             SharedEnvVirtualNetworkName: $(SharedEnvVirtualNetworkName)
+             BackEndAccessRestrictionsExcludedSubnets: $(BackEndAccessRestrictionsExcludedSubnets)
+             ResourceEnvironmentName: $(ResourceEnvironmentName)
+             UnrestrictedEnvironments: $(UnrestrictedEnvironments)
+             UptimeMonitoringAccessRestrictions: $(UptimeMonitoringAccessRestrictions)
+        - template: azure-pipelines-templates/deploy/step/arm-deploy.yml@das-platform-building-blocks
+          parameters:
+            ServiceConnection: ${{ parameters.ServiceConnection }}
+            SubscriptionId: $(SubscriptionId)
+            Location: $(ResourceGroupLocation)
+            Environment: ${{ parameters.Environment }}
+            TemplatePath: $(Pipeline.Workspace)/${{ parameters.SolutionBaseName }}/azure/template.json
+            ParametersPath: $(Pipeline.Workspace)/${{ parameters.SolutionBaseName }}/azure/template.parameters.json
+            IsMultiRepoCheckout: true
+            TemplateSecrets:
+              configurationStorageConnectionString: $(ConfigurationStorageConnectionString)
+              loggingRedisConnectionString: $(TLSLoggingRedisConnectionString)
+              loggingRedisKey: $(LoggingRedisKey)
+              redisSessionProviderConnectionString: $(DefaultSessionRedisConnectionString)
+              sharedStorageAccountConnectionString: $(sharedStorageAccountConnectionString)
+        - template: azure-pipelines-templates/deploy/step/generate-config.yml@das-platform-building-blocks
+          parameters:
+            EnvironmentName: $(EnvironmentName)
+            ServiceConnection: ${{ parameters.ServiceConnection }}
+            SourcePath: $(Pipeline.Workspace)/das-employer-config/Configuration/das-notifications
+            StorageAccountName: $(ConfigurationStorageAccountName)
+            StorageAccountResourceGroup: $(SharedEnvResourceGroup)
+            TargetFileName: '*.schema.json'
+            TableName: Configuration
+            ConfigurationSecrets:
+              NServiceBusLicense: $(NServiceBusLicense)
+              GovNotifyApiKey: $(GovNotifyApiKey)
+              NotificationsBlobStorageDataBusConnectionString: $(NotificationsBlobStorageDataBusConnectionString)#
+              ApiTokenSecret: $(ApiTokenSecret)
+        - template: azure-pipelines-templates/deploy/step/sql-dacpac-deploy.yml@das-platform-building-blocks
+          parameters:
+            AzureSubscription: ${{ parameters.ServiceConnection }}
+            ServerName: $(SharedSQLServerFQDN)
+            SqlUsername: $(SharedSQLServerUsername)
+            SqlPassword: $(SharedSQLServerPassword)
+            DacpacFile: $(Pipeline.Workspace)/DacpacArtifact/src/SFA.DAS.Notifications.Database/bin/Output/SFA.DAS.Notifications.Database.dacpac
+            DatabaseName: $(DatabaseName)
+            OverrideBlockOnPossibleDataLoss: ${{ parameters.OverrideBlockOnPossibleDataLoss }}
+            Environment: ${{ parameters.Environment }}
+        - template: azure-pipelines-templates/deploy/step/app-deploy.yml@das-platform-building-blocks
+          parameters:
+            ServiceConnection: ${{ parameters.ServiceConnection }}
+            AppServiceName: $(AppServiceName)
+            DeploymentPackagePath: $(Pipeline.Workspace)/${{ parameters.SolutionBaseName }}/${{ parameters.SolutionBaseName }}.Api.zip
+        - template: azure-pipelines-templates/deploy/step/webjob-deploy.yml@das-platform-building-blocks
+          parameters:
+            ServiceConnection: ${{ parameters.ServiceConnection }}
+            AppServiceName: $(WorkerAppServiceName)
+            DeploymentPackagePath: $(Pipeline.Workspace)/${{ parameters.SolutionBaseName }}/${{ parameters.SolutionBaseName }}.MessageHandlers
+            DeploymentType: zipDeploy
