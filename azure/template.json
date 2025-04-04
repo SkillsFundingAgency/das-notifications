@@ -108,6 +108,19 @@
         },
         "resourceGroupLocation": {
             "type": "string"
+        },
+        "EnableRouteTableAssociation": {
+            "type": "bool",
+            "defaultValue": false,
+            "metadata": {
+                "description": "Determines whether to enable route table association on subnet"
+            }
+        },
+        "SharedRouteTableName": {
+            "type": "string",
+            "metadata": {
+                "description": "Determines whether to enable route table association on subnet"
+            }
         }
     },
     "variables": {
@@ -117,7 +130,11 @@
         "appServiceName": "[concat(variables('resourceNamePrefix'), 'api-as')]",
         "workerAppServiceName": "[concat(variables('resourceNamePrefix'), 'wkr-as')]",
         "workerAppServicePlanName": "[concat(variables('resourceNamePrefix'), 'wkr-asp')]",
-        "databaseName": "[concat(variables('resourceNamePrefix'), '-db')]"
+        "databaseName": "[concat(variables('resourceNamePrefix'), '-db')]",
+        "routeTableId": {
+            "id": "[resourceId(subscription().subscriptionId, parameters('sharedEnvResourceGroup'), 'Microsoft.Network/routeTables', parameters('SharedRouteTableName'))]"
+        },
+        "emptyObject": {}
     },
     "resources": [
         {
@@ -158,27 +175,27 @@
             "type": "Microsoft.Resources/deployments",
             "resourceGroup": "[variables('resourceGroupName')]",
             "properties": {
-              "mode": "Incremental",
-              "templateLink": {
-                "uri": "[concat(variables('deploymentUrlBase'),'application-insights.json')]",
-                "contentVersion": "1.0.0.0"
-              },
-              "parameters": {
-                "appInsightsName": {
-                  "value": "[variables('appServiceName')]"
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(variables('deploymentUrlBase'),'application-insights.json')]",
+                    "contentVersion": "1.0.0.0"
                 },
-                "attachedService": {
-                  "value": "[variables('appServiceName')]"
-                },
-                "logAnalyticsWorkspaceId": {
-                    "value": "[resourceId(parameters('logAnalyticsSubscriptionId'),parameters('sharedManagementResourceGroup'),'Microsoft.OperationalInsights/workspaces',parameters('logAnalyticsWorkspaceName'))]"
+                "parameters": {
+                    "appInsightsName": {
+                        "value": "[variables('appServiceName')]"
+                    },
+                    "attachedService": {
+                        "value": "[variables('appServiceName')]"
+                    },
+                    "logAnalyticsWorkspaceId": {
+                        "value": "[resourceId(parameters('logAnalyticsSubscriptionId'),parameters('sharedManagementResourceGroup'),'Microsoft.OperationalInsights/workspaces',parameters('logAnalyticsWorkspaceName'))]"
+                    }
                 }
-              }
             },
             "dependsOn": [
-              "[variables('resourceGroupName')]"
+                "[variables('resourceGroupName')]"
             ]
-          },
+        },
         {
             "apiVersion": "2021-04-01",
             "name": "[concat(variables('appServiceName'), '-app-service-', parameters('utcValue'))]",
@@ -205,32 +222,32 @@
                     },
                     "appServiceAppSettings": {
                         "value": {
-                          "array": [
-                            {
-                              "name": "EnvironmentName",
-                              "value": "[parameters('environmentName')]"
-                            },
-                            {
-                              "name": "ConfigurationStorageConnectionString",
-                              "value": "[parameters('configurationStorageConnectionString')]"
-                            },
-                            {
-                              "name": "Version",
-                              "value": "1.0"
-                            },
-                            {
-                              "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
-                              "value": "[reference(concat(variables('appServiceName'), '-application-insights-', parameters('utcValue'))).outputs.ConnectionString.value]"
-                            },
-                            {
-                              "name": "LoggingRedisConnectionString",
-                              "value": "[parameters('loggingRedisConnectionString')]"
-                            },
-                            {
-                              "name": "LoggingRedisKey",
-                              "value": "[parameters('loggingRedisKey')]"
-                            }
-                          ]
+                            "array": [
+                                {
+                                    "name": "EnvironmentName",
+                                    "value": "[parameters('environmentName')]"
+                                },
+                                {
+                                    "name": "ConfigurationStorageConnectionString",
+                                    "value": "[parameters('configurationStorageConnectionString')]"
+                                },
+                                {
+                                    "name": "Version",
+                                    "value": "1.0"
+                                },
+                                {
+                                    "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
+                                    "value": "[reference(concat(variables('appServiceName'), '-application-insights-', parameters('utcValue'))).outputs.ConnectionString.value]"
+                                },
+                                {
+                                    "name": "LoggingRedisConnectionString",
+                                    "value": "[parameters('loggingRedisConnectionString')]"
+                                },
+                                {
+                                    "name": "LoggingRedisKey",
+                                    "value": "[parameters('loggingRedisKey')]"
+                                }
+                            ]
                         }
                     },
                     "customHostName": {
@@ -276,6 +293,9 @@
                     },
                     "delegations": {
                         "value": "[parameters('subnetDelegations')]"
+                    },
+                    "routeTable": {
+                        "value": "[if(parameters('enableRouteTableAssociation'), variables('routeTableId') , variables('emptyObject'))]"
                     }
                 }
             }
@@ -414,8 +434,8 @@
                                 {
                                     "name": "WEBSITE_RUN_FROM_PACKAGE",
                                     "value": "1"
-                                },    
-                                {    
+                                },
+                                {
                                     "name": "WEBSITE_ENABLE_SYNC_UPDATE_SITE",
                                     "value": "1"
                                 }
@@ -457,7 +477,7 @@
                 },
                 "parameters": {
                     "principalId": {
-                        "value":"[createArray(reference(concat(variables('appServiceName'), '-app-service-', parameters('utcValue'))).outputs.managedServiceIdentityId.value, reference(concat(variables('appServiceName'), '-app-service-', parameters('utcValue'))).outputs.stagingManagedServiceIdentityId.value, reference(concat(variables('workerAppServiceName'), '-worker-app-service-', parameters('utcValue'))).outputs.managedServiceIdentityId.value)[copyIndex()]]"
+                        "value": "[createArray(reference(concat(variables('appServiceName'), '-app-service-', parameters('utcValue'))).outputs.managedServiceIdentityId.value, reference(concat(variables('appServiceName'), '-app-service-', parameters('utcValue'))).outputs.stagingManagedServiceIdentityId.value, reference(concat(variables('workerAppServiceName'), '-worker-app-service-', parameters('utcValue'))).outputs.managedServiceIdentityId.value)[copyIndex()]]"
                     },
                     "assignmentType": {
                         "value": "ServiceBusOwner"
