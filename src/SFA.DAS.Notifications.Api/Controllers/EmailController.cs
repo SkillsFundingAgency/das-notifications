@@ -33,6 +33,7 @@ namespace SFA.DAS.Notifications.Api.Controllers
         {
             try
             {
+                _logger.LogInformation("EmailPost called");
                 if (string.IsNullOrEmpty(notification.SystemId)
                     && !string.IsNullOrEmpty(User.Identity.Name))
                 {
