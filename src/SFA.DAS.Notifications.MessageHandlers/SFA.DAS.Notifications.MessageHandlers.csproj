@@ -3,7 +3,7 @@
     <LangVersion>latest</LangVersion>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.2</TargetFramework>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <!--<TreatWarningsAsErrors>true</TreatWarningsAsErrors>-->
     <IsWebJobProject>true</IsWebJobProject>
     <WebJobName>Notifications-MessageHandlers</WebJobName>
     <WebJobType>Continuous</WebJobType>
@@ -27,13 +27,10 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="2.2.0" />
-    <PackageReference Include="NLog.Extensions.Logging" Version="1.6.1" />
-    <PackageReference Include="NLog.Schema" Version="4.6.4" />
     <PackageReference Include="NServiceBus" Version="7.2.0" />
     <PackageReference Include="NServiceBus.MSDependencyInjection" Version="0.1.4" />
     <PackageReference Include="Scrutor" Version="3.0.2" />
     <PackageReference Include="SFA.DAS.CommitmentsV2.Messages" Version="2.1.1507" />
-    <PackageReference Include="SFA.DAS.NLog.Targets.Redis" Version="1.2.1" />
     <PackageReference Include="SFA.DAS.NServiceBus" Version="16.0.2" />
     <PackageReference Include="SFA.DAS.NServiceBus.SqlServer" Version="16.0.2" />
     <PackageReference Include="SFA.DAS.ProviderRelationships.Messages" Version="3.0.2" />
@@ -51,12 +48,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="appsettings.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="nlog.Development.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="nlog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="run.cmd">

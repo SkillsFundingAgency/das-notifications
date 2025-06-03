@@ -1,8 +1,6 @@
-﻿using Microsoft.ApplicationInsights.Extensibility;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using NLog.Extensions.Logging;
 using SFA.DAS.Notifications.MessageHandlers.DependencyResolution;
 using SFA.DAS.Notifications.MessageHandlers.Startup;
 using StructureMap;
@@ -24,7 +22,6 @@ namespace SFA.DAS.Notifications.MessageHandlers
                     .ConfigureDasAppConfiguration(args)
                     .ConfigureLogging((context, b) =>
                     {
-                        b.AddNLog(context.HostingEnvironment.IsDevelopment() ? "nlog.development.config" : "nlog.config");
                         b.AddApplicationInsightsWebJobs(o => o.InstrumentationKey = context.Configuration["APPINSIGHTS_INSTRUMENTATIONKEY"]);
                     })
                     .UseConsoleLifetime()
