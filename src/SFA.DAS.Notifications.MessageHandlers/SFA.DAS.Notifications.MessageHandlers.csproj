@@ -3,7 +3,7 @@
     <LangVersion>latest</LangVersion>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.2</TargetFramework>
-    <!--<TreatWarningsAsErrors>true</TreatWarningsAsErrors>-->
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <IsWebJobProject>true</IsWebJobProject>
     <WebJobName>Notifications-MessageHandlers</WebJobName>
     <WebJobType>Continuous</WebJobType>
