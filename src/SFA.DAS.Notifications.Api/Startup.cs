@@ -58,7 +58,7 @@ namespace SFA.DAS.Notifications.Api
                 }
             }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            services.AddApplicationInsightsTelemetry(Configuration["APPINSIGHTS_INSTRUMENTATIONKEY"]);
+            services.AddApplicationInsightsTelemetry(Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]);
             services.AddHealthChecks();
 
             services.AddSwaggerGen(c =>
