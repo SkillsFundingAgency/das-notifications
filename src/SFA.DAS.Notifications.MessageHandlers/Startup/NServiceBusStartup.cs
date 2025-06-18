@@ -7,7 +7,6 @@ using SFA.DAS.Notifications.Infrastructure.Configuration;
 using SFA.DAS.NServiceBus.Configuration;
 using SFA.DAS.NServiceBus.Configuration.AzureServiceBus;
 using SFA.DAS.NServiceBus.Configuration.NewtonsoftJsonSerializer;
-using SFA.DAS.NServiceBus.Configuration.NLog;
 using SFA.DAS.NServiceBus.Configuration.StructureMap;
 using SFA.DAS.NServiceBus.Hosting;
 using SFA.DAS.NServiceBus.SqlServer.Configuration;
@@ -33,7 +32,6 @@ namespace SFA.DAS.Notifications.MessageHandlers.Startup
                         .UseLicense(nservicebusConfiguration.NServiceBusLicense)
                         .UseMessageConventions()
                         .UseNewtonsoftJsonSerializer()
-                        .UseNLogFactory()
                         .UseOutbox(true)
                         .UseSqlServerPersistence(() => container.GetInstance<DbConnection>())
                         .UseStructureMapBuilder(container)
