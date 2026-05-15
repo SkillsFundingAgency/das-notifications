@@ -518,9 +518,6 @@
                                 }
                             ]
                         }
-                    },
-                    "vnetRouteAllEnabled": {
-                        "value": "[parameters('vnetRouteAllEnabled')]"
                     }
                 }
             },
