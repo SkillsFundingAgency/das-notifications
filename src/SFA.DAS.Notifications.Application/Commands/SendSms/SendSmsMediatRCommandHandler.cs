@@ -12,7 +12,7 @@ using SFA.DAS.Notifications.Infrastructure;
 
 namespace SFA.DAS.Notifications.Application.Commands.SendSms
 {
-    public class SendSmsMediatRCommandHandler : AsyncRequestHandler<SendSmsMediatRCommand>
+    public class SendSmsMediatRCommandHandler : IRequestHandler<SendSmsMediatRCommand>
     {
         [QueueName]
 #pragma warning disable IDE1006 // Naming Styles
@@ -33,7 +33,7 @@ namespace SFA.DAS.Notifications.Application.Commands.SendSms
             _smsService = smsService;
         }
 
-        protected override async Task Handle(SendSmsMediatRCommand command, CancellationToken cancellationToken)
+        public async Task Handle(SendSmsMediatRCommand command, CancellationToken cancellationToken)
         {
             var messageId = Guid.NewGuid().ToString();
 

@@ -3,13 +3,12 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.Notifications.MessageHandlers.DependencyResolution;
 using SFA.DAS.Notifications.MessageHandlers.Startup;
-using StructureMap;
 using System;
 using System.Threading.Tasks;
 
 namespace SFA.DAS.Notifications.MessageHandlers
 {
-    class Program
+    static class Program
     {
         static async Task Main(string[] args)
         {
@@ -25,11 +24,14 @@ namespace SFA.DAS.Notifications.MessageHandlers
                         b.AddApplicationInsightsWebJobs(o => o.InstrumentationKey = context.Configuration["APPINSIGHTS_INSTRUMENTATIONKEY"]);
                     })
                     .UseConsoleLifetime()
-                    .UseStructureMap()
+                    .UseDefaultServiceProvider(o =>
+                    {
+                        o.ValidateOnBuild = true;
+                        o.ValidateScopes = true;
+                    })
                     .ConfigureServices((c, s) => s
-                        .AddMemoryCache()
-                        .AddNServiceBus(c.Configuration, c.HostingEnvironment.IsDevelopment()))
-                        .ConfigureContainer<Registry>(IoC.Initialize);
+                        .AddApplicationServices(c.Configuration)
+                        .AddNServiceBus(c.Configuration, c.HostingEnvironment.IsDevelopment()));
 
                 using (var host = hostBuilder.Build())
                 {
