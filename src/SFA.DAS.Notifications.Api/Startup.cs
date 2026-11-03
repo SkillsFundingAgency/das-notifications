@@ -1,19 +1,18 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi;
 using NServiceBus.ObjectBuilder.MSDependencyInjection;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.Notifications.Api.Orchestrators;
 using SFA.DAS.Notifications.Api.Security;
 using SFA.DAS.Notifications.Api.StartupExtensions;
-using Swashbuckle.AspNetCore.Swagger;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text;
@@ -23,15 +22,15 @@ namespace SFA.DAS.Notifications.Api
     public class Startup
     {
         public IConfiguration Configuration { get; }
-        public IHostingEnvironment Environment { get; }
+        public IWebHostEnvironment Environment { get; }
 
-        public Startup(IConfiguration configuration, IHostingEnvironment hostingContext)
+        public Startup(IConfiguration configuration, IWebHostEnvironment hostingContext)
         {
-            Configuration = configuration;
+
             Environment = hostingContext;
             var environmentName = hostingContext.EnvironmentName;
 
-            var config = new ConfigurationBuilder()
+            Configuration = new ConfigurationBuilder()
                     .SetBasePath(Directory.GetCurrentDirectory())
                     .AddJsonFile("appSettings.json", optional: false, reloadOnChange: false)
                     .AddJsonFile($"appSettings.{environmentName}.json", optional: true, reloadOnChange: false)
@@ -43,38 +42,36 @@ namespace SFA.DAS.Notifications.Api
                         options.StorageConnectionStringEnvironmentVariableName = "APPSETTING_ConfigurationStorageConnectionString";
                         options.PreFixConfigurationKeys = false;
                     }).Build();
-
-            Configuration = config;
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc(options =>
+            services.AddControllers(options =>
             {
                 if (!Environment.IsDevelopment())
                 {
                     options.Filters.Add(new AuthorizeFilter("default"));
                 }
-            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            });
 
-            services.AddApplicationInsightsTelemetry(Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]);
+            services.AddApplicationInsightsTelemetry(o => o.ConnectionString = Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]);
             services.AddHealthChecks();
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v0.1", new Info { Title = "Notifications-Api", Version = "v0.1" });
-                c.AddSecurityDefinition("Bearer", new ApiKeyScheme
+                c.SwaggerDoc("v0.1", new OpenApiInfo { Title = "Notifications-Api", Version = "v0.1" });
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Description = "JWT Authorization header using the Bearer scheme. Please Enter \"Bearer {token}\" into the value box.",
                     Name = "Authorization",
-                    In = "header",
-                    Type = "apiKey"
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey
                 });
-                c.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>> {
-                    {"Bearer",new string[]{ } }
+                c.AddSecurityRequirement(document => new OpenApiSecurityRequirement
+                {
+                    [new OpenApiSecuritySchemeReference("Bearer", document)] = []
                 });
-                // Set the comments path for the Swagger JSON and UI.
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
@@ -114,7 +111,7 @@ namespace SFA.DAS.Notifications.Api
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -127,16 +124,19 @@ namespace SFA.DAS.Notifications.Api
             }
 
             app.UseHttpsRedirection();
-            app.UseAuthentication();
-            app.UseMvc();
             app.UseHealthChecks("/api/health");
             app.UseSwagger();
-
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v0.1/swagger.json", "Notifications Api V0.1");
                 c.RoutePrefix = string.Empty;
             });
+
+            app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
+            app.UseEndpoints(endpoints => endpoints.MapControllers());
+
         }
     }
 }

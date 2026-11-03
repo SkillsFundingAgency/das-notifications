@@ -6,19 +6,8 @@ namespace SFA.DAS.Notifications.Infrastructure.ExecutionPolicies
 {
     public abstract class ExecutionPolicy
     {
-        protected Policy RootPolicy { get; set; }
+        protected AsyncPolicy RootPolicy { get; set; }
 
-        public virtual void Execute(Action action)
-        {
-            try
-            {
-                RootPolicy.Execute(action);
-            }
-            catch (Exception ex)
-            {
-                OnException(ex);
-            }
-        }
         public virtual async Task ExecuteAsync(Func<Task> action)
         {
             try
@@ -31,17 +20,6 @@ namespace SFA.DAS.Notifications.Infrastructure.ExecutionPolicies
             }
         }
 
-        public virtual T Execute<T>(Func<T> func)
-        {
-            try
-            {
-                return RootPolicy.Execute<T>(func);
-            }
-            catch (Exception ex)
-            {
-                return OnException<T>(ex);
-            }
-        }
         public virtual async Task<T> ExecuteAsync<T>(Func<Task<T>> func)
         {
             try
@@ -54,7 +32,6 @@ namespace SFA.DAS.Notifications.Infrastructure.ExecutionPolicies
             }
         }
 
-
         protected virtual void OnException(Exception ex)
         {
             throw ex;
@@ -64,22 +41,7 @@ namespace SFA.DAS.Notifications.Infrastructure.ExecutionPolicies
             throw ex;
         }
 
-
-
-        protected static Policy CreateRetryPolicy<T>(int numberOfRetries, TimeSpan waitBetweenTries, Action<Exception> onRetryableFailure = null)
-            where T : Exception
-        {
-            var waits = new TimeSpan[numberOfRetries];
-            for (var i = 0; i < waits.Length; i++)
-            {
-                waits[i] = waitBetweenTries;
-            }
-            return Policy.Handle<T>().WaitAndRetry(waits, (ex, wait) =>
-            {
-                onRetryableFailure?.Invoke(ex);
-            });
-        }
-        protected static Policy CreateAsyncRetryPolicy<T>(int numberOfRetries, TimeSpan waitBetweenTries, Action<Exception> onRetryableFailure = null)
+        protected static AsyncPolicy CreateAsyncRetryPolicy<T>(int numberOfRetries, TimeSpan waitBetweenTries, Action<Exception> onRetryableFailure = null)
             where T : Exception
         {
             var waits = new TimeSpan[numberOfRetries];

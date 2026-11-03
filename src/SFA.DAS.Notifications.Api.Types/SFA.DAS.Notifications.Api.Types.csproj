@@ -9,7 +9,7 @@
     <Authors>Esfa</Authors>
     <Title>Types for SFA.DAS.Notifications.Api service</Title>
     <Description>Provides api types when callling the SFA.DAS.Notifications.Api service</Description>
-    <PackageLicenseUrl>https://github.com/SkillsFundingAgency/das-notifications/blob/master/LICENSE</PackageLicenseUrl>
+	  <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/SkillsFundingAgency/das-notifications/tree/master/src/SFA.DAS.Notifications.Api.Types</PackageProjectUrl>
     <RepositoryUrl>https://github.com/SkillsFundingAgency/das-notifications</RepositoryUrl>
     <PackageTags>Esfa;Das;</PackageTags>
