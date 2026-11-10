@@ -1,12 +1,23 @@
 # Notifications API #
 
-This API provides a mechanism for send email or SMS messages to users of the Digital Apprenticeship Service.
+This API provides a mechanism for sending email or SMS messages to users of the Digital Apprenticeship Service.
 
-The API wraps underlying email and SMS service providers such as SMTP services, SendGrid, Notify, etc.
+The API sends messages using GOV.UK Notify.
 
 **Build status**
 
 ![Build Status](https://sfa-gov-uk.visualstudio.com/_apis/public/build/definitions/c39e0c0b-7aff-4606-b160-3566f3bbce23/148/badge)
+
+> **Developers:** to set up, run and test this service locally, see the [Developer Guide](docs/DEVELOPER-GUIDE.md).
+
+
+## Projects ##
+
+- **SFA.DAS.Notifications.Api** - HTTP API for sending emails and SMS messages
+- **SFA.DAS.Notifications.MessageHandlers** - NServiceBus endpoint (continuous WebJob) that handles `SendEmailCommand` and `SendSmsCommand` messages and sends them to GOV.UK Notify
+- **SFA.DAS.Notifications.MessageHandlers.TestHarness** - console app for sending test messages locally
+- **SFA.DAS.Notifications.Database** - SQL database project
+- **SFA.DAS.Notifications.Messages** - NuGet package containing `SendEmailCommand` and `SendSmsCommand`
 
 
 ## Functionality ##
@@ -19,9 +30,7 @@ POST http://host:port/api/email/
 
     {
         "templateId": "email_template_id",
-        "subject": "A test email",
         "recipientsAddress": "user@email.com",
-        "replyToAddress": "noreply@service.com",
         "tokens": {
             "Key1": "value1",
             "Key2": "value2",
@@ -31,39 +40,48 @@ POST http://host:port/api/email/
 
 Where:
 
-- **templateId** is the identifer for the email template to be used (eg. a SendGrid template ID)
-- **subject** is the email subject
+- **templateId** is a GOV.UK Notify template ID, or the `Id` of a template in the `SFA.DAS.Notifications-Templates` configuration
 - **recipientsAddress** is the email address to send the message to
-- **replyToAddress** is the "reply to" address that will show as the sender
 - **tokens** is an array of key/value pairs which are used to replace placeholders in the email body
+
+The request also accepts `subject` and `replyToAddress`, but these are not used. The subject and reply-to address are set on the GOV.UK Notify template.
+
+### Sending SMS ###
+
+To send a new SMS:
+
+POST http://host:port/api/sms/
+
+    {
+        "templateId": "sms_template_id",
+        "recipientsNumber": "07700900000",
+        "tokens": {
+            "Key1": "value1"
+        }
+    }
+
+Where:
+
+- **templateId** is the `Id` of a template in the `SFA.DAS.Notifications-Templates` configuration
+- **recipientsNumber** is the phone number to send the message to
+- **tokens** is an array of key/value pairs which are used to replace placeholders in the message
 
 
 ## Security ##
 
-The API uses Azure Active Directory to enforce authorised access to the API methods. When not running locally, callers must have a valid client id and secret.
+The API uses JWT bearer tokens to enforce authorised access to the API methods. Tokens are signed with a shared secret and validated against the `ApiAuthentication` configuration (`ApiIssuer`, `ApiAudiences` and `ApiTokenSecret`).
 
-Supported permissions are:
+Supported permissions (`role` claim) are:
 
     SendEmail
     SendSMS
 
 
-## Additional Gov Notify Services ##
+## GOV.UK Notify Services ##
 
-The API now supports multiple Gov Notify services. To use a different service, pass a SystemId with the email or SMS that matches the ServiceName in the configuration described below. If the system id is blank or not found in configuration then the default Apprenticeship Service api key will be used.
+All messages are sent through a single GOV.UK Notify service, using the `NotificationServiceApiKey` in configuration.
 
-To configure your service, add an element to the ConsumerConfiguration array inside `"NotifyServiceConfiguration"` in DAS Employer Config. This can be done via the build pipeline using the environment variable`GovNotifyConsumerConfiguration`
-
-```
-"ConsumerConfiguration": [
-    {
-      "ServiceName": "YourSystemId",
-      "ApiKey": "samplekey-11111111-1111-1111-1111-111111111111-22222222-2222-2222-2222-222222222222"
-    }
-  ]
-```
-
-The API Key should be a V2 API Key obtained from the Gov Notify portal.
+The request types still have a `SystemId` property, but it is not used.
 
 
 # Sending email using NServiceBus #
@@ -88,57 +106,51 @@ Add references to:
 Add something like this to your app:
 
     public static class ServiceCollectionExtensions
+    {
+        private const string EndpointName = "SFA.DAS.[YOUR APP]";
+
+        public static IServiceCollection AddNServiceBus(this IServiceCollection services, IConfiguration configuration, IHostEnvironment environment)
         {
-            private const string EndpointName = "SFA.DAS.[YOUR APP]";
+            var nServiceBusConfiguration = configuration.GetSection("NServiceBusConfiguration").Get<NServiceBusConfiguration>();
 
-            public static IServiceCollection AddNServiceBus(this IServiceCollection services)
+            var endpointConfiguration = new EndpointConfiguration(EndpointName)
+                .UseErrorQueue($"{EndpointName}-errors")
+                .UseLicense(nServiceBusConfiguration.NServiceBusLicense)
+                .UseMessageConventions()
+                .UseNewtonsoftJsonSerializer();
+
+            endpointConfiguration.SendOnly();
+
+            if (environment.IsDevelopment())
             {
-                return services
-                    .AddSingleton(p =>
-                    {
-                        var sp = services.BuildServiceProvider();
-                        var configuration = sp.GetService<IOptions<NServiceBusConfiguration>>().Value;
-
-                        var hostingEnvironment = p.GetService<IHostingEnvironment>();
-
-                        var endpointConfiguration = new EndpointConfiguration(EndpointName)
-                            .UseErrorQueue($"{EndpointName}-errors")
-                            .UseLicense(configuration.NServiceBusLicense)
-                            .UseMessageConventions()
-                            .UseNewtonsoftJsonSerializer()
-                            .UseNLogFactory();
-
-                        endpointConfiguration.SendOnly();
-
-                        if (hostingEnvironment.IsDevelopment())
-                        {
-                            endpointConfiguration.UseLearningTransport(s => s.AddRouting());
-                        }
-                        else
-                        {
-                            endpointConfiguration.UseAzureServiceBusTransport(configuration.SharedServiceBusEndpointUrl, s => s.AddRouting());
-                        }
-
-                        var endpoint = Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
-
-                        return endpoint;
-                    })
-                    .AddSingleton<IMessageSession>(s => s.GetService<IEndpointInstance>())
-                    .AddHostedService<NServiceBusHostedService>();
+                endpointConfiguration.UseLearningTransport(s => s.AddRouting());
             }
-        }
+            else
+            {
+                endpointConfiguration.UseAzureServiceBusTransport(nServiceBusConfiguration.SharedServiceBusEndpointUrl, s => s.AddRouting());
+            }
 
-        public static class RoutingSettingsExtensions
+            var endpoint = Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
+
+            return services
+                .AddSingleton(endpoint)
+                .AddSingleton<IMessageSession>(endpoint)
+                .AddHostedService<NServiceBusHostedService>();
+        }
+    }
+
+    public static class RoutingSettingsExtensions
+    {
+        private const string NotificationsMessageHandler = "SFA.DAS.Notifications.MessageHandlers";
+
+        public static void AddRouting(this RoutingSettings routingSettings)
         {
-            private const string NotificationsMessageHandler = "SFA.DAS.Notifications.MessageHandlers";
-
-            public static void AddRouting(this RoutingSettings routingSettings)
-            {
-                routingSettings.RouteToEndpoint(typeof(SendEmailCommand), NotificationsMessageHandler);
-            }
+            routingSettings.RouteToEndpoint(typeof(SendEmailCommand), NotificationsMessageHandler);
+            routingSettings.RouteToEndpoint(typeof(SendSmsCommand), NotificationsMessageHandler);
         }
-	
-Then add `services.AddNServiceBus();` to `Startup.ConfigureServices`
+    }
+
+Then add `services.AddNServiceBus(configuration, environment);` when registering services.
 
 
 To send an email
@@ -150,7 +162,7 @@ Call:
                         "Your GOV Notify email template ID", 
                         "Recipient email address", 
                         new Dictionary<string, string>(){{"TokenKey", "TokenValue"}}));
-					
+
 This will allow local development to send messages which will be dropped into a .learningTransport folder in your application's root folder.
 
 ## Sending emails from released App ##
