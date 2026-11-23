@@ -14,7 +14,7 @@ using SFA.DAS.Notifications.Infrastructure;
 
 namespace SFA.DAS.Notifications.Application.Commands.SendEmail
 {
-    public class SendEmailMediatRCommandHandler : AsyncRequestHandler<SendEmailMediatRCommand>
+    public class SendEmailMediatRCommandHandler : IRequestHandler<SendEmailMediatRCommand>
     {
         [QueueName]
 #pragma warning disable IDE1006 // Naming Styles
@@ -35,7 +35,7 @@ namespace SFA.DAS.Notifications.Application.Commands.SendEmail
             _templateConfiguration = templateConfiguration;
         }
 
-        protected override async Task Handle(SendEmailMediatRCommand command, CancellationToken cancellationToken)
+        public async Task Handle(SendEmailMediatRCommand command, CancellationToken cancellationToken)
         {
             var messageId = Guid.NewGuid().ToString();
 
