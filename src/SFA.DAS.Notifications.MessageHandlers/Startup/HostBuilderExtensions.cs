@@ -3,7 +3,6 @@ using Microsoft.Extensions.Hosting;
 using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.Notifications.Infrastructure.Configuration;
-using StructureMap;
 using System;
 
 namespace SFA.DAS.Notifications.MessageHandlers.Startup
@@ -28,11 +27,6 @@ namespace SFA.DAS.Notifications.MessageHandlers.Startup
             var mappedEnvironmentName = DasEnvironmentName.Map[environmentName];
 
             return hostBuilder.UseEnvironment(mappedEnvironmentName);
-        }
-
-        public static IHostBuilder UseStructureMap(this IHostBuilder builder)
-        {
-            return builder.UseServiceProviderFactory(new StructureMapServiceProviderFactory(null));
         }
     }
 }

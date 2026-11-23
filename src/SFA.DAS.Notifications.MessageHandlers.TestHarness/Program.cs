@@ -29,7 +29,7 @@ namespace SFA.DAS.Notifications.MessageHandlers.TestHarness
             var isDevelopment = Environment.GetEnvironmentVariable(EnvironmentVariableNames.EnvironmentName) == "LOCAL";
 
             var endpointConfiguration = new EndpointConfiguration("SFA.DAS.Notifications.MessageHandlers.TestHarness")
-                .UseErrorQueue()
+                .UseErrorQueue("SFA.DAS.Notifications.MessageHandlers.TestHarness-errors")
                 .UseInstallers()
                 .UseMessageConventions()
                 .UseNewtonsoftJsonSerializer();

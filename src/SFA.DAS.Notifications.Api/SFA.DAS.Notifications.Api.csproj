@@ -1,31 +1,24 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
-    <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+    <TargetFramework>net10.0</TargetFramework>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.23.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.14" />
+		<PackageReference Include="Microsoft.Data.SqlClient" Version="7.1.1" />
+		<PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="17.1.165" />
+		<PackageReference Include="SFA.DAS.NServiceBus" Version="17.0.49" />
+		<PackageReference Include="SFA.DAS.NServiceBus.SqlServer" Version="17.0.49" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="10.3.1" />
+	</ItemGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>bin\SFA.DAS.Notifications.Api.xml</DocumentationFile>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="MediatR" Version="7.0.0" />
-    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
-    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.12.0" />
-    <PackageReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="2.2.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging.EventSource" Version="2.2.0" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.0" />
-    <PackageReference Include="NServiceBus" Version="7.2.0" />
-    <PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="3.0.77" />
-    <PackageReference Include="SFA.DAS.NServiceBus" Version="16.0.2" />
-    <PackageReference Include="SFA.DAS.NServiceBus.SqlServer" Version="16.0.2" />
-    <PackageReference Include="SFA.DAS.UnitOfWork.NServiceBus" Version="9.0.13" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="4.0.1" />
+	<!-- Security pins for vulnerable transitive packages. Not used directly - do not remove without checking
+       `dotnet nuget why` and the vulnerability warnings. -->
+  <ItemGroup Label="Transitive security pins">
+    <PackageReference Include="Azure.Identity" Version="1.21.0" />
+    <PackageReference Include="System.Security.Cryptography.Pkcs" Version="10.0.14" />
   </ItemGroup>
 
   <ItemGroup>
